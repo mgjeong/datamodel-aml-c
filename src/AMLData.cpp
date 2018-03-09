@@ -20,6 +20,7 @@
 #include <map>
  
 #include "AMLInterface.h"
+#include "cAMLInterface.h"
 #include "AMLException.h"
 
 AMLData::AMLData(void)
@@ -153,56 +154,4 @@ AMLData AMLData::getValueToAMLData(const std::string& key) const
     }
 
     throw AMLException(Exception::DATA_INVALID_KEY);
-}
-
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
-AMLData* AMLData_new(void)
-{
-    return new AMLData();
-}
-void AMLData_delete(AMLData* amldata)
-{
-    delete amldata;
-}
-
-void AMLData_setStrValue(AMLData* amldata, char* key, char* value)
-{
-    amldata->setValue(key, value);
-}
-void AMLData_setStrArrValue(AMLData* amldata, char* key, char** value)
-{
-    amldata->setValue(key, value);
-}
-void AMLData_setAMLDataValue(AMLData* amldata, char* key, AMLData* value)
-{
-    amldata->setValue(key, value);
-}
-
-char* AMLData_getValueToStr(AMLData* amldata, char* key)
-{
-    return amldata->getValueToStr(key);
-}
-char** AMLData_getValueToStrArr(AMLData* amldata, char* key)
-{
-    return amldata->getValueToStrArr(key);
-}
-AMLData* AMLData_getValueToAMLData(AMLData* amldata, char* key);
-{
-    return amldata->getValueToAMLData(key);
-}
-
-char** AMLData_getKeys(AMLData* amldata)
-{
-    return amldata->getKeys();
-}
-AMLValueType AMLData_getValueType(AMLData* amldata, char* key)
-{
-    return amldata->getValueType(key);
-}
-
-#ifdef __cplusplus
 }

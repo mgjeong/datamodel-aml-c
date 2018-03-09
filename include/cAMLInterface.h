@@ -18,7 +18,8 @@
 #ifndef C_AML_INTERFACE_H_
 #define C_AML_INTERFACE_H_
 
-//#include "~~.h"
+#include "AMLInterface.h"
+#include "AMLException.h"
 
 #define AML_EXPORT __attribute__ ((visibility("default")))
 
@@ -43,7 +44,7 @@ typedef enum
     AMLVALTYPE_STRING = 0,
     AMLVALTYPE_STRINGARRAY,
     AMLVALTYPE_AMLDATA
-} AMLValueType;
+} AMLValueType_c;
 
 
 AML_EXPORT amlObjectHandle_t CreateAMLObject(const char* deviceId, const char* timeStamp);
@@ -66,7 +67,7 @@ AML_EXPORT AMLResult AMLData_GetValueStr(amlDataHandle_t amlObjHandle, const cha
 AML_EXPORT AMLResult AMLData_GetValueStrArr(amlDataHandle_t amlObjHandle, const char* key, char*** value, size_t* valueSize);
 AML_EXPORT AMLResult AMLData_GetValueAMLData(amlDataHandle_t amlObjHandle, const char* key, amlDataHandle_t* value);
 AML_EXPORT AMLResult AMLData_GetKeys(amlDataHandle_t amlObjHandle, char*** keys, size_t* keysSize);
-AML_EXPORT AMLResult AMLData_GetValueType(amlDataHandle_t amlObjHandle, const char* key, AMLValueType* type);
+AML_EXPORT AMLResult AMLData_GetValueType(amlDataHandle_t amlObjHandle, const char* key, AMLValueType_c* type);
 
 
 #ifdef __cplusplus

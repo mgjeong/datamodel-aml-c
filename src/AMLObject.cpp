@@ -21,7 +21,9 @@
 #include <cstring>
 
 #include "AMLInterface.h"
+#include "cAMLInterface.h"
 #include "AMLException.h"
+#include "AMLUtils.h"
 
 using namespace std;
 
@@ -90,56 +92,102 @@ std::string AMLObject::getId() const
     return m_id;
 }
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+//for C Wrapping
 
-const std::string& deviceId, const std::string& timeStamp, const std::string& id)
-AMLObject* AMLObject_new(const char* deviceId, const char* timeStamp)
+AML_EXPORT amlObjectHandle_t CreateAMLObject(const char* deviceId, const char* timeStamp)
 {
-    return new AMLObject(deviceId, timeStamp);
+    AMLObject* amlobject = new(std::nothrow) AMLObject(deviceId, timeStamp);
+    if(!amlobject)
+    {
+        //TODO : throw null check
+    }
+    return amlobject;
 }
+AML_EXPORT amlObjectHandle_t CreateAMLObjectWithID(const char* deviceId, const char* timeStamp, const char* id)
+{
+    AMLObject* amlobject = new(std::nothrow) AMLObject(deviceId, timeStamp, id);
+    if(!amlobject)
+    {
+        //TODO : throw null check
+    }
+    return amlobject;
+}
+AML_EXPORT AMLResult DestoryAMLObject(amlObjectHandle_t amlObjHandle)
+{
+    if(!amlObjHandle) 
+    {
+        //TODO : throw null check
+    }
+    AMLObject* amlobject = static_cast<AMLObject*>(amlObjHandle);
+    delete amlobject;
+    amlObjHandle = NULL;
 
-AMLObject* AMLObject_new_withId(void)
-{
-    return new AMLObject();
+    return AML_RESULT_OK;    
 }
+AML_EXPORT AMLResult AMLObject_AddData(amlObjectHandle_t amlObjHandle, const char* name, const amlDataHandle_t amlDataHandle)
+{
+    AMLObject* amlobject = static_cast<AMLObject*>(amlObjHandle);
+    AMLData* amldata = static_cast<AMLData*>(amlDataHandle);
+    amlobject->addData(name, *amldata);
 
-void AMLObject_delete(AMLObject* amlobj);
-{
-    delete amlobj;
+    return AML_RESULT_OK;
 }
+AML_EXPORT AMLResult AMLObject_GetData(amlObjectHandle_t amlObjHandle, const char* name, amlDataHandle_t* amlDataHandle)
+{
+    AMLObject* amlobject = static_cast<AMLObject*>(amlObjHandle);
+    AMLData* amldata = static_cast<AMLData*>(*amlDataHandle);
 
-void AMLObject_addData(AMLObject* amlobj, char* name, AMLData* data)
-{
-    amlobj->addData(name, data);
-}
+    try
+    {
+        *amldata = amlobject->getData(name);
+    }
+    catch(AMLException e) 
+    {
+        return AML_ERROR;   
+    }
 
-AMLData AMLObject_getData(AMLObject* amlobj, char* name)
-{
-    return amlobj->getData(name);
+    return AML_RESULT_OK;
 }
+AML_EXPORT AMLResult AMLObject_GetDataNames(amlObjectHandle_t amlObjHandle, char*** names, size_t* namesSize)
+{
+    AMLObject* amlobject = static_cast<AMLObject*>(amlObjHandle);
+    vector<string> strvec = amlobject->getDataNames();
 
-char** AMLObject_getDataNames(AMLObject* amlobj)
-{
-    return amlobj->getDataNames();
-}
+    char** strarr = vectorConverter(strvec);
+    size_t arrsize = strvec.size();
 
-char* AMLObject_getDeviceId(AMLObject* amlobj)
-{
-    return amlobj->getDeviceId();
-}
+    names = &strarr;
+    namesSize = &arrsize;
 
-char* AMLObject_getTimeStamp(AMLObject* amlobj)
-{
-    return amlobj->getTimestamp();
+    return AML_RESULT_OK;
 }
-char* AMLObject_getId(AMLObject* amlobj)
+AML_EXPORT AMLResult AMLObject_GetDeviceId(amlObjectHandle_t amlObjHandle, char** deviceId)
 {
-    return amlobj->getId();
-}
+    AMLObject* amlobject = static_cast<AMLObject*>(amlObjHandle);
+    
+    string str = amlobject->getDeviceId();
 
-#ifdef __cplusplus
+    *deviceId = stringConverter(str);
+
+    return AML_RESULT_OK;
 }
-#endif
+AML_EXPORT AMLResult AMLObject_GetTimeStamp(amlObjectHandle_t amlObjHandle, char** timeStamp)
+{
+    AMLObject* amlobject = static_cast<AMLObject*>(amlObjHandle);
+
+    string str = amlobject->getTimeStamp();
+
+    *timeStamp = stringConverter(str);
+    
+    return AML_RESULT_OK;
+}
+AML_EXPORT AMLResult AMLObject_GetId(amlObjectHandle_t amlObjHandle, char** id)
+{
+    AMLObject* amlobject = static_cast<AMLObject*>(amlObjHandle);
+
+    string str = amlobject->getId();
+
+    *id = stringConverter(str);
+
+    return AML_RESULT_OK;
+}

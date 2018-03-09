@@ -14,6 +14,11 @@
  * limitations under the License.
  *
  *******************************************************************************/
+#include <iostream>
+#include <string>
+#include <cstring>
+#include <vector>
+
 #include "AMLUtils.h"
 
 using namespace std;
@@ -22,7 +27,7 @@ char* stringConverter(std::string str)
 {	
 	char* cstr = new char[str.size() + 1];
     strncpy(cstr, str.c_str(), str.size());
-    cstr[list[i].size()] = '\0';
+    cstr[str.size()] = '\0';
 
     return cstr;
 }

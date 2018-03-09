@@ -31,10 +31,10 @@ else:
     c_aml_env.AppendUnique(CCFLAGS=['-g'])
 
 c_aml_env.AppendUnique(CPPPATH=[
-        './dependencies/protocol-ezmq-cpp/extlibs/pugixml/pugixml-1.8/src',
-        './dependencies/protocol-ezmq-cpp/protobuf',
-        './dependencies/protocol-ezmq-cpp/include',
-        './dependencies/protocol-ezmq-cpp/include/logger'
+        './dependencies/protocol-ezmq-c/extlibs/pugixml/pugixml-1.8/src',
+        './dependencies/protocol-ezmq-c/protobuf',
+        './dependencies/protocol-ezmq-c/include',
+        './dependencies/protocol-ezmq-c/include/logger',
         './include'
 ])
 
