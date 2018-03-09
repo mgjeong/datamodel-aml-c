@@ -1,0 +1,208 @@
+/*******************************************************************************
+ * Copyright 2018 Samsung Electronics All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ *******************************************************************************/
+
+#include <string>
+#include <vector>
+#include <map>
+ 
+#include "AMLInterface.h"
+#include "AMLException.h"
+
+AMLData::AMLData(void)
+{
+}
+
+AMLData::~AMLData(void)
+{
+}
+
+void AMLData::setValue(const std::string& key, const std::string& value)
+{
+    m_values.insert(std::pair<std::string, std::string>(key, value));
+}
+
+void AMLData::setValue(const std::string& key, const std::vector<std::string>& value)
+{
+    m_values.insert(std::pair<std::string, std::vector<std::string>>(key, value));
+}
+
+void AMLData::setValue(const std::string& key, const AMLData& value)
+{
+    m_values.insert(std::pair<std::string, AMLData>(key, value));
+}
+
+std::vector<std::string> AMLData::getKeys() const
+{
+    std::vector<std::string> keys;
+    for (auto const& element : m_values)
+    {
+        keys.push_back(element.first);
+    }
+
+    return keys;
+}
+
+AMLValueType AMLData::getValueType(const std::string& key) const
+{
+    for (auto const& element : m_values)
+    {
+        if (key.compare(element.first) == 0)
+        {
+            auto type = element.second.which();
+
+            if (type == 0)
+            {
+                return AMLValueType::String;
+            }
+            else if (type == 1)
+            {
+                return AMLValueType::StringArray;
+            }
+            else if (type == 2)
+            {
+                return AMLValueType::AMLData;
+            }
+            else 
+            {
+                throw AMLException(Exception::INVALID_DATA_TYPE);
+            }
+        }
+    }
+
+    throw AMLException(Exception::DATA_INVALID_KEY);
+}
+
+std::string AMLData::getValueToStr(const std::string& key) const
+{
+    for (auto const& element : m_values)
+    {
+        if (key.compare(element.first) == 0)
+        {
+            auto type = element.second.which();
+
+            if (type != 0)
+            {
+                throw AMLException(Exception::KEY_VALUE_NOT_MATCH);
+            }
+            else
+            {
+                std::string ret = boost::get<std::string>(element.second);
+                return ret;
+            }
+        }
+    }
+
+    throw AMLException(Exception::DATA_INVALID_KEY);
+}
+
+std::vector<std::string> AMLData::getValueToStrArr(const std::string& key) const
+{
+    for (auto const& element : m_values)
+    {
+        if (key.compare(element.first) == 0)
+        {
+            auto type = element.second.which();
+
+            if (type != 1)
+            {
+                throw AMLException(Exception::KEY_VALUE_NOT_MATCH);
+            }
+            else
+            {
+                std::vector<std::string> ret = boost::get<std::vector<std::string>>(element.second);
+                return ret;
+            }
+        }
+    }
+
+    throw AMLException(Exception::DATA_INVALID_KEY);
+}
+
+AMLData AMLData::getValueToAMLData(const std::string& key) const
+{
+    for (auto const& element : m_values)
+    {
+        if (key.compare(element.first) == 0)
+        {
+            auto type = element.second.which();
+
+            if (type != 2)
+            {
+                throw AMLException(Exception::KEY_VALUE_NOT_MATCH);
+            }
+            else
+            {
+                AMLData ret = boost::get<AMLData>(element.second);
+                return ret;
+            }
+        }
+    }
+
+    throw AMLException(Exception::DATA_INVALID_KEY);
+}
+
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
+AMLData* AMLData_new(void)
+{
+    return new AMLData();
+}
+void AMLData_delete(AMLData* amldata)
+{
+    delete amldata;
+}
+
+void AMLData_setStrValue(AMLData* amldata, char* key, char* value)
+{
+    amldata->setValue(key, value);
+}
+void AMLData_setStrArrValue(AMLData* amldata, char* key, char** value)
+{
+    amldata->setValue(key, value);
+}
+void AMLData_setAMLDataValue(AMLData* amldata, char* key, AMLData* value)
+{
+    amldata->setValue(key, value);
+}
+
+char* AMLData_getValueToStr(AMLData* amldata, char* key)
+{
+    return amldata->getValueToStr(key);
+}
+char** AMLData_getValueToStrArr(AMLData* amldata, char* key)
+{
+    return amldata->getValueToStrArr(key);
+}
+AMLData* AMLData_getValueToAMLData(AMLData* amldata, char* key);
+{
+    return amldata->getValueToAMLData(key);
+}
+
+char** AMLData_getKeys(AMLData* amldata)
+{
+    return amldata->getKeys();
+}
+AMLValueType AMLData_getValueType(AMLData* amldata, char* key)
+{
+    return amldata->getValueType(key);
+}
+
+#ifdef __cplusplus
+}
