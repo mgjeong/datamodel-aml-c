@@ -21,6 +21,9 @@
 typedef enum
 {
     CAML_OK = 0,
+
+
+    CAML_ERROR = 255
 } CAMLErrorCode;
 
 #endif // C_AML_ERRORCODES_H_

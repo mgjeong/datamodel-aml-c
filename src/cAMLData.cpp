@@ -26,7 +26,11 @@
 
 using namespace std;
 
+<<<<<<< Updated upstream
 AML_EXPORT amlDataHandle_t CreateAMLData()
+=======
+amlDataHandle_t CreateAMLData()
+>>>>>>> Stashed changes
 {
     AMLData* amldata = new(std::nothrow) AMLData();
     if(!amldata)
@@ -37,7 +41,11 @@ AML_EXPORT amlDataHandle_t CreateAMLData()
     return static_cast<amlDataHandle_t>(amldata);
 }
 
+<<<<<<< Updated upstream
 AML_EXPORT CAMLErrorCode DestoryAMLData(amlDataHandle_t amlDataHandle)
+=======
+CAMLErrorCode DestoryAMLData(amlDataHandle_t amlDataHandle)
+>>>>>>> Stashed changes
 {
     // if(!amlDataHandle)
     // {
@@ -50,7 +58,11 @@ AML_EXPORT CAMLErrorCode DestoryAMLData(amlDataHandle_t amlDataHandle)
     return CAML_OK;
 }
 
+<<<<<<< Updated upstream
 AML_EXPORT CAMLErrorCode AMLData_SetValueStr(amlDataHandle_t amlDataHandle, const char* key, const char* value)
+=======
+CAMLErrorCode AMLData_SetValueStr(amlDataHandle_t amlDataHandle, const char* key, const char* value)
+>>>>>>> Stashed changes
 {
     // AMLData* amldata = static_cast<AMLData*>(amlDataHandle);
     
@@ -62,7 +74,11 @@ AML_EXPORT CAMLErrorCode AMLData_SetValueStr(amlDataHandle_t amlDataHandle, cons
     return CAML_OK;
 }
 
+<<<<<<< Updated upstream
 AML_EXPORT CAMLErrorCode AMLData_SetValueStrArr(amlDataHandle_t amlDataHandle, const char* key, const char** value, const size_t valueSize)
+=======
+CAMLErrorCode AMLData_SetValueStrArr(amlDataHandle_t amlDataHandle, const char* key, const char** value, const size_t valueSize)
+>>>>>>> Stashed changes
 {
     // AMLData* amldata = static_cast<AMLData*>(amlDataHandle);
 
@@ -79,7 +95,11 @@ AML_EXPORT CAMLErrorCode AMLData_SetValueStrArr(amlDataHandle_t amlDataHandle, c
     return CAML_OK;
 }
 
+<<<<<<< Updated upstream
 AML_EXPORT CAMLErrorCode AMLData_SetValueAMLData(amlDataHandle_t amlDataHandle, const char* key, const amlDataHandle_t value)
+=======
+CAMLErrorCode AMLData_SetValueAMLData(amlDataHandle_t amlDataHandle, const char* key, const amlDataHandle_t value)
+>>>>>>> Stashed changes
 {
     // AMLData* amldata = static_cast<AMLData*>(amlDataHandle);
 
@@ -91,7 +111,11 @@ AML_EXPORT CAMLErrorCode AMLData_SetValueAMLData(amlDataHandle_t amlDataHandle, 
     return CAML_OK;
 }
 
+<<<<<<< Updated upstream
 AML_EXPORT CAMLErrorCode AMLData_GetValueStr(amlDataHandle_t amlDataHandle, const char* key, char** value)
+=======
+CAMLErrorCode AMLData_GetValueStr(amlDataHandle_t amlDataHandle, const char* key, char** value)
+>>>>>>> Stashed changes
 {
     // AMLData* amldata = static_cast<AMLData*>(amlDataHandle);
 
@@ -103,7 +127,11 @@ AML_EXPORT CAMLErrorCode AMLData_GetValueStr(amlDataHandle_t amlDataHandle, cons
     return CAML_OK;
 }
 
+<<<<<<< Updated upstream
 AML_EXPORT CAMLErrorCode AMLData_GetValueStrArr(amlDataHandle_t amlDataHandle, const char* key, char*** value, size_t* valueSize)
+=======
+CAMLErrorCode AMLData_GetValueStrArr(amlDataHandle_t amlDataHandle, const char* key, char*** value, size_t* valueSize)
+>>>>>>> Stashed changes
 {
     // AMLData* amldata = static_cast<AMLData*>(amlDataHandle);
 
@@ -119,7 +147,11 @@ AML_EXPORT CAMLErrorCode AMLData_GetValueStrArr(amlDataHandle_t amlDataHandle, c
     return CAML_OK;
 }
 
+<<<<<<< Updated upstream
 AML_EXPORT CAMLErrorCode AMLData_GetValueAMLData(amlDataHandle_t amlDataHandle, const char* key, amlDataHandle_t* value)
+=======
+CAMLErrorCode AMLData_GetValueAMLData(amlDataHandle_t amlDataHandle, const char* key, amlDataHandle_t* value)
+>>>>>>> Stashed changes
 {
     // AMLData* amldata = static_cast<AMLData*>(amlDataHandle);
 
@@ -137,7 +169,11 @@ AML_EXPORT CAMLErrorCode AMLData_GetValueAMLData(amlDataHandle_t amlDataHandle, 
     return CAML_OK;
 }
 
+<<<<<<< Updated upstream
 AML_EXPORT CAMLErrorCode AMLData_GetKeys(amlDataHandle_t amlDataHandle, char*** keys, size_t* keysSize)
+=======
+CAMLErrorCode AMLData_GetKeys(amlDataHandle_t amlDataHandle, char*** keys, size_t* keysSize)
+>>>>>>> Stashed changes
 {
     // AMLData* amldata = static_cast<AMLData*>(amlDataHandle);
     // vector<string> strvec = amldata->getKeys();
@@ -150,7 +186,17 @@ AML_EXPORT CAMLErrorCode AMLData_GetKeys(amlDataHandle_t amlDataHandle, char*** 
     return CAML_OK;
 }
 
+<<<<<<< Updated upstream
 AML_EXPORT CAMLErrorCode AMLData_GetValueType(amlDataHandle_t amlDataHandle, const char* key, AMLValueType_c* type)
+=======
+CAMLErrorCode AMLData_GetValueType(amlDataHandle_t amlDataHandle, const char* key, AMLValueType_c* type)
+>>>>>>> Stashed changes
 {
+    // AMLData* amldata = static_cast<AMLData*>(amlDataHandle);
+
+    // string strKey(key, strlen(key));
+
+    // *type = AMLValueType_c(amldata->getValueType(strKey));
+
     return CAML_OK;
 }
