@@ -21,16 +21,16 @@ import os
 
 Import('env')
 
-c_aml_env = env.Clone()
-target_os = c_aml_env.get('TARGET_OS')
-target_arch = c_aml_env.get('TARGET_ARCH')
+caml_env = env.Clone()
+target_os = caml_env.get('TARGET_OS')
+target_arch = caml_env.get('TARGET_ARCH')
 
-if c_aml_env.get('RELEASE'):
-    c_aml_env.AppendUnique(CCFLAGS=['-Os'])
+if caml_env.get('RELEASE'):
+    caml_env.AppendUnique(CCFLAGS=['-Os'])
 else:
-    c_aml_env.AppendUnique(CCFLAGS=['-g'])
+    caml_env.AppendUnique(CCFLAGS=['-g'])
 
-c_aml_env.AppendUnique(CPPPATH=[
+caml_env.AppendUnique(CPPPATH=[
         './dependencies/datamodel-aml-cpp/extlibs/pugixml/pugixml-1.8/src',
         './dependencies/datamodel-aml-cpp/protobuf',
         './dependencies/datamodel-aml-cpp/include',
@@ -38,39 +38,39 @@ c_aml_env.AppendUnique(CPPPATH=[
         './include'
 ])
 
-if c_aml_env.get('RELEASE'):
-    c_aml_env.PrependUnique(LIBS=['aml'], LIBPATH=[os.path.join('./dependencies/datamodel-aml-cpp/out/linux/', target_arch, 'release')])
+if caml_env.get('RELEASE'):
+    caml_env.PrependUnique(LIBS=['aml'], LIBPATH=[os.path.join('./dependencies/datamodel-aml-cpp/out/linux/', target_arch, 'release')])
 else:
-    c_aml_env.PrependUnique(LIBS=['aml'], LIBPATH=[os.path.join('./dependencies/datamodel-aml-cpp/out/linux/', target_arch, 'debug')])
+    caml_env.PrependUnique(LIBS=['aml'], LIBPATH=[os.path.join('./dependencies/datamodel-aml-cpp/out/linux/', target_arch, 'debug')])
 
-c_aml_env.PrependUnique(LIBS=['protobuf'])
+caml_env.PrependUnique(LIBS=['protobuf'])
 
 if target_os not in ['windows']:
-    c_aml_env.AppendUnique(
+    caml_env.AppendUnique(
         CXXFLAGS=['-O2', '-g', '-Wall', '-fPIC', '-fmessage-length=0', '-std=c++0x', '-I/usr/local/include'])
 
 if target_os not in ['windows']:
-    c_aml_env.AppendUnique(LINKFLAGS=['-Wl,--no-undefined'])
+    caml_env.AppendUnique(LINKFLAGS=['-Wl,--no-undefined'])
 
 if target_os in ['linux']:
-    c_aml_env.AppendUnique(LIBS=['pthread'])
+    caml_env.AppendUnique(LIBS=['pthread'])
 
 if target_os in ['linux']:
     if not env.get('RELEASE'):
-        c_aml_env.PrependUnique(LIBS=['gcov'])
-        c_aml_env.AppendUnique(CXXFLAGS=['--coverage'])
+        caml_env.PrependUnique(LIBS=['gcov'])
+        caml_env.AppendUnique(CXXFLAGS=['--coverage'])
 
-AML_DIR = '.'
-c_aml_env.AppendUnique(aml_src = [c_aml_env.Glob(os.path.join(AML_DIR, 'src', '*.cpp'))])
+CAML_DIR = '.'
+caml_env.AppendUnique(caml_src = [caml_env.Glob(os.path.join(CAML_DIR, 'src', '*.cpp'))])
 
-amlshared = c_aml_env.SharedLibrary('caml', c_aml_env.get('aml_src'))
-amlstatic = c_aml_env.StaticLibrary('caml', c_aml_env.get('aml_src'))
+amlshared = caml_env.SharedLibrary('caml', caml_env.get('caml_src'))
+amlstatic = caml_env.StaticLibrary('caml', caml_env.get('caml_src'))
 
 # Go to build AML DataModel sample apps
-if target_os == 'linux':
-       SConscript('samples/SConscript')
+#if target_os == 'linux':
+#       SConscript('samples/SConscript')
 
 # Go to build AML DataModel unit test cases
-if target_os == 'linux':
-    if target_arch in ['x86', 'x86_64']:
-        SConscript('unittests/SConscript')
+#if target_os == 'linux':
+#    if target_arch in ['x86', 'x86_64']:
+#        SConscript('unittests/SConscript')
