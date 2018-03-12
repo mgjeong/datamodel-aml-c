@@ -23,7 +23,7 @@
 
 using namespace std;
 
-char* stringConverter(std::string str)
+char* ConvertStringToCharStr(std::string str)
 {
     char* cstr = new char[str.size() + 1];
     strncpy(cstr, str.c_str(), str.size());
@@ -32,7 +32,7 @@ char* stringConverter(std::string str)
     return cstr;
 }
 
-char** vectorConverter(std::vector<std::string>& list)
+char** ConvertVectorToCharStrArr(std::vector<std::string>& list)
 {
     char ** cstr = new char*[list.size()];
 
@@ -42,4 +42,14 @@ char** vectorConverter(std::vector<std::string>& list)
     }
 
     return cstr;
+}
+
+string ConvertCharStrToString(char* charstr)
+{
+    
+}
+
+vector<string> ConvertCharStrArrToVector(char** charstrarr)
+{
+
 }

@@ -21,7 +21,10 @@
 #include <string>
 #include <vector>
 
-char* stringConverter(std::string str);
-char** vectorConverter(std::vector<std::string>& list);
+char* ConvertStringToCharStr(std::string str);
+char** ConvertVectorToCharStrArr(std::vector<std::string>& list);
+
+std::string ConvertCharStrToString(char* charstr);
+std::vector<std::string> ConvertCharStrArrToVector(char** charstrarr);
 
 #endif // AML_UTILS_H_

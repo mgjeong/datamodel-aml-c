@@ -36,9 +36,7 @@ AML_EXPORT amlObjectHandle_t CreateAMLObject(const char* deviceId, const char* t
     {
         //TODO : throw null check
     }
-    return amlobject;
-
-    return NULL;
+    return static_cast<amlObjectHandle_t>(amlobject); 
 }
 
 AML_EXPORT amlObjectHandle_t CreateAMLObjectWithID(const char* deviceId, const char* timeStamp, const char* id)
@@ -78,15 +76,14 @@ AML_EXPORT CAMLErrorCode AMLObject_AddData(amlObjectHandle_t amlObjHandle, const
 AML_EXPORT CAMLErrorCode AMLObject_GetData(amlObjectHandle_t amlObjHandle, const char* name, amlDataHandle_t* amlDataHandle)
 {
     // AMLObject* amlobject = static_cast<AMLObject*>(amlObjHandle);
-    // AMLData* amldata = static_cast<AMLData*>(*amlDataHandle);
 
     // try
     // {
-    //     *amldata = amlobject->getData(name);
+    //     *amldata = static_cast<amlDataHandle_t>amlobject->getData(name);
     // }
     // catch(AMLException e) 
     // {
-    //     return AML_ERROR;   
+    //     return CAML_ERROR;   
     // }
 
     return CAML_OK;
@@ -97,11 +94,10 @@ AML_EXPORT CAMLErrorCode AMLObject_GetDataNames(amlObjectHandle_t amlObjHandle, 
     // AMLObject* amlobject = static_cast<AMLObject*>(amlObjHandle);
     // vector<string> strvec = amlobject->getDataNames();
 
-    // char** strarr = vectorConverter(strvec);
-    // size_t arrsize = strvec.size();
+    // char** strarr = ConvertVectorToCharStrArr(strvec);
+    // *namesSize = strvec.size();
 
-    // names = &strarr;
-    // namesSize = &arrsize;
+    // *names = strarr;
 
     return CAML_OK;
 }
@@ -112,7 +108,7 @@ AML_EXPORT CAMLErrorCode AMLObject_GetDeviceId(amlObjectHandle_t amlObjHandle, c
     
     // string str = amlobject->getDeviceId();
 
-    // *deviceId = stringConverter(str);
+    // *deviceId = ConvertStringToCharStr(str);
 
     return CAML_OK;
 }
@@ -123,7 +119,7 @@ AML_EXPORT CAMLErrorCode AMLObject_GetTimeStamp(amlObjectHandle_t amlObjHandle, 
 
     // string str = amlobject->getTimeStamp();
 
-    // *timeStamp = stringConverter(str);
+    // *timeStamp = ConvertStringToCharStr(str);
     
     return CAML_OK;
 }
@@ -134,7 +130,7 @@ AML_EXPORT CAMLErrorCode AMLObject_GetId(amlObjectHandle_t amlObjHandle, char** 
 
     // string str = amlobject->getId();
 
-    // *id = stringConverter(str);
+    // *id = ConvertStringToCharStr(str);
 
     return CAML_OK;
 }

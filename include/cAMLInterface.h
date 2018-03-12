@@ -58,15 +58,15 @@ AML_EXPORT CAMLErrorCode AMLObject_GetId(amlObjectHandle_t amlObjHandle, char** 
 
 
 AML_EXPORT amlDataHandle_t CreateAMLData();
-AML_EXPORT CAMLErrorCode DestoryAMLData(amlDataHandle_t amlObjHandle);
-AML_EXPORT CAMLErrorCode AMLData_SetValueStr(amlDataHandle_t amlObjHandle, const char* key, const char* value);
-AML_EXPORT CAMLErrorCode AMLData_SetValueStrArr(amlDataHandle_t amlObjHandle, const char* key, const char** value, const size_t valueSize);
-AML_EXPORT CAMLErrorCode AMLData_SetValueAMLData(amlDataHandle_t amlObjHandle, const char* key, const amlDataHandle_t value);
-AML_EXPORT CAMLErrorCode AMLData_GetValueStr(amlDataHandle_t amlObjHandle, const char* key, char** value);
-AML_EXPORT CAMLErrorCode AMLData_GetValueStrArr(amlDataHandle_t amlObjHandle, const char* key, char*** value, size_t* valueSize);
-AML_EXPORT CAMLErrorCode AMLData_GetValueAMLData(amlDataHandle_t amlObjHandle, const char* key, amlDataHandle_t* value);
-AML_EXPORT CAMLErrorCode AMLData_GetKeys(amlDataHandle_t amlObjHandle, char*** keys, size_t* keysSize);
-AML_EXPORT CAMLErrorCode AMLData_GetValueType(amlDataHandle_t amlObjHandle, const char* key, AMLValueType_c* type);
+AML_EXPORT CAMLErrorCode DestoryAMLData(amlDataHandle_t amlDataHandle);
+AML_EXPORT CAMLErrorCode AMLData_SetValueStr(amlDataHandle_t amlDataHandle, const char* key, const char* value);
+AML_EXPORT CAMLErrorCode AMLData_SetValueStrArr(amlDataHandle_t amlDataHandle, const char* key, const char** value, const size_t valueSize);
+AML_EXPORT CAMLErrorCode AMLData_SetValueAMLData(amlDataHandle_t amlDataHandle, const char* key, const amlDataHandle_t value);
+AML_EXPORT CAMLErrorCode AMLData_GetValueStr(amlDataHandle_t amlDataHandle, const char* key, char** value);
+AML_EXPORT CAMLErrorCode AMLData_GetValueStrArr(amlDataHandle_t amlDataHandle, const char* key, char*** value, size_t* valueSize);
+AML_EXPORT CAMLErrorCode AMLData_GetValueAMLData(amlDataHandle_t amlDataHandle, const char* key, amlDataHandle_t* value);
+AML_EXPORT CAMLErrorCode AMLData_GetKeys(amlDataHandle_t amlDataHandle, char*** keys, size_t* keysSize);
+AML_EXPORT CAMLErrorCode AMLData_GetValueType(amlDataHandle_t amlDataHandle, const char* key, AMLValueType_c* type);
 
 
 #ifdef __cplusplus
