@@ -17,16 +17,16 @@
 
 #include <string>
 #include <vector>
-#include <map>
 
 #include "cAMLErrorcodes.h"
-//#include "AMLInterface.h"
 #include "cAMLInterface.h"
-//#include "AMLException.h"
+
+#include "AMLInterface.h"
+#include "AMLException.h"
 
 using namespace std;
 
-amlDataHandle_t CreateAMLData()
+CAMLErrorCode CreateAMLData(amlDataHandle_t* amlDataHandle)
 {
     // AMLData* amldata = new(std::nothrow) AMLData();
     // if(!amldata)
@@ -35,9 +35,11 @@ amlDataHandle_t CreateAMLData()
     // }
 
     // return static_cast<amlDataHandle_t>(amldata);
+
+    return CAML_OK;
 }
 
-CAMLErrorCode DestoryAMLData(amlDataHandle_t amlDataHandle)
+CAMLErrorCode DestoryAMLData(amlDataHandle_t* amlDataHandle)
 {
     // if(!amlDataHandle)
     // {

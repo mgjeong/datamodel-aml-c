@@ -57,8 +57,8 @@ AML_EXPORT CAMLErrorCode AMLObject_GetTimeStamp(amlObjectHandle_t amlObjHandle, 
 AML_EXPORT CAMLErrorCode AMLObject_GetId(amlObjectHandle_t amlObjHandle, char** id);
 
 
-AML_EXPORT amlDataHandle_t CreateAMLData();
-AML_EXPORT CAMLErrorCode DestoryAMLData(amlDataHandle_t amlDataHandle);
+AML_EXPORT CAMLErrorCode CreateAMLData(amlDataHandle_t* amlDataHandle);
+AML_EXPORT CAMLErrorCode DestoryAMLData(amlDataHandle_t* amlDataHandle);
 AML_EXPORT CAMLErrorCode AMLData_SetValueStr(amlDataHandle_t amlDataHandle, const char* key, const char* value);
 AML_EXPORT CAMLErrorCode AMLData_SetValueStrArr(amlDataHandle_t amlDataHandle, const char* key, const char** value, const size_t valueSize);
 AML_EXPORT CAMLErrorCode AMLData_SetValueAMLData(amlDataHandle_t amlDataHandle, const char* key, const amlDataHandle_t value);
