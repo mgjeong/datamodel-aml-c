@@ -18,9 +18,20 @@
 #ifndef C_AML_ERRORCODES_H_
 #define C_AML_ERRORCODES_H_
 
+#define VERIFY_PARAM_NON_NULL(PARAM)        if (!PARAM){ return CAML_INVALID_PARAM; }
+
 typedef enum
 {
-    CAML_OK = 0,
+    CAML_OK = 0,                    /**< Success */
+
+    CAML_INVALID_PARAM,             /**< Invalid Parameter */
+    CAML_INVALID_FILE_PATH,         /**< .. */
+    CAML_INVALID_AML_SCHEMA,        /**< .. */
+    CAML_INVALID_XML_STRING,        /**< .. */
+    CAML_NO_MEMORY,                 /**< .. */
+    CAML_KEY_NOT_EXIST,             /**< .. */
+    CAML_KEY_ALREADY_EXIST,         /**< .. */
+    CAML_INVALID_DATA_TYPE,         /**< .. */
 } CAMLErrorCode;
 
 #endif // C_AML_ERRORCODES_H_

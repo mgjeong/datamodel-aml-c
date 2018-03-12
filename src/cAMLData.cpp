@@ -28,13 +28,13 @@ using namespace std;
 
 AML_EXPORT amlDataHandle_t CreateAMLData()
 {
-    AMLData* amldata = new(std::nothrow) AMLData();
-    if(!amldata)
-    {
-        //TODO : throw null check
-    }
+    // AMLData* amldata = new(std::nothrow) AMLData();
+    // if(!amldata)
+    // {
+    //     //TODO : throw null check
+    // }
 
-    return static_cast<amlDataHandle_t>(amldata);
+    // return static_cast<amlDataHandle_t>(amldata);
 }
 
 AML_EXPORT CAMLErrorCode DestoryAMLData(amlDataHandle_t amlDataHandle)

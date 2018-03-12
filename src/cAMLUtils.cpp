@@ -38,15 +38,10 @@ char** ConvertVectorToCharStrArr(std::vector<std::string>& list)
 
     for(unsigned long i = 0; i < list.size(); i++)
     {
-        cstr[i] = stringConverter(list[i]);
+        cstr[i] = ConvertStringToCharStr(list[i]);
     }
 
     return cstr;
-}
-
-string ConvertCharStrToString(char* charstr)
-{
-    
 }
 
 vector<string> ConvertCharStrArrToVector(char** charstrarr)
