@@ -20,6 +20,7 @@
 
 #include "cAMLErrorcodes.h"
 #include "cAMLInterface.h"
+#include "cAMLUtils.h"
 
 #include "AMLInterface.h"
 #include "AMLException.h"
@@ -28,137 +29,188 @@ using namespace std;
 
 CAMLErrorCode CreateAMLData(amlDataHandle_t* amlDataHandle)
 {
-    // AMLData* amldata = new(std::nothrow) AMLData();
-    // if(!amldata)
-    // {
-    //     //TODO : throw null check
-    // }
-
-    // return static_cast<amlDataHandle_t>(amldata);
+    *amlDataHandle = new(std::nothrow) AMLData();
+    if(!amlDataHandle)
+    {
+        return CAML_NO_MEMORY;
+    }
 
     return CAML_OK;
 }
 
 CAMLErrorCode DestoryAMLData(amlDataHandle_t* amlDataHandle)
 {
-    // if(!amlDataHandle)
-    // {
-    //     //TODO : throw null check
-    // }
-    // AMLData* amldata = static_cast<AMLData*>(amlDataHandle);
-    // delete amldata;
-    // amlDataHandle = NULL;
+    VERIFY_PARAM_NON_NULL(amlDataHandle);
+
+    AMLData* amldata = static_cast<AMLData*>(*amlDataHandle);
+    delete amldata;
+    *amlDataHandle = NULL;
 
     return CAML_OK;
 }
 
 CAMLErrorCode AMLData_SetValueStr(amlDataHandle_t amlDataHandle, const char* key, const char* value)
 {
-    // AMLData* amldata = static_cast<AMLData*>(amlDataHandle);
+    VERIFY_PARAM_NON_NULL(amlDataHandle);
+    VERIFY_PARAM_NON_NULL(key);
+    VERIFY_PARAM_NON_NULL(value);
+
+    AMLData* amldata = static_cast<AMLData*>(amlDataHandle);
     
-    // string strKey(key, strlen(key));
-    // string strValue(value, strlen(value));
-    
-    // amldata->setValue(strKey, strValue);
+    string strKey(key, strlen(key));
+    string strValue(value, strlen(value));
+    try
+    {
+       amldata->setValue(strKey, strValue);
+    }
+    catch(const AMLException& e)
+    {
+        return CAML_KEY_ALREADY_EXIST;
+    }
 
     return CAML_OK;
 }
 
 CAMLErrorCode AMLData_SetValueStrArr(amlDataHandle_t amlDataHandle, const char* key, const char** value, const size_t valueSize)
 {
-    // AMLData* amldata = static_cast<AMLData*>(amlDataHandle);
+    VERIFY_PARAM_NON_NULL(amlDataHandle);
+    VERIFY_PARAM_NON_NULL(key);
+    VERIFY_PARAM_NON_NULL(value);
 
-    // string strKey(key, strlen(key));
+    AMLData* amldata = static_cast<AMLData*>(amlDataHandle);
 
-    // vector<string> strvec;
-    // for(int i = 0; i< valueSize; i++)
-    // {
-    //     string strValue(value[i], strlen(value[i]));
-    //     strvec.insert(strValue);
-    // }
-    // amldata->setValue(strKey, strvec);
+    string strKey(key, strlen(key));
+
+    vector<string> strvec;
+    for(size_t i = 0; i< valueSize; i++)
+    {
+        string strValue(value[i], strlen(value[i]));
+        strvec.push_back(strValue);
+    }
+
+    try
+    {
+       amldata->setValue(strKey, strvec);
+    }
+    catch(const AMLException& e)
+    {
+        return CAML_KEY_ALREADY_EXIST;
+    }
 
     return CAML_OK;
 }
 
 CAMLErrorCode AMLData_SetValueAMLData(amlDataHandle_t amlDataHandle, const char* key, const amlDataHandle_t value)
 {
-    // AMLData* amldata = static_cast<AMLData*>(amlDataHandle);
+    VERIFY_PARAM_NON_NULL(amlDataHandle);
+    VERIFY_PARAM_NON_NULL(key);
+    VERIFY_PARAM_NON_NULL(value);
 
-    // string strKey(key, strlen(key));
-    // AMLData* amlData = static_cast<AMLData*>(value);
+    AMLData* amldata = static_cast<AMLData*>(amlDataHandle);
 
-    // amldata->setValue(strKey, *amlData);
+    string strKey(key, strlen(key));
+    AMLData* amlData = static_cast<AMLData*>(value);
+
+    try
+    {
+       amldata->setValue(strKey, *amlData);
+    }
+    catch(const AMLException& e)
+    {
+        return CAML_KEY_ALREADY_EXIST;
+    }
 
     return CAML_OK;
 }
 
 CAMLErrorCode AMLData_GetValueStr(amlDataHandle_t amlDataHandle, const char* key, char** value)
 {
-    // AMLData* amldata = static_cast<AMLData*>(amlDataHandle);
+    VERIFY_PARAM_NON_NULL(amlDataHandle);
+    VERIFY_PARAM_NON_NULL(key);
+    VERIFY_PARAM_NON_NULL(value);
+    
+    AMLData* amldata = static_cast<AMLData*>(amlDataHandle);
 
-    // string strKey(key, strlen(key));
+    string strKey(key, strlen(key));
 
-    // string str = amldta->getValueToStr(strKey);
-    // *value = ConvertStringToCharStr(str);
+    string str = amldata->getValueToStr(strKey);
+    *value = ConvertStringToCharStr(str);
 
     return CAML_OK;
 }
 
 CAMLErrorCode AMLData_GetValueStrArr(amlDataHandle_t amlDataHandle, const char* key, char*** value, size_t* valueSize)
-{
-    // AMLData* amldata = static_cast<AMLData*>(amlDataHandle);
+{   
+    VERIFY_PARAM_NON_NULL(amlDataHandle);
+    VERIFY_PARAM_NON_NULL(key);
+    VERIFY_PARAM_NON_NULL(value);
+    VERIFY_PARAM_NON_NULL(valueSize);
 
-    // string strKey(key, strlen(key));
+    AMLData* amldata = static_cast<AMLData*>(amlDataHandle);
 
-    // vector<string> strvec = amldata->getValueToStrArr(strKey);
+    string strKey(key, strlen(key));
 
-    // char** strarr = ConvertStringToCharStrArr(strvec);
-    // *valueSize = strvec.size();
+    vector<string> strvec = amldata->getValueToStrArr(strKey);
 
-    // *value = strarr;
+    char** strarr = ConvertVectorToCharStrArr(strvec);
+    *valueSize = strvec.size();
+
+    *value = strarr;
         
     return CAML_OK;
 }
 
 CAMLErrorCode AMLData_GetValueAMLData(amlDataHandle_t amlDataHandle, const char* key, amlDataHandle_t* value)
 {
-    // AMLData* amldata = static_cast<AMLData*>(amlDataHandle);
+    VERIFY_PARAM_NON_NULL(amlDataHandle);
+    VERIFY_PARAM_NON_NULL(key);
+    VERIFY_PARAM_NON_NULL(value);
+    
+    AMLData* amldata = static_cast<AMLData*>(amlDataHandle);
+    AMLData* amlData = nullptr;
+    string strKey(key, strlen(key));
 
-    // string strKey(key, strlen(key));
-
-    // try
-    // {
-    //     *value = static_cast<amlDataHandle_t>amldata->getValueToAMLData(strKey);
-    // }
-    // catch(AMLException e)
-    // {
-    //     return CAML_ERROR;
-    // }
+    try
+    {
+        *amlData = amldata->getValueToAMLData(strKey);
+        *value = static_cast<amlDataHandle_t>(amlData);
+    }
+    catch(AMLException e)
+    {
+        return CAML_KEY_NOT_EXIST;
+    }
 
     return CAML_OK;
 }
 
 CAMLErrorCode AMLData_GetKeys(amlDataHandle_t amlDataHandle, char*** keys, size_t* keysSize)
 {
-    // AMLData* amldata = static_cast<AMLData*>(amlDataHandle);
-    // vector<string> strvec = amldata->getKeys();
+    VERIFY_PARAM_NON_NULL(amlDataHandle);
+    VERIFY_PARAM_NON_NULL(keys);
+    VERIFY_PARAM_NON_NULL(keysSize);
 
-    // char** strarr = ConvertStringToCharStrArr(strvec);
-    // *keySize = strvec.size();
+    AMLData* amldata = static_cast<AMLData*>(amlDataHandle);
+    vector<string> strvec = amldata->getKeys();
 
-    // *keys = strarr;
+    char** strarr = ConvertVectorToCharStrArr(strvec);
+    *keysSize = strvec.size();
+
+    *keys = strarr;
 
     return CAML_OK;
 }
 
 CAMLErrorCode AMLData_GetValueType(amlDataHandle_t amlDataHandle, const char* key, AMLValueType_c* type)
 {
-    // AMLData* amldata = static_cast<AMLData*>(amlDataHandle);
+    VERIFY_PARAM_NON_NULL(amlDataHandle);
+    VERIFY_PARAM_NON_NULL(key);
+    VERIFY_PARAM_NON_NULL(type);
 
-    // string strKey(key, strlen(key));
+    AMLData* amldata = static_cast<AMLData*>(amlDataHandle);
 
-    // *type = AMLValueType_c(amldata->getValueType(strKey));
+    string strKey(key, strlen(key));
+
+    *type = AMLValueType_c(amldata->getValueType(strKey));
 
     return CAML_OK;
 }

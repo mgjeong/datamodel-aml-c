@@ -43,8 +43,3 @@ char** ConvertVectorToCharStrArr(std::vector<std::string>& list)
 
     return cstr;
 }
-
-vector<string> ConvertCharStrArrToVector(char** charstrarr)
-{
-
-}

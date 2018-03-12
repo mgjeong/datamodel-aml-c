@@ -91,23 +91,22 @@ CAMLErrorCode AMLObject_AddData(amlObjectHandle_t amlObjHandle, const char* name
 
 CAMLErrorCode AMLObject_GetData(amlObjectHandle_t amlObjHandle, const char* name, amlDataHandle_t* amlDataHandle)
 {
-    // VERIFY_PARAM_NON_NULL(amlObjHandle);
-    // VERIFY_PARAM_NON_NULL(name);
-    // VERIFY_PARAM_NON_NULL(amlDataHandle);
+    VERIFY_PARAM_NON_NULL(amlObjHandle);
+    VERIFY_PARAM_NON_NULL(name);
+    VERIFY_PARAM_NON_NULL(amlDataHandle);
 
-    // AMLObject* amlObj = static_cast<AMLObject*>(amlObjHandle);
-    // AMLData* amlData;
+    AMLObject* amlObj = static_cast<AMLObject*>(amlObjHandle);
+    AMLData* amlData = nullptr;
 
-    // try
-    // {
-    //     amlData = amlObj->getData(name);
-    // }
-    // catch (const AMLException& e)
-    // {
-    //     return CAML_KEY_NOT_EXIST;
-    // }
-
-    // *amlDataHandle = static_cast<amlDataHandle_t>(amlData);
+    try
+    {
+        *amlData = amlObj->getData(name);
+        *amlDataHandle = static_cast<amlDataHandle_t>(amlData);
+    }
+    catch (const AMLException& e)
+    {
+        return CAML_KEY_NOT_EXIST;
+    }
 
     return CAML_OK;
 }
