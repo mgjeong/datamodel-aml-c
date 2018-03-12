@@ -27,4 +27,5 @@ build_dir = env.get('BUILD_DIR')
 
 # Build AML DataModel library(C)
 SConscript(build_dir + 'SConscript')
+#SConscript('SConscript', build_dir=build_dir, src='.')
 

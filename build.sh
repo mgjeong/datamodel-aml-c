@@ -30,25 +30,25 @@ install_dependencies() {
 
     cd ./dependencies
 
-    if [ -d "./datamodel-aml-c" ] ; then
-        echo "datamodel-aml-c already exists"
+    if [ -d "./datamodel-aml-cpp" ] ; then
+        echo "datamodel-aml-cpp already exists"
     else
         #clone datamodel-aml-cpp
-        git clone git@github.sec.samsung.net:RS7-EdgeComputing/datamodel-aml-c.git
+        git clone git@github.sec.samsung.net:RS7-EdgeComputing/datamodel-aml-cpp.git
     fi
 
-    cd ./datamodel-aml-c
+    cd ./datamodel-aml-cpp
     git fetch origin
     #git reset --hard origin/master
 
     # Build datamodel-aml-cpp
-    echo -e "${GREEN}Installing datamodel-aml-c library${NO_COLOUR}"
+    echo -e "Installing datamodel-aml-cpp library"
     ./build.sh
     if [ $? -ne 0 ]; then 
         echo -e "\033[31m"Build failed"\033[0m" 
         exit 1 
     fi
-    echo -e "${GREEN}Installation of datamodel-aml-c library${NO_COLOUR}"
+    echo -e "Installation of datamodel-aml-cpp library"
 }
 
 function build(){
@@ -60,8 +60,8 @@ function build(){
 }
 
 install_dependencies
-echo -e "Building AML DataModel library("${AML_TARGET_ARCH}").."
+echo -e "Building C AML DataModel library("${AML_TARGET_ARCH}").."
 build
-echo -e "Done building AML DataModel library("${AML_TARGET_ARCH}")"
+echo -e "Done building C AML DataModel library("${AML_TARGET_ARCH}")"
 
 exit 0

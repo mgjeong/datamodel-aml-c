@@ -18,8 +18,7 @@
 #ifndef C_AML_INTERFACE_H_
 #define C_AML_INTERFACE_H_
 
-#include "AMLInterface.h"
-#include "AMLException.h"
+#include "cAMLErrorcodes.h"
 
 #define AML_EXPORT __attribute__ ((visibility("default")))
 
@@ -49,25 +48,25 @@ typedef enum
 
 AML_EXPORT amlObjectHandle_t CreateAMLObject(const char* deviceId, const char* timeStamp);
 AML_EXPORT amlObjectHandle_t CreateAMLObjectWithID(const char* deviceId, const char* timeStamp, const char* id);
-AML_EXPORT AMLResult DestoryAMLObject(amlObjectHandle_t amlObjHandle);
-AML_EXPORT AMLResult AMLObject_AddData(amlObjectHandle_t amlObjHandle, const char* name, const amlDataHandle_t amlDataHandle);
-AML_EXPORT AMLResult AMLObject_GetData(amlObjectHandle_t amlObjHandle, const char* name, amlDataHandle_t* amlDataHandle);
-AML_EXPORT AMLResult AMLObject_GetDataNames(amlObjectHandle_t amlObjHandle, char*** names, size_t* namesSize);
-AML_EXPORT AMLResult AMLObject_GetDeviceId(amlObjectHandle_t amlObjHandle, char** deviceId);
-AML_EXPORT AMLResult AMLObject_GetTimeStamp(amlObjectHandle_t amlObjHandle, char** timeStamp);
-AML_EXPORT AMLResult AMLObject_GetId(amlObjectHandle_t amlObjHandle, char** id);
+AML_EXPORT CAMLErrorCode DestoryAMLObject(amlObjectHandle_t amlObjHandle);
+AML_EXPORT CAMLErrorCode AMLObject_AddData(amlObjectHandle_t amlObjHandle, const char* name, const amlDataHandle_t amlDataHandle);
+AML_EXPORT CAMLErrorCode AMLObject_GetData(amlObjectHandle_t amlObjHandle, const char* name, amlDataHandle_t* amlDataHandle);
+AML_EXPORT CAMLErrorCode AMLObject_GetDataNames(amlObjectHandle_t amlObjHandle, char*** names, size_t* namesSize);
+AML_EXPORT CAMLErrorCode AMLObject_GetDeviceId(amlObjectHandle_t amlObjHandle, char** deviceId);
+AML_EXPORT CAMLErrorCode AMLObject_GetTimeStamp(amlObjectHandle_t amlObjHandle, char** timeStamp);
+AML_EXPORT CAMLErrorCode AMLObject_GetId(amlObjectHandle_t amlObjHandle, char** id);
 
 
 AML_EXPORT amlDataHandle_t CreateAMLData();
-AML_EXPORT AMLResult DestoryAMLData(amlDataHandle_t amlObjHandle);
-AML_EXPORT AMLResult AMLData_SetValueStr(amlDataHandle_t amlObjHandle, const char* key, const char* value);
-AML_EXPORT AMLResult AMLData_SetValueStrArr(amlDataHandle_t amlObjHandle, const char* key, const char** value, const size_t valueSize);
-AML_EXPORT AMLResult AMLData_SetValueAMLData(amlDataHandle_t amlObjHandle, const char* key, const amlDataHandle_t value);
-AML_EXPORT AMLResult AMLData_GetValueStr(amlDataHandle_t amlObjHandle, const char* key, char** value);
-AML_EXPORT AMLResult AMLData_GetValueStrArr(amlDataHandle_t amlObjHandle, const char* key, char*** value, size_t* valueSize);
-AML_EXPORT AMLResult AMLData_GetValueAMLData(amlDataHandle_t amlObjHandle, const char* key, amlDataHandle_t* value);
-AML_EXPORT AMLResult AMLData_GetKeys(amlDataHandle_t amlObjHandle, char*** keys, size_t* keysSize);
-AML_EXPORT AMLResult AMLData_GetValueType(amlDataHandle_t amlObjHandle, const char* key, AMLValueType_c* type);
+AML_EXPORT CAMLErrorCode DestoryAMLData(amlDataHandle_t amlObjHandle);
+AML_EXPORT CAMLErrorCode AMLData_SetValueStr(amlDataHandle_t amlObjHandle, const char* key, const char* value);
+AML_EXPORT CAMLErrorCode AMLData_SetValueStrArr(amlDataHandle_t amlObjHandle, const char* key, const char** value, const size_t valueSize);
+AML_EXPORT CAMLErrorCode AMLData_SetValueAMLData(amlDataHandle_t amlObjHandle, const char* key, const amlDataHandle_t value);
+AML_EXPORT CAMLErrorCode AMLData_GetValueStr(amlDataHandle_t amlObjHandle, const char* key, char** value);
+AML_EXPORT CAMLErrorCode AMLData_GetValueStrArr(amlDataHandle_t amlObjHandle, const char* key, char*** value, size_t* valueSize);
+AML_EXPORT CAMLErrorCode AMLData_GetValueAMLData(amlDataHandle_t amlObjHandle, const char* key, amlDataHandle_t* value);
+AML_EXPORT CAMLErrorCode AMLData_GetKeys(amlDataHandle_t amlObjHandle, char*** keys, size_t* keysSize);
+AML_EXPORT CAMLErrorCode AMLData_GetValueType(amlDataHandle_t amlObjHandle, const char* key, AMLValueType_c* type);
 
 
 #ifdef __cplusplus

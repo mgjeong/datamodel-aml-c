@@ -14,32 +14,13 @@
  * limitations under the License.
  *
  *******************************************************************************/
-#include <iostream>
-#include <string>
-#include <cstring>
-#include <vector>
 
-#include "AMLUtils.h"
+#ifndef C_AML_ERRORCODES_H_
+#define C_AML_ERRORCODES_H_
 
-using namespace std;
-
-char* stringConverter(std::string str)
-{	
-	char* cstr = new char[str.size() + 1];
-    strncpy(cstr, str.c_str(), str.size());
-    cstr[str.size()] = '\0';
-
-    return cstr;
-}
-
-char** vectorConverter(std::vector<std::string>& list)
+typedef enum
 {
-	char ** cstr = new char*[list.size()];
+    CAML_OK = 0,
+} CAMLErrorCode;
 
-    for(unsigned long i = 0; i < list.size(); i++)
-    {
-        cstr[i] = stringConverter(list[i]);
-    }
-
-    return cstr;
-}
+#endif // C_AML_ERRORCODES_H_

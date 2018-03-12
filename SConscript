@@ -31,17 +31,17 @@ else:
     c_aml_env.AppendUnique(CCFLAGS=['-g'])
 
 c_aml_env.AppendUnique(CPPPATH=[
-        './dependencies/protocol-ezmq-c/extlibs/pugixml/pugixml-1.8/src',
-        './dependencies/protocol-ezmq-c/protobuf',
-        './dependencies/protocol-ezmq-c/include',
-        './dependencies/protocol-ezmq-c/include/logger',
+        './dependencies/datamodel-aml-cpp/extlibs/pugixml/pugixml-1.8/src',
+        './dependencies/datamodel-aml-cpp/protobuf',
+        './dependencies/datamodel-aml-cpp/include',
+        './dependencies/datamodel-aml-cpp/include/logger',
         './include'
 ])
 
 if c_aml_env.get('RELEASE'):
-    c_aml_env.PrependUnique(LIBS=['ezmq'], LIBPATH=[os.path.join('./dependencies/protocol-ezmq-cpp/out/linux/', target_arch, 'release')])
+    c_aml_env.PrependUnique(LIBS=['aml'], LIBPATH=[os.path.join('./dependencies/datamodel-aml-cpp/out/linux/', target_arch, 'release')])
 else:
-    c_aml_env.PrependUnique(LIBS=['ezmq'], LIBPATH=[os.path.join('./dependencies/protocol-ezmq-cpp/out/linux/', target_arch, 'debug')])
+    c_aml_env.PrependUnique(LIBS=['aml'], LIBPATH=[os.path.join('./dependencies/datamodel-aml-cpp/out/linux/', target_arch, 'debug')])
 
 c_aml_env.PrependUnique(LIBS=['protobuf'])
 
@@ -63,8 +63,8 @@ if target_os in ['linux']:
 AML_DIR = '.'
 c_aml_env.AppendUnique(aml_src = [c_aml_env.Glob(os.path.join(AML_DIR, 'src', '*.cpp'))])
 
-amlshared = c_aml_env.SharedLibrary('aml', c_aml_env.get('aml_src'))
-amlstatic = c_aml_env.StaticLibrary('aml', c_aml_env.get('aml_src'))
+amlshared = c_aml_env.SharedLibrary('caml', c_aml_env.get('aml_src'))
+amlstatic = c_aml_env.StaticLibrary('caml', c_aml_env.get('aml_src'))
 
 # Go to build AML DataModel sample apps
 if target_os == 'linux':
