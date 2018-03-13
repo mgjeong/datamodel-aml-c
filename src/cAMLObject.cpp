@@ -77,6 +77,7 @@ CAMLErrorCode AMLObject_AddData(amlObjectHandle_t amlObjHandle, const char* name
 
     AMLObject* amlObj = static_cast<AMLObject*>(amlObjHandle);
     AMLData* amldata = static_cast<AMLData*>(amlDataHandle);
+
     try
     {
         amlObj->addData(name, *amldata);
@@ -95,12 +96,9 @@ CAMLErrorCode AMLObject_GetData(amlObjectHandle_t amlObjHandle, const char* name
     VERIFY_PARAM_NON_NULL(name);
     VERIFY_PARAM_NON_NULL(amlDataHandle);
 
-    AMLObject* amlObj = static_cast<AMLObject*>(amlObjHandle);
-    AMLData* amlData = nullptr;
-
     try
     {
-        *amlData = amlObj->getData(name);
+        AMLData* amlData = static_cast<AMLObject*>(amlObjHandle)->getData(name);
         *amlDataHandle = static_cast<amlDataHandle_t>(amlData);
     }
     catch (const AMLException& e)

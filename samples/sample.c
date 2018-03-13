@@ -40,20 +40,23 @@ void freeCharArr(char** str, size_t size)
 
 void printAMLData(amlDataHandle_t amlData, int depth)
 {
-    char* indent;
+    char* indent = (char*)malloc(sizeof(char)*100);
+    strncpy(indent, "", 1);
     for (int i = 0; i < depth; i++) strcat(indent, "    ");
 
     printf("%s{\n", indent);
 
-    char** keys;
-    size_t size;
+    char** keys = NULL;
+    size_t size = 0;
     AMLData_GetKeys(amlData, &keys, &size);
+printf("size : %d\n", size);
+printf("%s %s\n", keys[0], keys[1]);
     for (size_t i = 0; i < size; i++)
     {
+printf("FOR(%d)\n", i);
         printf("%s    \"%s\" : ", indent, keys[i]);
 
         AMLValueType_c valType = AMLVALTYPE_STRING;
-
         AMLData_GetValueType(amlData, keys[i], &valType);
         if (AMLVALTYPE_STRING == valType)
         {
@@ -80,18 +83,20 @@ void printAMLData(amlDataHandle_t amlData, int depth)
         }
         else if (AMLVALTYPE_AMLDATA == valType)
         {
+            printf("AMLData_GetValueAMLData\n");
             amlDataHandle_t valAMLData;
             AMLData_GetValueAMLData(amlData, keys[i], &valAMLData);
             printf("\n");
             printAMLData(valAMLData, depth + 1);
         }
 
-        if (i != size - 1) printf(",");
+        if (i != size - 1)  printf(",");
         printf("\n");
     }
     printf("\n");
 
     free(indent);
+    freeCharArr(keys, size);
 }
 
 void printAMLObject(amlObjectHandle_t amlObj)
@@ -116,13 +121,12 @@ void printAMLObject(amlObjectHandle_t amlObj)
 
     for (size_t i = 0; i < size; i++)
     {
-printf("%s\n", dataNames[i]);
         amlDataHandle_t data;
         AMLObject_GetData(amlObj, dataNames[i], &data);
-printf("3\n");
+
         printf("    \"%s\" : \n", dataNames[i]);
         printAMLData(data, 1);
-printf("4\n");
+
         if (i != size - 1) printf(",\n");
     }
 
