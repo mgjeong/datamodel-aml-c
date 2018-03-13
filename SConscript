@@ -67,8 +67,8 @@ amlshared = caml_env.SharedLibrary('caml', caml_env.get('caml_src'))
 amlstatic = caml_env.StaticLibrary('caml', caml_env.get('caml_src'))
 
 # Go to build AML DataModel sample apps
-#if target_os == 'linux':
-#       SConscript('samples/SConscript')
+if target_os == 'linux':
+       SConscript('samples/SConscript')
 
 # Go to build AML DataModel unit test cases
 #if target_os == 'linux':
