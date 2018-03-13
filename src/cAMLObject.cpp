@@ -119,8 +119,16 @@ CAMLErrorCode AMLObject_GetDataNames(amlObjectHandle_t amlObjHandle, char*** nam
 
     AMLObject* amlObj = static_cast<AMLObject*>(amlObjHandle);
     vector<string> strvec = amlObj->getDataNames();
+    char** strarr = nullptr;
 
-    char** strarr = ConvertVectorToCharStrArr(strvec);
+    try
+    {
+        strarr = ConvertVectorToCharStrArr(strvec);
+    }
+    catch(const AMLException& e)
+    {
+        return CAML_NO_MEMORY;
+    }
 
     *names = strarr;
     *namesSize = strvec.size();
@@ -136,8 +144,20 @@ CAMLErrorCode AMLObject_GetDeviceId(amlObjectHandle_t amlObjHandle, char** devic
     AMLObject* amlObj = static_cast<AMLObject*>(amlObjHandle);
 
     string deviceIdStr = amlObj->getDeviceId();
+    
+    if(deviceIdStr.empty())
+    {
+        return CAML_INVALID_DATA;
+    }
 
-    *deviceId = ConvertStringToCharStr(deviceIdStr);
+    try
+    {
+        *deviceId = ConvertStringToCharStr(deviceIdStr);
+    }
+    catch(const AMLException& e)
+    {
+        return CAML_NO_MEMORY;
+    }
 
     return CAML_OK;
 }
@@ -150,8 +170,19 @@ CAMLErrorCode AMLObject_GetTimeStamp(amlObjectHandle_t amlObjHandle, char** time
     AMLObject* amlObj = static_cast<AMLObject*>(amlObjHandle);
 
     string timeStampStr = amlObj->getTimeStamp();
+    if(timeStampStr.empty())
+    {
+        return CAML_INVALID_DATA;
+    }
 
-    *timeStamp = ConvertStringToCharStr(timeStampStr);
+    try
+    {
+        *timeStamp = ConvertStringToCharStr(timeStampStr);
+    }
+    catch(const AMLException& e)
+    {
+        return CAML_NO_MEMORY;
+    }
 
     return CAML_OK;
 }
@@ -164,8 +195,19 @@ CAMLErrorCode AMLObject_GetId(amlObjectHandle_t amlObjHandle, char** id)
     AMLObject* amlObj = static_cast<AMLObject*>(amlObjHandle);
 
     string idStr = amlObj->getId();
+    if(idStr.empty())
+    {
+        return CAML_INVALID_DATA;
+    }
 
-    *id = ConvertStringToCharStr(idStr);
+    try
+    {
+        *id = ConvertStringToCharStr(idStr);
+    }
+    catch(const AMLException& e)
+    {
+        return CAML_NO_MEMORY;
+    }
 
     return CAML_OK;
 }

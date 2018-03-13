@@ -25,6 +25,7 @@ typedef enum
     CAML_OK = 0,                    /**< Success */
 
     CAML_INVALID_PARAM,             /**< Invalid Parameter */
+    CAML_INVALID_DATA,
     CAML_INVALID_FILE_PATH,         /**< .. */
     CAML_INVALID_AML_SCHEMA,        /**< .. */
     CAML_INVALID_XML_STRING,        /**< .. */
