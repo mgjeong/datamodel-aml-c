@@ -227,7 +227,7 @@ CAMLErrorCode AMLData_GetKeys(amlDataHandle_t amlDataHandle, char*** keys, size_
     return CAML_OK;
 }
 
-CAMLErrorCode AMLData_GetValueType(amlDataHandle_t amlDataHandle, const char* key, AMLValueType_c* type)
+CAMLErrorCode AMLData_GetValueType(amlDataHandle_t amlDataHandle, const char* key, CAMLValueType* type)
 {
     VERIFY_PARAM_NON_NULL(amlDataHandle);
     VERIFY_PARAM_NON_NULL(key);

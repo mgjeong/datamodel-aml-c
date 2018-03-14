@@ -116,7 +116,7 @@ void printAMLData(amlDataHandle_t amlData, int depth)
     {
         printf("%s    \"%s\" : ", indent, keys[i]);
 
-        AMLValueType_c valType = AMLVALTYPE_STRING;
+        CAMLValueType valType = AMLVALTYPE_STRING;
         AMLData_GetValueType(amlData, keys[i], &valType);
         if (AMLVALTYPE_STRING == valType)
         {

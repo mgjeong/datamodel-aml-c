@@ -43,7 +43,7 @@ typedef enum
     AMLVALTYPE_STRING = 0,
     AMLVALTYPE_STRINGARRAY,
     AMLVALTYPE_AMLDATA
-} AMLValueType_c;
+} CAMLValueType;
 
 
 AML_EXPORT CAMLErrorCode CreateAMLObject(const char* deviceId, const char* timeStamp, amlObjectHandle_t* amlObjHandle);
@@ -66,7 +66,7 @@ AML_EXPORT CAMLErrorCode AMLData_GetValueStr(amlDataHandle_t amlDataHandle, cons
 AML_EXPORT CAMLErrorCode AMLData_GetValueStrArr(amlDataHandle_t amlDataHandle, const char* key, char*** value, size_t* valueSize);
 AML_EXPORT CAMLErrorCode AMLData_GetValueAMLData(amlDataHandle_t amlDataHandle, const char* key, amlDataHandle_t* value);
 AML_EXPORT CAMLErrorCode AMLData_GetKeys(amlDataHandle_t amlDataHandle, char*** keys, size_t* keysSize);
-AML_EXPORT CAMLErrorCode AMLData_GetValueType(amlDataHandle_t amlDataHandle, const char* key, AMLValueType_c* type);
+AML_EXPORT CAMLErrorCode AMLData_GetValueType(amlDataHandle_t amlDataHandle, const char* key, CAMLValueType* type);
 
 
 #ifdef __cplusplus
