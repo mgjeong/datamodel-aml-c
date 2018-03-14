@@ -19,12 +19,12 @@
 #include <string.h>
 #include <vector>
 
-#include "cAMLErrorcodes.h"
-#include "cAMLInterface.h"
-#include "cAMLUtils.h"
-
 #include "AMLInterface.h"
 #include "AMLException.h"
+
+#include "camlinterface.h"
+#include "camlerrorcodes.h"
+#include "camlutils.h"
 
 using namespace std;
 

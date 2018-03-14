@@ -18,7 +18,9 @@
 #ifndef C_AML_INTERFACE_H_
 #define C_AML_INTERFACE_H_
 
-#include "cAMLErrorcodes.h"
+#include <stdlib.h>
+
+#include "camlerrorcodes.h"
 
 #define AML_EXPORT __attribute__ ((visibility("default")))
 

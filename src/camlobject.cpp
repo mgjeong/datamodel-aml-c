@@ -23,9 +23,9 @@
 #include "AMLInterface.h"
 #include "AMLException.h"
 
-#include "cAMLUtils.h"
-#include "cAMLInterface.h"
-#include "cAMLErrorcodes.h"
+#include "camlinterface.h"
+#include "camlerrorcodes.h"
+#include "camlutils.h"
 
 using namespace std;
 
@@ -123,7 +123,7 @@ CAMLErrorCode AMLObject_GetDataNames(amlObjectHandle_t amlObjHandle, char*** nam
     {
         strarr = ConvertVectorToCharStrArr(strvec);
     }
-    catch(const AMLException& e)
+    catch (const AMLException& e)
     {
         return CAML_NO_MEMORY;
     }
@@ -143,7 +143,7 @@ CAMLErrorCode AMLObject_GetDeviceId(amlObjectHandle_t amlObjHandle, char** devic
 
     string deviceIdStr = amlObj->getDeviceId();
     
-    if(deviceIdStr.empty())
+    if (deviceIdStr.empty())
     {
         return CAML_INVALID_DATA;
     }
@@ -152,7 +152,7 @@ CAMLErrorCode AMLObject_GetDeviceId(amlObjectHandle_t amlObjHandle, char** devic
     {
         *deviceId = ConvertStringToCharStr(deviceIdStr);
     }
-    catch(const AMLException& e)
+    catch (const AMLException& e)
     {
         return CAML_NO_MEMORY;
     }
@@ -168,7 +168,7 @@ CAMLErrorCode AMLObject_GetTimeStamp(amlObjectHandle_t amlObjHandle, char** time
     AMLObject* amlObj = static_cast<AMLObject*>(amlObjHandle);
 
     string timeStampStr = amlObj->getTimeStamp();
-    if(timeStampStr.empty())
+    if (timeStampStr.empty())
     {
         return CAML_INVALID_DATA;
     }
@@ -177,7 +177,7 @@ CAMLErrorCode AMLObject_GetTimeStamp(amlObjectHandle_t amlObjHandle, char** time
     {
         *timeStamp = ConvertStringToCharStr(timeStampStr);
     }
-    catch(const AMLException& e)
+    catch (const AMLException& e)
     {
         return CAML_NO_MEMORY;
     }
@@ -193,7 +193,7 @@ CAMLErrorCode AMLObject_GetId(amlObjectHandle_t amlObjHandle, char** id)
     AMLObject* amlObj = static_cast<AMLObject*>(amlObjHandle);
 
     string idStr = amlObj->getId();
-    if(idStr.empty())
+    if (idStr.empty())
     {
         return CAML_INVALID_DATA;
     }
@@ -202,7 +202,7 @@ CAMLErrorCode AMLObject_GetId(amlObjectHandle_t amlObjHandle, char** id)
     {
         *id = ConvertStringToCharStr(idStr);
     }
-    catch(const AMLException& e)
+    catch (const AMLException& e)
     {
         return CAML_NO_MEMORY;
     }

@@ -15,13 +15,32 @@
  *
  *******************************************************************************/
 
-#ifndef AML_UTILS_H_
-#define AML_UTILS_H_
-
 #include <string>
+#include <cstring>
 #include <vector>
 
-char* ConvertStringToCharStr(std::string str);
-char** ConvertVectorToCharStrArr(std::vector<std::string>& list);
+#include "camlutils.h"
 
-#endif // AML_UTILS_H_
+using namespace std;
+
+char* ConvertStringToCharStr(std::string str)
+{
+    char* cstr = new char[str.size() + 1];
+    strncpy(cstr, str.c_str(), str.size());
+    cstr[str.size()] = '\0';
+
+    return cstr;
+}
+
+char** ConvertVectorToCharStrArr(std::vector<std::string>& list)
+{
+    unsigned long size = list.size();
+    char ** cstr = new char*[size];
+
+    for(unsigned long i = 0; i < size; i++)
+    {
+        cstr[i] = ConvertStringToCharStr(list[i]);
+    }
+
+    return cstr;
+}

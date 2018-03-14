@@ -19,8 +19,8 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "cAMLInterface.h"
-#include "cAMLErrorcodes.h"
+#include "camlinterface.h"
+#include "camlerrorcodes.h"
 
 // helper methods
 void freeCharArr(char** str, size_t size);
@@ -76,7 +76,7 @@ int main() {
     amlDataHandle_t sample;
     CreateAMLData(&sample);
     AMLData_SetValueAMLData(sample, "info", info);
-    char* appendix[3] = {"935", "52303", "1442"};
+    const char* appendix[3] = {"935", "52303", "1442"};
     AMLData_SetValueStrArr(sample, "appendix", appendix, 3);
 
 
@@ -132,7 +132,7 @@ void printAMLData(amlDataHandle_t amlData, int depth)
             size_t arrsize;
             AMLData_GetValueStrArr(amlData, keys[i], &valStrArr, &arrsize);
             printf("[");
-            for (int j = 0; j < arrsize; j++)
+            for (size_t j = 0; j < arrsize; j++)
             {
                 printf("%s", valStrArr[j]);
                 if (j != arrsize - 1) printf(", ");

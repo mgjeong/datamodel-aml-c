@@ -14,32 +14,14 @@
  * limitations under the License.
  *
  *******************************************************************************/
-#include <iostream>
+
+#ifndef C_AML_UTILS_H_
+#define C_AML_UTILS_H_
+
 #include <string>
-#include <cstring>
 #include <vector>
 
-#include "cAMLUtils.h"
+char* ConvertStringToCharStr(std::string str);
+char** ConvertVectorToCharStrArr(std::vector<std::string>& list);
 
-using namespace std;
-
-char* ConvertStringToCharStr(std::string str)
-{
-    char* cstr = new char[str.size() + 1];
-    strncpy(cstr, str.c_str(), str.size());
-    cstr[str.size()] = '\0';
-
-    return cstr;
-}
-
-char** ConvertVectorToCharStrArr(std::vector<std::string>& list)
-{
-    char ** cstr = new char*[list.size()];
-
-    for(unsigned long i = 0; i < list.size(); i++)
-    {
-        cstr[i] = ConvertStringToCharStr(list[i]);
-    }
-
-    return cstr;
-}
+#endif // C_AML_UTILS_H_

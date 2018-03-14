@@ -35,7 +35,8 @@ caml_env.AppendUnique(CPPPATH=[
         './dependencies/datamodel-aml-cpp/protobuf',
         './dependencies/datamodel-aml-cpp/include',
         './dependencies/datamodel-aml-cpp/include/logger',
-        './include'
+        './include',
+        './include/internal'
 ])
 
 if caml_env.get('RELEASE'):
