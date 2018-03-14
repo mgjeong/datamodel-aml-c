@@ -89,6 +89,14 @@ int main() {
 
     // print object
     printAMLObject(object);
+
+
+    // destory object and datas
+    DestoryAMLData(&model);
+    DestoryAMLData(&axis);
+    DestoryAMLData(&info);
+    DestoryAMLData(&sample);
+    DestoryAMLObject(&object);
 }
 
 void freeCharArr(char** str, size_t size)
@@ -164,7 +172,7 @@ void printAMLObject(amlObjectHandle_t amlObj)
     AMLObject_GetDeviceId(amlObj, &deviceId);
     AMLObject_GetTimeStamp(amlObj, &timeStamp);
     AMLObject_GetId(amlObj, &id);
-    
+
     printf("{\n");
     printf("    \"device\" : %s,\n", deviceId);
     printf("    \"timeStamp\" : %s,\n", timeStamp);
@@ -190,4 +198,6 @@ void printAMLObject(amlObjectHandle_t amlObj)
     }
 
     printf("\n}\n");
+
+    freeCharArr(dataNames, size);
 }

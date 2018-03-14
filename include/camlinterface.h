@@ -50,7 +50,7 @@ typedef enum
 
 AML_EXPORT CAMLErrorCode CreateAMLObject(const char* deviceId, const char* timeStamp, amlObjectHandle_t* amlObjHandle);
 AML_EXPORT CAMLErrorCode CreateAMLObjectWithID(const char* deviceId, const char* timeStamp, const char* id, amlObjectHandle_t* amlObjHandle);
-AML_EXPORT CAMLErrorCode DestoryAMLObject(amlObjectHandle_t amlObjHandle);
+AML_EXPORT CAMLErrorCode DestoryAMLObject(amlObjectHandle_t* amlObjHandle);
 AML_EXPORT CAMLErrorCode AMLObject_AddData(amlObjectHandle_t amlObjHandle, const char* name, const amlDataHandle_t amlDataHandle);
 AML_EXPORT CAMLErrorCode AMLObject_GetData(amlObjectHandle_t amlObjHandle, const char* name, amlDataHandle_t* amlDataHandle);
 AML_EXPORT CAMLErrorCode AMLObject_GetDataNames(amlObjectHandle_t amlObjHandle, char*** names, size_t* namesSize);
