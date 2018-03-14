@@ -22,13 +22,75 @@
 #include "cAMLInterface.h"
 #include "cAMLErrorcodes.h"
 
-// #define VERIFY_RESULT_OK(result)        if (CAML_OK != result) { \
-//                                             printf("result : %d\n", result);\
-//                                             return 0;\
-//                                         }
+// helper methods
+void freeCharArr(char** str, size_t size);
+void printAMLData(amlDataHandle_t amlData, int depth);
+void printAMLObject(amlObjectHandle_t amlObj);
+
+// Example Data
+/*
+    Raw Data1 (name : "Model")
+    {
+        "ctname": "Model_107.113.97.248",
+        "con": "SR-P7-970"
+    }
+
+    Raw Data2 (name : "Sample")
+    {
+        "info": {
+            "id": "f437da3b",
+            "axis": {
+                "x": "20",
+                "y": "110"
+                "z": "80"
+            }
+        },
+        "appendix": [
+            "935",
+            "52303",
+            "1442"
+        ]
+    }
+*/
+
+int main() {
+    // create "Model" data
+    amlDataHandle_t model;
+    CreateAMLData(&model);
+
+    AMLData_SetValueStr(model, "ctname", "Model_107.113.97.248");
+    AMLData_SetValueStr(model, "con", "SR-P7-970");
+
+    // create "Sample" data
+    amlDataHandle_t axis;
+    CreateAMLData(&axis);
+    AMLData_SetValueStr(axis, "x", "20");
+    AMLData_SetValueStr(axis, "y", "110");
+    AMLData_SetValueStr(axis, "z", "80");
+
+    amlDataHandle_t info;
+    CreateAMLData(&info);
+    AMLData_SetValueStr(info, "id", "f437da3b");
+    AMLData_SetValueAMLData(info, "axis", axis);
+
+    amlDataHandle_t sample;
+    CreateAMLData(&sample);
+    AMLData_SetValueAMLData(sample, "info", info);
+    char* appendix[3] = {"935", "52303", "1442"};
+    AMLData_SetValueStrArr(sample, "appendix", appendix, 3);
 
 
-//helper methods
+    // set datas to object
+    amlObjectHandle_t object;
+    CreateAMLObject("Robot0001", "123456789", &object);
+    AMLObject_AddData(object, "Model", model);
+    AMLObject_AddData(object, "Sample", sample);
+
+
+    // print object
+    printAMLObject(object);
+}
+
 void freeCharArr(char** str, size_t size)
 {
     for (size_t i = 0; i < size; i++)
@@ -49,11 +111,9 @@ void printAMLData(amlDataHandle_t amlData, int depth)
     char** keys = NULL;
     size_t size = 0;
     AMLData_GetKeys(amlData, &keys, &size);
-printf("size : %d\n", size);
-printf("%s %s\n", keys[0], keys[1]);
+
     for (size_t i = 0; i < size; i++)
     {
-printf("FOR(%d)\n", i);
         printf("%s    \"%s\" : ", indent, keys[i]);
 
         AMLValueType_c valType = AMLVALTYPE_STRING;
@@ -83,7 +143,6 @@ printf("FOR(%d)\n", i);
         }
         else if (AMLVALTYPE_AMLDATA == valType)
         {
-            printf("AMLData_GetValueAMLData\n");
             amlDataHandle_t valAMLData;
             AMLData_GetValueAMLData(amlData, keys[i], &valAMLData);
             printf("\n");
@@ -93,7 +152,7 @@ printf("FOR(%d)\n", i);
         if (i != size - 1)  printf(",");
         printf("\n");
     }
-    printf("\n");
+    printf("%s}", indent);
 
     free(indent);
     freeCharArr(keys, size);
@@ -131,69 +190,4 @@ void printAMLObject(amlObjectHandle_t amlObj)
     }
 
     printf("\n}\n");
-}
-
-/*
-    Raw Data1 (name : "Model")
-    {
-        "ctname": "Model_107.113.97.248",
-        "con": "SR-P7-970"
-    }
-
-    Raw Data2 (name : "Sample")
-    {
-        "info": {
-            "id": "f437da3b",
-            "axis": {
-                "x": "20",
-                "y": "110"
-                "z": "80"
-            }
-        },
-        "appendix": [
-            "935",
-            "52303",
-            "1442"
-        ]
-    }
-*/
-
-int main() {
-    CAMLErrorCode result = CAML_OK;
-
-    // create "Model" data
-    amlDataHandle_t model;
-    CreateAMLData(&model);
-
-    AMLData_SetValueStr(model, "ctname", "Model_107.113.97.248");
-    AMLData_SetValueStr(model, "con", "SR-P7-970");
-
-    // create "Sample" data
-    amlDataHandle_t axis;
-    CreateAMLData(&axis);
-    AMLData_SetValueStr(axis, "x", "20");
-    AMLData_SetValueStr(axis, "y", "110");
-    AMLData_SetValueStr(axis, "z", "80");
-
-    amlDataHandle_t info;
-    CreateAMLData(&info);
-    AMLData_SetValueStr(info, "id", "f437da3b");
-    AMLData_SetValueAMLData(info, "axis", axis);
-
-    amlDataHandle_t sample;
-    CreateAMLData(&sample);
-    AMLData_SetValueAMLData(sample, "info", info);
-    char* appendix[3] = {"935", "52303", "1442"};
-    AMLData_SetValueStrArr(sample, "appendix", appendix, 3);
-
-
-    // set datas to object
-    amlObjectHandle_t object;
-    CreateAMLObject("Robot0001", "123456789", &object);
-    AMLObject_AddData(object, "Model", model);
-    AMLObject_AddData(object, "Sample", sample);
-
-
-    // print object
-    printAMLObject(object);
 }

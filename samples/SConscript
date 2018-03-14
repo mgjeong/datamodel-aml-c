@@ -33,9 +33,9 @@ caml_sample_env.AppendUnique(
     CXXFLAGS=['-O2', '-g', '-Wall', '-fmessage-length=0', '-std=c++0x', '-I/usr/local/include'])
 
 if caml_sample_env.get('RELEASE'):
-	caml_sample_env.PrependUnique(LIBS=['aml'], LIBPATH=[os.path.join('./../dependencies/datamodel-aml-cpp/out/linux/', target_arch, 'release')])
+    caml_sample_env.PrependUnique(LIBS=['aml'], LIBPATH=[os.path.join('./../dependencies/datamodel-aml-cpp/out/linux/', target_arch, 'release')])
 else:
-	caml_sample_env.PrependUnique(LIBS=['aml'], LIBPATH=[os.path.join('./../dependencies/datamodel-aml-cpp/out/linux/', target_arch, 'debug')])
+    caml_sample_env.PrependUnique(LIBS=['aml'], LIBPATH=[os.path.join('./../dependencies/datamodel-aml-cpp/out/linux/', target_arch, 'debug')])
 
 caml_sample_env.AppendUnique(LIBS=['caml'])
 

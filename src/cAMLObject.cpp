@@ -98,8 +98,8 @@ CAMLErrorCode AMLObject_GetData(amlObjectHandle_t amlObjHandle, const char* name
 
     try
     {
-        AMLData* amlData = static_cast<AMLObject*>(amlObjHandle)->getData(name);
-        *amlDataHandle = static_cast<amlDataHandle_t>(amlData);
+        const AMLData& amlData = static_cast<AMLObject*>(amlObjHandle)->getData(name);
+        *amlDataHandle = static_cast<amlDataHandle_t>(const_cast<AMLData*>(&amlData));
     }
     catch (const AMLException& e)
     {
