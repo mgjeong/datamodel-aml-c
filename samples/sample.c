@@ -20,12 +20,15 @@
 #include <stdlib.h>
 
 #include "camlinterface.h"
+#include "camlrepresentation.h"
 #include "camlerrorcodes.h"
 
 // helper methods
 void freeCharArr(char** str, size_t size);
 void printAMLData(amlDataHandle_t amlData, int depth);
 void printAMLObject(amlObjectHandle_t amlObj);
+
+void representationTest(char* filePath);
 
 // Example Data
 /*
@@ -53,7 +56,12 @@ void printAMLObject(amlObjectHandle_t amlObj);
     }
 */
 
-int main() {
+int main()
+{
+    // test representation
+    representationTest("GTC_data_model.aml");
+    printf("-------------------------------------------------------------\n");
+
     // create "Model" data
     amlDataHandle_t model;
     CreateAMLData(&model);
@@ -97,6 +105,20 @@ int main() {
     DestoryAMLData(&info);
     DestoryAMLData(&sample);
     DestoryAMLObject(&object);
+}
+
+void representationTest(char* filePath)
+{
+    representation_t rep;
+    CreateRepresentation(&rep, filePath);
+
+    amlObjectHandle_t config;
+    Representation_GetConfigInfo(rep, &config);
+
+    printAMLObject(config); 
+
+    DestoryAMLObject(&config);
+    DestoryRepresentation(&rep);
 }
 
 void freeCharArr(char** str, size_t size)
