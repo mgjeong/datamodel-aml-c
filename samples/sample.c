@@ -100,11 +100,11 @@ int main()
 
 
     // destory object and datas
-    DestoryAMLData(&model);
-    DestoryAMLData(&axis);
-    DestoryAMLData(&info);
-    DestoryAMLData(&sample);
-    DestoryAMLObject(&object);
+    DestoryAMLData(model);
+    DestoryAMLData(axis);
+    DestoryAMLData(info);
+    DestoryAMLData(sample);
+    DestoryAMLObject(object);
 }
 
 void representationTest(char* filePath)
@@ -117,8 +117,8 @@ void representationTest(char* filePath)
 
     printAMLObject(config); 
 
-    DestoryAMLObject(&config);
-    DestoryRepresentation(&rep);
+    DestoryAMLObject(config);
+    DestoryRepresentation(rep);
 }
 
 void freeCharArr(char** str, size_t size)

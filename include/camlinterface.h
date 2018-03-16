@@ -50,7 +50,7 @@ typedef enum
 
 AML_EXPORT CAMLErrorCode CreateAMLObject(const char* deviceId, const char* timeStamp, amlObjectHandle_t* amlObjHandle);
 AML_EXPORT CAMLErrorCode CreateAMLObjectWithID(const char* deviceId, const char* timeStamp, const char* id, amlObjectHandle_t* amlObjHandle);
-AML_EXPORT CAMLErrorCode DestoryAMLObject(amlObjectHandle_t* amlObjHandle);
+AML_EXPORT CAMLErrorCode DestoryAMLObject(amlObjectHandle_t amlObjHandle);
 AML_EXPORT CAMLErrorCode AMLObject_AddData(amlObjectHandle_t amlObjHandle, const char* name, const amlDataHandle_t amlDataHandle);
 AML_EXPORT CAMLErrorCode AMLObject_GetData(amlObjectHandle_t amlObjHandle, const char* name, amlDataHandle_t* amlDataHandle);
 AML_EXPORT CAMLErrorCode AMLObject_GetDataNames(amlObjectHandle_t amlObjHandle, char*** names, size_t* namesSize);
@@ -60,7 +60,7 @@ AML_EXPORT CAMLErrorCode AMLObject_GetId(amlObjectHandle_t amlObjHandle, char** 
 
 
 AML_EXPORT CAMLErrorCode CreateAMLData(amlDataHandle_t* amlDataHandle);
-AML_EXPORT CAMLErrorCode DestoryAMLData(amlDataHandle_t* amlDataHandle);
+AML_EXPORT CAMLErrorCode DestoryAMLData(amlDataHandle_t amlDataHandle);
 AML_EXPORT CAMLErrorCode AMLData_SetValueStr(amlDataHandle_t amlDataHandle, const char* key, const char* value);
 AML_EXPORT CAMLErrorCode AMLData_SetValueStrArr(amlDataHandle_t amlDataHandle, const char* key, const char** value, const size_t valueSize);
 AML_EXPORT CAMLErrorCode AMLData_SetValueAMLData(amlDataHandle_t amlDataHandle, const char* key, const amlDataHandle_t value);

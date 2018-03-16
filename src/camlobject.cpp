@@ -58,13 +58,12 @@ CAMLErrorCode CreateAMLObjectWithID(const char* deviceId, const char* timeStamp,
     return CAML_OK;
 }
 
-CAMLErrorCode DestoryAMLObject(amlObjectHandle_t* amlObjHandle)
+CAMLErrorCode DestoryAMLObject(amlObjectHandle_t amlObjHandle)
 {
     VERIFY_PARAM_NON_NULL(amlObjHandle);
 
-    AMLObject* amlObj = static_cast<AMLObject*>(*amlObjHandle);
+    AMLObject* amlObj = static_cast<AMLObject*>(amlObjHandle);
     delete amlObj;
-    *amlObjHandle = NULL;
 
     return CAML_OK;
 }

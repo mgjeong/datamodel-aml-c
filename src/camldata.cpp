@@ -39,13 +39,12 @@ CAMLErrorCode CreateAMLData(amlDataHandle_t* amlDataHandle)
     return CAML_OK;
 }
 
-CAMLErrorCode DestoryAMLData(amlDataHandle_t* amlDataHandle)
+CAMLErrorCode DestoryAMLData(amlDataHandle_t amlDataHandle)
 {
     VERIFY_PARAM_NON_NULL(amlDataHandle);
 
-    AMLData* amldata = static_cast<AMLData*>(*amlDataHandle);
+    AMLData* amldata = static_cast<AMLData*>(amlDataHandle);
     delete amldata;
-    *amlDataHandle = NULL;
 
     return CAML_OK;
 }

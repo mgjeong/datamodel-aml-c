@@ -42,13 +42,12 @@ CAMLErrorCode CreateRepresentation(representation_t* repHandle, const char* file
     return CAML_OK;
 }
 
-CAMLErrorCode DestoryRepresentation(representation_t* repHandle)
+CAMLErrorCode DestoryRepresentation(representation_t repHandle)
 {
     VERIFY_PARAM_NON_NULL(repHandle);
 
-    Representation* rep = static_cast<Representation*>(*repHandle);
+    Representation* rep = static_cast<Representation*>(repHandle);
     delete rep;
-    *repHandle = NULL;
 
     return CAML_OK;
 }
