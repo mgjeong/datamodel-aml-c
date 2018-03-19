@@ -99,12 +99,12 @@ int main()
     printAMLObject(object);
 
 
-    // destory object and datas
-    DestoryAMLData(model);
-    DestoryAMLData(axis);
-    DestoryAMLData(info);
-    DestoryAMLData(sample);
-    DestoryAMLObject(object);
+    // Destroy object and datas
+    DestroyAMLData(model);
+    DestroyAMLData(axis);
+    DestroyAMLData(info);
+    DestroyAMLData(sample);
+    DestroyAMLObject(object);
 }
 
 void representationTest(char* filePath)
@@ -117,8 +117,8 @@ void representationTest(char* filePath)
 
     printAMLObject(config); 
 
-    DestoryAMLObject(config);
-    DestoryRepresentation(rep);
+    DestroyAMLObject(config);
+    DestroyRepresentation(rep);
 }
 
 void freeCharArr(char** str, size_t size)

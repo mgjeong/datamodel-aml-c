@@ -42,7 +42,7 @@ CAMLErrorCode CreateRepresentation(representation_t* repHandle, const char* file
     return CAML_OK;
 }
 
-CAMLErrorCode DestoryRepresentation(representation_t repHandle)
+CAMLErrorCode DestroyRepresentation(representation_t repHandle)
 {
     VERIFY_PARAM_NON_NULL(repHandle);
 
