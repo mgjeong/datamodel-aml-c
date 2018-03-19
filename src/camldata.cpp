@@ -39,7 +39,7 @@ CAMLErrorCode CreateAMLData(amlDataHandle_t* amlDataHandle)
     return CAML_OK;
 }
 
-CAMLErrorCode DestoryAMLData(amlDataHandle_t amlDataHandle)
+CAMLErrorCode DestroyAMLData(amlDataHandle_t amlDataHandle)
 {
     VERIFY_PARAM_NON_NULL(amlDataHandle);
 
