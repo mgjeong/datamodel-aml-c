@@ -35,7 +35,7 @@ typedef void * representation_t;
 
 
 AML_EXPORT CAMLErrorCode CreateRepresentation(representation_t* repHandle, const char* filePath);
-AML_EXPORT CAMLErrorCode DestoryRepresentation(representation_t* repHandle);
+AML_EXPORT CAMLErrorCode DestoryRepresentation(representation_t repHandle);
 AML_EXPORT CAMLErrorCode Representation_GetRepId(representation_t repHandle, char** repId);
 AML_EXPORT CAMLErrorCode Representation_GetConfigInfo(representation_t repHandle, amlObjectHandle_t* amlObjHandle);
 
