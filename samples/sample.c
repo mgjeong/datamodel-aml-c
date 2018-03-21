@@ -18,12 +18,15 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <time.h>
+#include <sys/timeb.h>
 
 #include "camlinterface.h"
 #include "camlrepresentation.h"
 #include "camlerrorcodes.h"
 
 // helper methods
+char* getCurrentTime();
 void freeCharArr(char** str, size_t size);
 void printAMLData(amlDataHandle_t amlData, int depth);
 void printAMLObject(amlObjectHandle_t amlObj);
@@ -90,7 +93,8 @@ int main()
 
     // set datas to object
     amlObjectHandle_t object;
-    CreateAMLObject("Robot0001", "123456789", &object);
+    char* currTime = getCurrentTime();
+    CreateAMLObject("Robot0001", currTime, &object);
     AMLObject_AddData(object, "Model", model);
     AMLObject_AddData(object, "Sample", sample);
 
@@ -105,6 +109,7 @@ int main()
     DestroyAMLData(info);
     DestroyAMLData(sample);
     DestroyAMLObject(object);
+    free(currTime);
 }
 
 void representationTest(char* filePath)
@@ -119,6 +124,24 @@ void representationTest(char* filePath)
 
     DestroyAMLObject(config);
     DestroyRepresentation(rep);
+}
+
+char* getCurrentTime()
+{
+    char* timeStr = (char*)malloc(sizeof(char) * 10);
+    struct timeb tp;
+    ftime(&tp);
+    strftime(timeStr, sizeof(timeStr), "%H%M%S", localtime(&tp.time));
+
+    char milliSec[4];
+    sprintf(milliSec, "%d", tp.millitm);
+
+    strncpy(timeStr + 6, milliSec, 3);
+    timeStr[9] = '\0';
+
+//    printf("%s\n", timeStr);
+
+    return timeStr;
 }
 
 void freeCharArr(char** str, size_t size)
