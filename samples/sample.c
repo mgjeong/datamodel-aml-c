@@ -110,7 +110,7 @@ int main()
 void representationTest(char* filePath)
 {
     representation_t rep;
-    CreateRepresentation(&rep, filePath);
+    CreateRepresentation(filePath, &rep);
 
     amlObjectHandle_t config;
     Representation_GetConfigInfo(rep, &config);

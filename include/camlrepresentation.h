@@ -36,14 +36,14 @@ typedef void * representation_t;
 
 /**
  * @brief       Create an instance of Representation.
- * @param       repHandle       [out] handle of created Representation.
  * @param       filePath        [in] path of an AML file that contains data model information.
+ * @param       repHandle       [out] handle of created Representation.
  * @retval      #CAML_OK                Successful.
  * @retval      #CAML_NO_MEMORY         Failed to alloc memory.
  * @note        Representation instance will be allocated, so it should be deleted after use.
  *              To destroy an instance, use DestroyRepresentation().
  */
-AML_EXPORT CAMLErrorCode CreateRepresentation(representation_t* repHandle, const char* filePath);
+AML_EXPORT CAMLErrorCode CreateRepresentation(const char* filePath, representation_t* repHandle);
 
 /**
  * @brief       Destroy an instance of Representation.
