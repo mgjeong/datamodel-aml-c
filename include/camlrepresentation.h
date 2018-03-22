@@ -44,7 +44,8 @@ typedef void * representation_t;
  * @note        Representation instance will be allocated, so it should be deleted after use.
  *              To destroy an instance, use DestroyRepresentation().
  */
-AML_EXPORT CAMLErrorCode CreateRepresentation(const char* filePath, representation_t* repHandle);
+AML_EXPORT CAMLErrorCode CreateRepresentation(const char* filePath,
+                                              representation_t* repHandle);
 
 /**
  * @brief       Destroy an instance of Representation.
@@ -64,7 +65,8 @@ AML_EXPORT CAMLErrorCode DestroyRepresentation(representation_t repHandle);
  * @note        Characters will be allocated to 'repId', so it should be freed after use. (See the below example)
  *              ex) free(repId);
  */
-AML_EXPORT CAMLErrorCode Representation_GetRepId(representation_t repHandle, char** repId);
+AML_EXPORT CAMLErrorCode Representation_GetRepId(representation_t repHandle,
+                                                 char** repId);
 
 /**
  * @brief       This function returns AMLObject that contains configuration data which is present in RoleClassLib.
@@ -77,7 +79,8 @@ AML_EXPORT CAMLErrorCode Representation_GetRepId(representation_t repHandle, cha
  *              To destroy an instance, use DestroyAMLObject().
  * @see         DestroyAMLObject
  */
-AML_EXPORT CAMLErrorCode Representation_GetConfigInfo(representation_t repHandle, amlObjectHandle_t* amlObjHandle);
+AML_EXPORT CAMLErrorCode Representation_GetConfigInfo(representation_t repHandle,
+                                                      amlObjectHandle_t* amlObjHandle);
 
 
 #ifdef __cplusplus
