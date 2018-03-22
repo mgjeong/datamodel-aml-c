@@ -54,6 +54,7 @@ typedef enum
  * @param       timestamp       [in] timestamp value of AMLObject delivered by device.
  * @param       amlObjHandle    [out] handle of created AMLObject.
  * @retval      #CAML_OK                Successful.
+ * @retval      #CAML_INVALID_PARAM     Invalid parameter.
  * @retval      #CAML_NO_MEMORY         Failed to alloc memory to AMLObject instance.
  * @note        AMLObject instance will be allocated, so it should be deleted after use.
  *              To destroy an instance, use DestroyAMLObject().
@@ -69,6 +70,7 @@ AML_EXPORT CAMLErrorCode CreateAMLObject(const char* deviceId,
  * @param       id              [in] id of AMLObject.
  * @param       amlObjHandle    [out] handle of created AMLObject.
  * @retval      #CAML_OK                Successful.
+ * @retval      #CAML_INVALID_PARAM     Invalid parameter.
  * @retval      #CAML_NO_MEMORY         Failed to alloc memory to AMLObject instance.
  * @note        AMLObject instance will be allocated, so it should be deleted after use.
  *              To destroy an instance, use DestroyAMLObject().
@@ -82,6 +84,7 @@ AML_EXPORT CAMLErrorCode CreateAMLObjectWithID(const char* deviceId,
  * @brief       Destroy an instance of AMLObject.
  * @param       amlObjHandle    [in] AMLObject that will be destroyed.
  * @retval      #CAML_OK                Successful.
+ * @retval      #CAML_INVALID_PARAM     Invalid parameter.
  */
 AML_EXPORT CAMLErrorCode DestroyAMLObject(amlObjectHandle_t amlObjHandle);
 
@@ -91,6 +94,7 @@ AML_EXPORT CAMLErrorCode DestroyAMLObject(amlObjectHandle_t amlObjHandle);
  * @param       name            [in] AMLData key.
  * @param       amlDataHandle   [in] handle of AMLData value.
  * @retval      #CAML_OK                Successful.
+ * @retval      #CAML_INVALID_PARAM     Invalid parameter.
  * @retval      #CAML_KEY_ALREADY_EXIST Name already exists in AMLObject.
  */
 AML_EXPORT CAMLErrorCode AMLObject_AddData(amlObjectHandle_t amlObjHandle,
@@ -103,6 +107,7 @@ AML_EXPORT CAMLErrorCode AMLObject_AddData(amlObjectHandle_t amlObjHandle,
  * @param       name            [in] AMLData key.
  * @param       amlDataHandle   [out] handle of AMLData value.
  * @retval      #CAML_OK                Successful.
+ * @retval      #CAML_INVALID_PARAM     Invalid parameter.
  * @retval      #CAML_KEY_NOT_EXIST     Name does not exists in AMLObject.
  */
 AML_EXPORT CAMLErrorCode AMLObject_GetData(amlObjectHandle_t amlObjHandle,
@@ -115,6 +120,7 @@ AML_EXPORT CAMLErrorCode AMLObject_GetData(amlObjectHandle_t amlObjHandle,
  * @param       names           [out] character array that contains AMLData names.
  * @param       namesSize       [out] the size of 'names'.
  * @retval      #CAML_OK                Successful.
+ * @retval      #CAML_INVALID_PARAM     Invalid parameter.
  * @retval      #CAML_NO_MEMORY         Failed to alloc memory to character array.
  * @note        Character array will be allocated to 'names', so it should be freed after use. (See the below example)
  *              ex) for (size_t i = 0; i < namesSize; i++) free(names[i]);
@@ -129,6 +135,7 @@ AML_EXPORT CAMLErrorCode AMLObject_GetDataNames(amlObjectHandle_t amlObjHandle,
  * @param       amlObjHandle    [in] handle of AMLObject.
  * @param       deviceId        [out] deviceId.
  * @retval      #CAML_OK                Successful.
+ * @retval      #CAML_INVALID_PARAM     Invalid parameter.
  * @retval      #CAML_NO_MEMORY         Failed to alloc memory to characters.
  * @note        Characters will be allocated to 'deviceId', so it should be freed after use. (See the below example)
  *              ex) free(deviceId);
@@ -141,6 +148,7 @@ AML_EXPORT CAMLErrorCode AMLObject_GetDeviceId(amlObjectHandle_t amlObjHandle,
  * @param       amlObjHandle    [in] handle of AMLObject.
  * @param       timeStamp       [out] timeStamp.
  * @retval      #CAML_OK                Successful.
+ * @retval      #CAML_INVALID_PARAM     Invalid parameter.
  * @retval      #CAML_NO_MEMORY         Failed to alloc memory to characters.
  * @note        Characters will be allocated to 'timeStamp', so it should be freed after use. (See the below example)
  *              ex) free(timeStamp);
@@ -153,6 +161,7 @@ AML_EXPORT CAMLErrorCode AMLObject_GetTimeStamp(amlObjectHandle_t amlObjHandle,
  * @param       amlObjHandle    [in] handle of AMLObject.
  * @param       id              [out] id.
  * @retval      #CAML_OK                Successful.
+ * @retval      #CAML_INVALID_PARAM     Invalid parameter.
  * @retval      #CAML_NO_MEMORY         Failed to alloc memory to characters.
  * @note        Characters will be allocated to 'id', so it should be freed after use. (See the below example)
  *              ex) free(id);
@@ -164,6 +173,8 @@ AML_EXPORT CAMLErrorCode AMLObject_GetId(amlObjectHandle_t amlObjHandle,
 /**
  * @brief       Create an instance of AMLData.
  * @param       amlDataHandle   [out] handle of created AMLData.
+ * @retval      #CAML_OK                Successful.
+ * @retval      #CAML_INVALID_PARAM     Invalid parameter.
  * @note        AMLData instance will be allocated, so it should be deleted after use.
  *              To destroy an instance, use DestroyAMLData().
  */
@@ -173,6 +184,7 @@ AML_EXPORT CAMLErrorCode CreateAMLData(amlDataHandle_t* amlDataHandle);
  * @brief       Destroy an instance of AMLData.
  * @param       amlDataHandle   [in] AMLData that will be destroyed.
  * @retval      #CAML_OK                Successful.
+ * @retval      #CAML_INVALID_PARAM     Invalid parameter.
  */
 AML_EXPORT CAMLErrorCode DestroyAMLData(amlDataHandle_t amlDataHandle);
 
@@ -182,6 +194,7 @@ AML_EXPORT CAMLErrorCode DestroyAMLData(amlDataHandle_t amlDataHandle);
  * @param       key             [in] key string.
  * @param       value           [in] string value.
  * @retval      #CAML_OK                Successful.
+ * @retval      #CAML_INVALID_PARAM     Invalid parameter.
  * @retval      #CAML_KEY_ALREADY_EXIST Key already exists in AMLData.
  */
 AML_EXPORT CAMLErrorCode AMLData_SetValueStr(amlDataHandle_t amlDataHandle,
@@ -195,6 +208,7 @@ AML_EXPORT CAMLErrorCode AMLData_SetValueStr(amlDataHandle_t amlDataHandle,
  * @param       value           [in] string array value.
  * @param       valueSize       [in] size of value array.
  * @retval      #CAML_OK                Successful.
+ * @retval      #CAML_INVALID_PARAM     Invalid parameter.
  * @retval      #CAML_KEY_ALREADY_EXIST Key already exists in AMLData.
  */
 AML_EXPORT CAMLErrorCode AMLData_SetValueStrArr(amlDataHandle_t amlDataHandle,
@@ -208,6 +222,7 @@ AML_EXPORT CAMLErrorCode AMLData_SetValueStrArr(amlDataHandle_t amlDataHandle,
  * @param       key             [in] key string.
  * @param       value           [in] handle of AMLData that will be set as value.
  * @retval      #CAML_OK                Successful.
+ * @retval      #CAML_INVALID_PARAM     Invalid parameter.
  * @retval      #CAML_KEY_ALREADY_EXIST Key already exists in AMLData.
  */
 AML_EXPORT CAMLErrorCode AMLData_SetValueAMLData(amlDataHandle_t amlDataHandle,
@@ -220,6 +235,7 @@ AML_EXPORT CAMLErrorCode AMLData_SetValueAMLData(amlDataHandle_t amlDataHandle,
  * @param       key             [in] key string.
  * @param       value           [out] string value.
  * @retval      #CAML_OK                Successful.
+ * @retval      #CAML_INVALID_PARAM     Invalid parameter.
  * @retval      #CAML_KEY_NOT_EXIST     Key does not exists in AMLData.
  * @retval      #CAML_NO_MEMORY         Failed to alloc memory to characters.
  * @note        Characters will be allocated to 'value', so it should be freed after use. (See the below example)
@@ -235,6 +251,7 @@ AML_EXPORT CAMLErrorCode AMLData_GetValueStr(amlDataHandle_t amlDataHandle,
  * @param       key             [in] key string.
  * @param       value           [out] string array value.
  * @retval      #CAML_OK                Successful.
+ * @retval      #CAML_INVALID_PARAM     Invalid parameter.
  * @retval      #CAML_KEY_NOT_EXIST     Key does not exists in AMLData.
  * @retval      #CAML_NO_MEMORY         Failed to alloc memory to character array.
  * @note        Character array will be allocated to 'value', so it should be freed after use. (See the below example)
@@ -252,6 +269,7 @@ AML_EXPORT CAMLErrorCode AMLData_GetValueStrArr(amlDataHandle_t amlDataHandle,
  * @param       key             [in] key string.
  * @param       value           [out] handle of AMLData value.
  * @retval      #CAML_OK                Successful.
+ * @retval      #CAML_INVALID_PARAM     Invalid parameter.
  * @retval      #CAML_KEY_NOT_EXIST     Key does not exists in AMLData.
  */
 AML_EXPORT CAMLErrorCode AMLData_GetValueAMLData(amlDataHandle_t amlDataHandle,
@@ -264,6 +282,7 @@ AML_EXPORT CAMLErrorCode AMLData_GetValueAMLData(amlDataHandle_t amlDataHandle,
  * @param       keys            [out] character array that contains keys.
  * @param       keysSize        [out] the size of 'keys'.
  * @retval      #CAML_OK                Successful.
+ * @retval      #CAML_INVALID_PARAM     Invalid parameter.
  * @retval      #CAML_NO_MEMORY         Failed to alloc memory to character array.
  * @note        Character array will be allocated to 'keys', so it should be freed after use. (See the below example)
  *              ex) for (size_t i = 0; i < keysSize; i++) free(keys[i]);
@@ -279,6 +298,7 @@ AML_EXPORT CAMLErrorCode AMLData_GetKeys(amlDataHandle_t amlDataHandle,
  * @param       key             [in] key string.
  * @param       type            [out] type of value of the key.
  * @retval      #CAML_OK                Successful.
+ * @retval      #CAML_INVALID_PARAM     Invalid parameter.
  * @retval      #CAML_KEY_NOT_EXIST     Key does not exists in AMLData.
  */
 AML_EXPORT CAMLErrorCode AMLData_GetValueType(amlDataHandle_t amlDataHandle,

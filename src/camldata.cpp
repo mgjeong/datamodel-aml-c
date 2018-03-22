@@ -30,6 +30,8 @@ using namespace std;
 
 CAMLErrorCode CreateAMLData(amlDataHandle_t* amlDataHandle)
 {
+    VERIFY_PARAM_NON_NULL(amlDataHandle);
+
     *amlDataHandle = new(std::nothrow) AMLData();
     if (!amlDataHandle)
     {
