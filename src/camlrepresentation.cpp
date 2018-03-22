@@ -28,7 +28,7 @@
 
 using namespace std;
 
-CAMLErrorCode CreateRepresentation(representation_t* repHandle, const char* filePath)
+CAMLErrorCode CreateRepresentation(const char* filePath, representation_t* repHandle)
 {
     VERIFY_PARAM_NON_NULL(repHandle);
     VERIFY_PARAM_NON_NULL(filePath);
