@@ -18,7 +18,7 @@
 #!/bin/bash
 
 PROJECT_ROOT=$(pwd)
-AML_TARGET_ARCH=x86_64
+AML_TARGET_ARCH="$(uname -m)"
 
 
 install_dependencies() {
@@ -40,6 +40,7 @@ install_dependencies() {
 
     cd ./datamodel-aml-cpp
     git fetch origin
+#git checkout alpha_noboost
     #git reset --hard origin/master
 
     # Build datamodel-aml-cpp
