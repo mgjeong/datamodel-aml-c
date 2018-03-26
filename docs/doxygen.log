@@ -1,0 +1,78 @@
+warning: failed to open layout file 'doxygenLayout.xml' for reading!
+warning: source img is not a readable file or directory... skipping.
+warning: source ../include/camlerrorcmodes.h is not a readable file or directory... skipping.
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:283: warning: explicit link request to 'CAML_OK' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:284: warning: explicit link request to 'CAML_INVALID_PARAM' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:285: warning: explicit link request to 'CAML_NO_MEMORY' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:270: warning: explicit link request to 'CAML_OK' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:271: warning: explicit link request to 'CAML_INVALID_PARAM' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:272: warning: explicit link request to 'CAML_KEY_NOT_EXIST' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:236: warning: explicit link request to 'CAML_OK' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:237: warning: explicit link request to 'CAML_INVALID_PARAM' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:238: warning: explicit link request to 'CAML_KEY_NOT_EXIST' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:239: warning: explicit link request to 'CAML_NO_MEMORY' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:252: warning: explicit link request to 'CAML_OK' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:253: warning: explicit link request to 'CAML_INVALID_PARAM' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:254: warning: explicit link request to 'CAML_KEY_NOT_EXIST' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:255: warning: explicit link request to 'CAML_NO_MEMORY' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:249: warning: The following parameters of AMLData_GetValueStrArr(amlDataHandle_t amlDataHandle, const char *key, char ***value, size_t *valueSize) are not documented:
+  parameter 'valueSize'
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:299: warning: explicit link request to 'CAML_OK' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:300: warning: explicit link request to 'CAML_INVALID_PARAM' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:301: warning: explicit link request to 'CAML_KEY_NOT_EXIST' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:223: warning: explicit link request to 'CAML_OK' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:224: warning: explicit link request to 'CAML_INVALID_PARAM' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:225: warning: explicit link request to 'CAML_KEY_ALREADY_EXIST' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:195: warning: explicit link request to 'CAML_OK' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:196: warning: explicit link request to 'CAML_INVALID_PARAM' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:197: warning: explicit link request to 'CAML_KEY_ALREADY_EXIST' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:209: warning: explicit link request to 'CAML_OK' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:210: warning: explicit link request to 'CAML_INVALID_PARAM' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:211: warning: explicit link request to 'CAML_KEY_ALREADY_EXIST' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:95: warning: explicit link request to 'CAML_OK' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:96: warning: explicit link request to 'CAML_INVALID_PARAM' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:97: warning: explicit link request to 'CAML_KEY_ALREADY_EXIST' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:108: warning: explicit link request to 'CAML_OK' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:109: warning: explicit link request to 'CAML_INVALID_PARAM' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:110: warning: explicit link request to 'CAML_KEY_NOT_EXIST' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:121: warning: explicit link request to 'CAML_OK' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:122: warning: explicit link request to 'CAML_INVALID_PARAM' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:123: warning: explicit link request to 'CAML_NO_MEMORY' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:136: warning: explicit link request to 'CAML_OK' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:137: warning: explicit link request to 'CAML_INVALID_PARAM' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:138: warning: explicit link request to 'CAML_NO_MEMORY' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:162: warning: explicit link request to 'CAML_OK' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:163: warning: explicit link request to 'CAML_INVALID_PARAM' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:164: warning: explicit link request to 'CAML_NO_MEMORY' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:149: warning: explicit link request to 'CAML_OK' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:150: warning: explicit link request to 'CAML_INVALID_PARAM' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:151: warning: explicit link request to 'CAML_NO_MEMORY' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:175: warning: explicit link request to 'CAML_OK' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:176: warning: explicit link request to 'CAML_INVALID_PARAM' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:52: warning: argument 'timestamp' of command @param is not found in the argument list of CreateAMLObject(const char *deviceId, const char *timeStamp, amlObjectHandle_t *amlObjHandle)
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:55: warning: explicit link request to 'CAML_OK' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:56: warning: explicit link request to 'CAML_INVALID_PARAM' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:57: warning: explicit link request to 'CAML_NO_MEMORY' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:52: warning: The following parameters of CreateAMLObject(const char *deviceId, const char *timeStamp, amlObjectHandle_t *amlObjHandle) are not documented:
+  parameter 'timeStamp'
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:67: warning: argument 'timestamp' of command @param is not found in the argument list of CreateAMLObjectWithID(const char *deviceId, const char *timeStamp, const char *id, amlObjectHandle_t *amlObjHandle)
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:71: warning: explicit link request to 'CAML_OK' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:72: warning: explicit link request to 'CAML_INVALID_PARAM' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:73: warning: explicit link request to 'CAML_NO_MEMORY' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:67: warning: The following parameters of CreateAMLObjectWithID(const char *deviceId, const char *timeStamp, const char *id, amlObjectHandle_t *amlObjHandle) are not documented:
+  parameter 'timeStamp'
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:185: warning: explicit link request to 'CAML_OK' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:186: warning: explicit link request to 'CAML_INVALID_PARAM' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:85: warning: explicit link request to 'CAML_OK' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlinterface.h:86: warning: explicit link request to 'CAML_INVALID_PARAM' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlrepresentation.h:40: warning: explicit link request to 'CAML_OK' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlrepresentation.h:41: warning: explicit link request to 'CAML_INVALID_PARAM' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlrepresentation.h:42: warning: explicit link request to 'CAML_NO_MEMORY' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlrepresentation.h:52: warning: explicit link request to 'CAML_OK' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlrepresentation.h:53: warning: explicit link request to 'CAML_INVALID_PARAM' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlrepresentation.h:74: warning: explicit link request to 'CAML_OK' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlrepresentation.h:75: warning: explicit link request to 'CAML_INVALID_PARAM' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlrepresentation.h:76: warning: explicit link request to 'CAML_INVALID_AML_SCHEMA' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlrepresentation.h:61: warning: explicit link request to 'CAML_OK' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlrepresentation.h:62: warning: explicit link request to 'CAML_INVALID_PARAM' could not be resolved
+/home/jaewook/project/githubsec/datamodel-aml-c/include/camlrepresentation.h:63: warning: explicit link request to 'CAML_NO_MEMORY' could not be resolved
