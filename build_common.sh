@@ -55,47 +55,7 @@ install_dependencies() {
 
     # Build datamodel-aml-cpp
     echo -e "Installing datamodel-aml-cpp library"
-    if [ "x86" = ${AML_TARGET_ARCH} ]; then
-        if [ "debug" = ${AML_BUILD_MODE} ]; then
-            ./build_common.sh --with_dependencies=true --target_arch=x86 --build_mode=debug
-        else
-            ./build_common.sh --with_dependencies=true --target_arch=x86
-        fi
-    elif [ "x86_64" = ${AML_TARGET_ARCH} ]; then
-        if [ "debug" = ${AML_BUILD_MODE} ]; then
-            ./build_common.sh --with_dependencies=true --target_arch=x86_64 --build_mode=debug
-        else
-            ./build_common.sh --with_dependencies=true --target_arch=x86_64
-        fi
-    elif [ "arm" = ${AML_TARGET_ARCH} ]; then
-        if [ "debug" = ${AML_BUILD_MODE} ]; then
-            ./build_common.sh --with_dependencies=true --target_arch=arm --build_mode=debug
-        else
-            ./build_common.sh --with_dependencies=true --target_arch=arm
-        fi
-    elif [ "arm64" = ${AML_TARGET_ARCH} ]; then
-        if [ "debug" = ${AML_BUILD_MODE} ]; then
-            ./build_common.sh --with_dependencies=true --target_arch=arm64 --build_mode=debug
-        else
-            ./build_common.sh --with_dependencies=true --target_arch=arm64
-        fi
-#    elif [ "armhf" = ${AML_TARGET_ARCH} ]; then
-#        if [ "debug" = ${AML_BUILD_MODE} ]; then
-#            ./build_common.sh --with_dependencies=true --target_arch=armhf --build_mode=debug
-#        else
-#            ./build_common.sh --with_dependencies=true --target_arch=armhf
-#        fi
-    elif [ "armhf" = ${AML_TARGET_ARCH} -o "armhf-qemu" = ${AML_TARGET_ARCH} ]; then
-        if [ "debug" = ${AML_BUILD_MODE} ]; then
-            ./build_common.sh --with_dependencies=true --target_arch=armhf --build_mode=debug
-        else
-            ./build_common.sh --with_dependencies=true --target_arch=armhf
-        fi
-    else
-         echo -e "${RED}Not a supported architecture${NO_COLOUR}"
-         usage; exit 1;
-    fi
-
+    ./build_common.sh --with_dependencies=${AML_WITH_DEP} --target_arch=${AML_TARGET_ARCH} --build_mode=${AML_BUILD_MODE} --logging=${AML_LOGGING}
     if [ $? -ne 0 ]; then 
         echo -e "${RED}Build failed${NO_COLOUR}" 
         exit 1 
@@ -108,7 +68,7 @@ usage() {
     echo -e "${GREEN}Options:${NO_COLOUR}"
     echo "  --build_mode=[release|debug](default: release)               :  Build aml library and samples in release or debug mode"
     echo "  --logging=[on|off](default: off)                             :  Build aml library including logs"
-    echo "  --with_dependencies=[true|false](default: false)             :  Build aml along with dependencies [protobuf]"
+    echo "  --with_dependencies=[true|false](default: false)             :  Build aml along with dependencies [datamodel-aml-cpp]"
     echo "  -c                                                           :  Clean aml repository"
     echo "  -h / --help                                                  :  Display help and exit"
 }
@@ -157,10 +117,6 @@ build_armhf_qemu() {
 }
 
 build() {
-    if [ true = ${AML_WITH_DEP} ]; then
-        install_dependencies
-    fi
-
     if [ "debug" = ${AML_BUILD_MODE} ]; then
         RELEASE="0"
     fi
