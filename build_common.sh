@@ -29,7 +29,11 @@ AML_WITH_DEP=false
 AML_BUILD_MODE="release"
 AML_LOGGING="off"
 
+RELEASE="1"
+LOGGING="0"
+
 install_dependencies() {
+
     if [ -d "./dependencies" ] ; then
         echo "dependencies folder exists"
     else
@@ -51,25 +55,7 @@ install_dependencies() {
 
     # Build datamodel-aml-cpp
     echo -e "Installing datamodel-aml-cpp library"
-    if [ "x86" = ${AML_TARGET_ARCH} ]; then
-         ./build_32.sh "$@"
-    elif [ "x86_64" = ${AML_TARGET_ARCH} ]; then
-         ./build.sh "$@"
-#    elif [ "arm" = ${AML_TARGET_ARCH} ]; then
-#
-    elif [ "arm64" = ${AML_TARGET_ARCH} ]; then
-         ./build_arm64.sh "$@"
-    elif [ "armhf" = ${AML_TARGET_ARCH} ]; then
-         ./build_arm.sh "$@"
-#    elif [ "armhf-qemu" = ${AML_TARGET_ARCH} ]; then
-#         
-#    elif [ "armhf-native" = ${AML_TARGET_ARCH} ]; then
-#         
-    else
-         echo -e "${RED}Not a supported architecture${NO_COLOUR}"
-         usage; exit 1;
-    fi
-
+    ./build_common.sh --with_dependencies=${AML_WITH_DEP} --target_arch=${AML_TARGET_ARCH} --build_mode=${AML_BUILD_MODE} --logging=${AML_LOGGING}
     if [ $? -ne 0 ]; then 
         echo -e "${RED}Build failed${NO_COLOUR}" 
         exit 1 
@@ -82,15 +68,55 @@ usage() {
     echo -e "${GREEN}Options:${NO_COLOUR}"
     echo "  --build_mode=[release|debug](default: release)               :  Build aml library and samples in release or debug mode"
     echo "  --logging=[on|off](default: off)                             :  Build aml library including logs"
+    echo "  --with_dependencies=[true|false](default: false)             :  Build aml along with dependencies [datamodel-aml-cpp]"
     echo "  -c                                                           :  Clean aml repository"
     echo "  -h / --help                                                  :  Display help and exit"
 }
 
-build() {
-    cd $PROJECT_ROOT
+build_x86() {
+    echo -e "Building for x86"
+    scons TARGET_OS=linux TARGET_ARCH=x86 RELEASE=${RELEASE} LOGGING=${LOGGING}
+}
 
-    RELEASE="1"
-    LOGGING="0"
+build_x86_64() {
+    echo -e "Building for x86_64"
+    scons TARGET_OS=linux TARGET_ARCH=x86_64 RELEASE=${RELEASE} LOGGING=${LOGGING}
+}
+
+build_arm() {
+    echo -e "Building for arm"
+    scons TARGET_ARCH=arm TC_PREFIX=/usr/bin/arm-linux-gnueabi- TC_PATH=/usr/bin/ RELEASE=${RELEASE} LOGGING=${LOGGING}
+}
+
+build_arm64() {
+    echo -e "Building for arm64"
+    scons TARGET_ARCH=arm64 TC_PREFIX=/usr/bin/aarch64-linux-gnu- TC_PATH=/usr/bin/ RELEASE=${RELEASE} LOGGING=${LOGGING}
+}
+
+build_armhf() {
+    echo -e "Building for armhf"
+    scons TARGET_ARCH=armhf TC_PREFIX=/usr/bin/arm-linux-gnueabihf- TC_PATH=/usr/bin/ RELEASE=${RELEASE} LOGGING=${LOGGING}
+}
+
+build_armhf_native() {
+    echo -e "Building for armhf_native"
+    scons TARGET_ARCH=armhf RELEASE=${RELEASE} LOGGING=${LOGGING}
+}
+
+build_armhf_qemu() {
+    echo -e "Building for armhf-qemu"
+    scons TARGET_ARCH=armhf RELEASE=${RELEASE} LOGGING=${LOGGING}
+
+    if [ -x "/usr/bin/qemu-arm-static" ]; then
+        echo -e "${BLUE}qemu-arm-static found, copying it to current directory${NO_COLOUR}"
+        cp /usr/bin/qemu-arm-static .
+    else
+        echo -e "${RED}No qemu-arm-static found${NO_COLOUR}"
+        echo -e "${BLUE} - Install qemu-arm-static and build again${NO_COLOUR}"
+    fi
+}
+
+build() {
     if [ "debug" = ${AML_BUILD_MODE} ]; then
         RELEASE="0"
     fi
@@ -98,7 +124,25 @@ build() {
         LOGGING="1"
     fi
 
-    scons TARGET_OS=linux TARGET_ARCH=${AML_TARGET_ARCH} RELEASE=${RELEASE} LOGGING=${LOGGING}
+    cd $PROJECT_ROOT
+    if [ "x86" = ${AML_TARGET_ARCH} ]; then
+         build_x86;
+    elif [ "x86_64" = ${AML_TARGET_ARCH} ]; then
+         build_x86_64;
+    elif [ "arm" = ${AML_TARGET_ARCH} ]; then
+         build_arm;
+    elif [ "arm64" = ${AML_TARGET_ARCH} ]; then
+         build_arm64;
+    elif [ "armhf" = ${AML_TARGET_ARCH} ]; then
+         build_armhf;
+    elif [ "armhf-qemu" = ${AML_TARGET_ARCH} ]; then
+         build_armhf_qemu;
+    elif [ "armhf-native" = ${AML_TARGET_ARCH} ]; then
+         build_armhf_native;
+    else
+         echo -e "${RED}Not a supported architecture${NO_COLOUR}"
+         usage; exit 1;
+    fi
     if [ $? -ne 0 ]; then 
         echo -e "${RED}Build failed${NO_COLOUR}" 
         exit 1 
@@ -115,6 +159,18 @@ clean() {
 process_cmd_args() {
     while [ "$#" -gt 0  ]; do
         case "$1" in
+            --with_dependencies=*)
+                AML_WITH_DEP="${1#*=}";
+                if [ ${AML_WITH_DEP} = true ]; then
+                    echo -e "${GREEN}Build with depedencies${NO_COLOUR}"
+                elif [ ${AML_WITH_DEP} = false ]; then
+                    echo -e "${GREEN}Build without depedencies${NO_COLOUR}"
+                else
+                    echo -e "${RED}Unknown option for --with_dependencies${NO_COLOUR}"
+                    shift 1; exit 0
+                fi
+                shift 1;
+                ;;
             --target_arch=*)
                 AML_TARGET_ARCH="${1#*=}";
                 echo -e "${GREEN}Target Arch is: $AML_TARGET_ARCH${NO_COLOUR}"
