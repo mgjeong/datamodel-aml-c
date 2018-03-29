@@ -97,7 +97,7 @@ AML_EXPORT CAMLErrorCode DestroyAMLObject(amlObjectHandle_t amlObjHandle);
  * @retval      #CAML_INVALID_PARAM     Invalid parameter.
  * @retval      #CAML_KEY_ALREADY_EXIST Name already exists in AMLObject.
  */
-AML_EXPORT CAMLErrorCode AMLObject_AddData(amlObjectHandle_t amlObjHandle,
+AML_EXPORT CAMLErrorCode AMLObject_AddData(const amlObjectHandle_t amlObjHandle,
                                            const char* name,
                                            const amlDataHandle_t amlDataHandle);
 
@@ -110,7 +110,7 @@ AML_EXPORT CAMLErrorCode AMLObject_AddData(amlObjectHandle_t amlObjHandle,
  * @retval      #CAML_INVALID_PARAM     Invalid parameter.
  * @retval      #CAML_KEY_NOT_EXIST     Name does not exists in AMLObject.
  */
-AML_EXPORT CAMLErrorCode AMLObject_GetData(amlObjectHandle_t amlObjHandle,
+AML_EXPORT CAMLErrorCode AMLObject_GetData(const amlObjectHandle_t amlObjHandle,
                                            const char* name,
                                            amlDataHandle_t* amlDataHandle);
 
@@ -126,7 +126,7 @@ AML_EXPORT CAMLErrorCode AMLObject_GetData(amlObjectHandle_t amlObjHandle,
  *              ex) for (size_t i = 0; i < namesSize; i++) free(names[i]);
  *                  free(names);
  */
-AML_EXPORT CAMLErrorCode AMLObject_GetDataNames(amlObjectHandle_t amlObjHandle,
+AML_EXPORT CAMLErrorCode AMLObject_GetDataNames(const amlObjectHandle_t amlObjHandle,
                                                 char*** names,
                                                 size_t* namesSize);
 
@@ -140,7 +140,7 @@ AML_EXPORT CAMLErrorCode AMLObject_GetDataNames(amlObjectHandle_t amlObjHandle,
  * @note        Characters will be allocated to 'deviceId', so it should be freed after use. (See the below example)
  *              ex) free(deviceId);
  */
-AML_EXPORT CAMLErrorCode AMLObject_GetDeviceId(amlObjectHandle_t amlObjHandle,
+AML_EXPORT CAMLErrorCode AMLObject_GetDeviceId(const amlObjectHandle_t amlObjHandle,
                                                char** deviceId);
 
 /**
@@ -153,7 +153,7 @@ AML_EXPORT CAMLErrorCode AMLObject_GetDeviceId(amlObjectHandle_t amlObjHandle,
  * @note        Characters will be allocated to 'timeStamp', so it should be freed after use. (See the below example)
  *              ex) free(timeStamp);
  */
-AML_EXPORT CAMLErrorCode AMLObject_GetTimeStamp(amlObjectHandle_t amlObjHandle,
+AML_EXPORT CAMLErrorCode AMLObject_GetTimeStamp(const amlObjectHandle_t amlObjHandle,
                                                 char** timeStamp);
 
 /**
@@ -166,7 +166,7 @@ AML_EXPORT CAMLErrorCode AMLObject_GetTimeStamp(amlObjectHandle_t amlObjHandle,
  * @note        Characters will be allocated to 'id', so it should be freed after use. (See the below example)
  *              ex) free(id);
  */
-AML_EXPORT CAMLErrorCode AMLObject_GetId(amlObjectHandle_t amlObjHandle,
+AML_EXPORT CAMLErrorCode AMLObject_GetId(const amlObjectHandle_t amlObjHandle,
                                          char** id);
 
 
@@ -197,7 +197,7 @@ AML_EXPORT CAMLErrorCode DestroyAMLData(amlDataHandle_t amlDataHandle);
  * @retval      #CAML_INVALID_PARAM     Invalid parameter.
  * @retval      #CAML_KEY_ALREADY_EXIST Key already exists in AMLData.
  */
-AML_EXPORT CAMLErrorCode AMLData_SetValueStr(amlDataHandle_t amlDataHandle,
+AML_EXPORT CAMLErrorCode AMLData_SetValueStr(const amlDataHandle_t amlDataHandle,
                                              const char* key,
                                              const char* value);
 
@@ -211,7 +211,7 @@ AML_EXPORT CAMLErrorCode AMLData_SetValueStr(amlDataHandle_t amlDataHandle,
  * @retval      #CAML_INVALID_PARAM     Invalid parameter.
  * @retval      #CAML_KEY_ALREADY_EXIST Key already exists in AMLData.
  */
-AML_EXPORT CAMLErrorCode AMLData_SetValueStrArr(amlDataHandle_t amlDataHandle,
+AML_EXPORT CAMLErrorCode AMLData_SetValueStrArr(const amlDataHandle_t amlDataHandle,
                                                 const char* key,
                                                 const char** value,
                                                 const size_t valueSize);
@@ -225,7 +225,7 @@ AML_EXPORT CAMLErrorCode AMLData_SetValueStrArr(amlDataHandle_t amlDataHandle,
  * @retval      #CAML_INVALID_PARAM     Invalid parameter.
  * @retval      #CAML_KEY_ALREADY_EXIST Key already exists in AMLData.
  */
-AML_EXPORT CAMLErrorCode AMLData_SetValueAMLData(amlDataHandle_t amlDataHandle,
+AML_EXPORT CAMLErrorCode AMLData_SetValueAMLData(const amlDataHandle_t amlDataHandle,
                                                  const char* key,
                                                  const amlDataHandle_t value);
 
@@ -241,7 +241,7 @@ AML_EXPORT CAMLErrorCode AMLData_SetValueAMLData(amlDataHandle_t amlDataHandle,
  * @note        Characters will be allocated to 'value', so it should be freed after use. (See the below example)
  *              ex) free(value);
  */
-AML_EXPORT CAMLErrorCode AMLData_GetValueStr(amlDataHandle_t amlDataHandle,
+AML_EXPORT CAMLErrorCode AMLData_GetValueStr(const amlDataHandle_t amlDataHandle,
                                              const char* key,
                                              char** value);
 
@@ -250,6 +250,7 @@ AML_EXPORT CAMLErrorCode AMLData_GetValueStr(amlDataHandle_t amlDataHandle,
  * @param       amlDataHandle   [in] handle of AMLData.
  * @param       key             [in] key string.
  * @param       value           [out] string array value.
+ * @param       valueSize       [out] size of value array.
  * @retval      #CAML_OK                Successful.
  * @retval      #CAML_INVALID_PARAM     Invalid parameter.
  * @retval      #CAML_KEY_NOT_EXIST     Key does not exists in AMLData.
@@ -258,7 +259,7 @@ AML_EXPORT CAMLErrorCode AMLData_GetValueStr(amlDataHandle_t amlDataHandle,
  *              ex) for (size_t i = 0; i < valueSize; i++) free(value[i]);
  *                  free(value);
  */
-AML_EXPORT CAMLErrorCode AMLData_GetValueStrArr(amlDataHandle_t amlDataHandle,
+AML_EXPORT CAMLErrorCode AMLData_GetValueStrArr(const amlDataHandle_t amlDataHandle,
                                                 const char* key,
                                                 char*** value,
                                                 size_t* valueSize);
@@ -272,7 +273,7 @@ AML_EXPORT CAMLErrorCode AMLData_GetValueStrArr(amlDataHandle_t amlDataHandle,
  * @retval      #CAML_INVALID_PARAM     Invalid parameter.
  * @retval      #CAML_KEY_NOT_EXIST     Key does not exists in AMLData.
  */
-AML_EXPORT CAMLErrorCode AMLData_GetValueAMLData(amlDataHandle_t amlDataHandle,
+AML_EXPORT CAMLErrorCode AMLData_GetValueAMLData(const amlDataHandle_t amlDataHandle,
                                                  const char* key,
                                                  amlDataHandle_t* value);
 
@@ -288,7 +289,7 @@ AML_EXPORT CAMLErrorCode AMLData_GetValueAMLData(amlDataHandle_t amlDataHandle,
  *              ex) for (size_t i = 0; i < keysSize; i++) free(keys[i]);
  *                  free(keys);
  */
-AML_EXPORT CAMLErrorCode AMLData_GetKeys(amlDataHandle_t amlDataHandle,
+AML_EXPORT CAMLErrorCode AMLData_GetKeys(const amlDataHandle_t amlDataHandle,
                                          char*** keys,
                                          size_t* keysSize);
 
@@ -301,7 +302,7 @@ AML_EXPORT CAMLErrorCode AMLData_GetKeys(amlDataHandle_t amlDataHandle,
  * @retval      #CAML_INVALID_PARAM     Invalid parameter.
  * @retval      #CAML_KEY_NOT_EXIST     Key does not exists in AMLData.
  */
-AML_EXPORT CAMLErrorCode AMLData_GetValueType(amlDataHandle_t amlDataHandle,
+AML_EXPORT CAMLErrorCode AMLData_GetValueType(const amlDataHandle_t amlDataHandle,
                                               const char* key,
                                               CAMLValueType* type);
 

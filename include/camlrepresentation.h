@@ -65,7 +65,7 @@ AML_EXPORT CAMLErrorCode DestroyRepresentation(representation_t repHandle);
  * @note        Characters will be allocated to 'repId', so it should be freed after use. (See the below example)
  *              ex) free(repId);
  */
-AML_EXPORT CAMLErrorCode Representation_GetRepId(representation_t repHandle,
+AML_EXPORT CAMLErrorCode Representation_GetRepId(const representation_t repHandle,
                                                  char** repId);
 
 /**
@@ -79,9 +79,39 @@ AML_EXPORT CAMLErrorCode Representation_GetRepId(representation_t repHandle,
  *              To destroy an instance, use DestroyAMLObject().
  * @see         DestroyAMLObject
  */
-AML_EXPORT CAMLErrorCode Representation_GetConfigInfo(representation_t repHandle,
+AML_EXPORT CAMLErrorCode Representation_GetConfigInfo(const representation_t repHandle,
                                                       amlObjectHandle_t* amlObjHandle);
 
+/**
+ * @brief       This function converts AMLObject to AML(XML) string to match the AML model information which is set on CreateRepresentation().
+ * @param       repHandle       [in] handle of Representation.
+ * @param       amlObjHandle    [in] handle of AMLObject.
+ * @param       amlStr          [out] AML(XML) string.
+ * @retval      #CAML_OK                 Successful.
+ * @retval      #CAML_INVALID_PARAM      Invalid parameter.
+ * @retval      #CAML_INVALID_AML_SCHEMA The AML, which is set by CreateRepresentation, has a invalid schema.
+ * @note        Characters will be allocated to 'amlStr', so it should be freed after use. (See the below example)
+ *              ex) free(amlStr);
+ */
+AML_EXPORT CAMLErrorCode Representation_DataToAml(const representation_t repHandle,
+                                                  const amlObjectHandle_t amlObjHandle,
+                                                  char** amlStr);
+
+/**
+ * @brief       This function converts AML(XML) string to AMLObject to match the AML model information which is set on CreateRepresentation().
+ * @param       repHandle       [in] handle of Representation.
+ * @param       amlStr          [in] AML(XML) string.
+ * @param       amlObjHandle    [out] handle of AMLObject.
+ * @retval      #CAML_OK                 Successful.
+ * @retval      #CAML_INVALID_PARAM      Invalid parameter.
+ * @retval      #CAML_INVALID_AML_SCHEMA The AML, which is set by CreateRepresentation, has a invalid schema.
+ * @note        AMLObject instance will be allocated, so it should be deleted after use.
+ *              To destroy an instance, use DestroyAMLObject().
+ * @see         DestroyAMLObject
+ */
+AML_EXPORT CAMLErrorCode Representation_AmlToData(const representation_t repHandle,
+                                                  const char* amlStr,
+                                                  amlObjectHandle_t* amlObjHandle);
 
 #ifdef __cplusplus
 }
