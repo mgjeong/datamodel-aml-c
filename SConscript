@@ -24,6 +24,7 @@ Import('env')
 caml_env = env.Clone()
 target_os = caml_env.get('TARGET_OS')
 target_arch = caml_env.get('TARGET_ARCH')
+exclude_protobuf = caml_env.get('EXCLUDE_PROTOBUF')
 
 if caml_env.get('RELEASE'):
     caml_env.AppendUnique(CCFLAGS=['-Os'])
@@ -32,19 +33,24 @@ else:
 
 caml_env.AppendUnique(CPPPATH=[
         './dependencies/datamodel-aml-cpp/extlibs/pugixml/pugixml-1.8/src',
-        './dependencies/datamodel-aml-cpp/protobuf',
         './dependencies/datamodel-aml-cpp/include',
         './dependencies/datamodel-aml-cpp/include/logger',
         './include',
         './include/internal'
 ])
 
+if not exclude_protobuf:
+    caml_env.AppendUnique(CPPPATH=['./dependencies/datamodel-aml-cpp/protobuf'])
+    caml_env.PrependUnique(LIBS=['protobuf'])
+else:
+    caml_env.AppendUnique(CPPDEFINES = ['_EXCLUDE_PROTOBUF_'])
+
 if caml_env.get('RELEASE'):
     caml_env.PrependUnique(LIBS=['aml'], LIBPATH=[os.path.join('./dependencies/datamodel-aml-cpp/out/linux/', target_arch, 'release')])
 else:
     caml_env.PrependUnique(LIBS=['aml'], LIBPATH=[os.path.join('./dependencies/datamodel-aml-cpp/out/linux/', target_arch, 'debug')])
 
-caml_env.PrependUnique(LIBS=['protobuf'])
+
 
 if target_os not in ['windows']:
     caml_env.AppendUnique(
