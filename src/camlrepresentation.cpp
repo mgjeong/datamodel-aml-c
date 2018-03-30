@@ -29,37 +29,6 @@
 
 using namespace std;
 
-static CAMLErrorCode ExceptionCodeToErrorCode(AMLResult result)
-{
-    switch (result)
-    {
-        case AML_INVALID_PARAM :
-            return CAML_INVALID_PARAM;
-        case AML_INVALID_FILE_PATH :
-            return CAML_INVALID_FILE_PATH;
-        case AML_INVALID_SCHEMA :
-            return CAML_INVALID_AML_SCHEMA;
-        case AML_INVALID_XML_STR :
-            return CAML_INVALID_XML_STRING;
-        case AML_NO_MEMORY :
-            return CAML_NO_MEMORY;
-        case AML_KEY_NOT_EXIST :
-            return CAML_KEY_NOT_EXIST;
-        case AML_KEY_ALREADY_EXIST :
-            return CAML_KEY_ALREADY_EXIST;
-        case AML_INVALID_DATA_TYPE :
-            return CAML_INVALID_DATA_TYPE;
-
-        case AML_INVALID_AMLDATA_NAME : //@TODO
-        case AML_NOT_IMPL :
-        case AML_KEY_VALUE_NOT_MATCH :
-        case AML_ERROR :
-
-        default : // AML_RESULT_OK
-            return CAML_OK;
-    }
-}
-
 CAMLErrorCode CreateRepresentation(const char* filePath, representation_t* repHandle)
 {
     VERIFY_PARAM_NON_NULL(repHandle);

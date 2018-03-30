@@ -67,7 +67,7 @@ CAMLErrorCode AMLData_SetValueStr(amlDataHandle_t amlDataHandle, const char* key
     }
     catch (const AMLException& e)
     {
-        return CAML_KEY_ALREADY_EXIST;
+        return ExceptionCodeToErrorCode(e.code());
     }
 
     return CAML_OK;
@@ -95,7 +95,7 @@ CAMLErrorCode AMLData_SetValueStrArr(amlDataHandle_t amlDataHandle, const char* 
     }
     catch (const AMLException& e)
     {
-        return CAML_KEY_ALREADY_EXIST;
+        return ExceptionCodeToErrorCode(e.code());
     }
 
     return CAML_OK;
@@ -117,7 +117,7 @@ CAMLErrorCode AMLData_SetValueAMLData(amlDataHandle_t amlDataHandle, const char*
     }
     catch (const AMLException& e)
     {
-        return CAML_KEY_ALREADY_EXIST;
+        return ExceptionCodeToErrorCode(e.code());
     }
 
     return CAML_OK;
@@ -139,11 +139,7 @@ CAMLErrorCode AMLData_GetValueStr(amlDataHandle_t amlDataHandle, const char* key
     }
     catch (const AMLException& e)
     {
-        if (!value)
-        {
-            return CAML_NO_MEMORY;
-        }
-        return CAML_KEY_NOT_EXIST;
+        return ExceptionCodeToErrorCode(e.code());
     }
 
     return CAML_OK;
@@ -168,11 +164,7 @@ CAMLErrorCode AMLData_GetValueStrArr(amlDataHandle_t amlDataHandle, const char* 
     }
     catch (const AMLException& e)
     {
-        if (!strarr)
-        {
-            return CAML_NO_MEMORY;
-        }
-        return CAML_KEY_NOT_EXIST;
+        return ExceptionCodeToErrorCode(e.code());
     }
 
     *valueSize = valueStrArr.size();
@@ -197,7 +189,7 @@ CAMLErrorCode AMLData_GetValueAMLData(amlDataHandle_t amlDataHandle, const char*
     }
     catch (const AMLException e)
     {
-        return CAML_KEY_NOT_EXIST;
+        return ExceptionCodeToErrorCode(e.code());
     }
 
     return CAML_OK;
@@ -219,7 +211,7 @@ CAMLErrorCode AMLData_GetKeys(amlDataHandle_t amlDataHandle, char*** keys, size_
     }
     catch (const AMLException& e)
     {
-        return CAML_NO_MEMORY;
+        return ExceptionCodeToErrorCode(e.code());
     }
 
     *keysSize = keysVec.size();
@@ -244,7 +236,7 @@ CAMLErrorCode AMLData_GetValueType(amlDataHandle_t amlDataHandle, const char* ke
     }
     catch (const AMLException& e)
     {
-        return CAML_KEY_NOT_EXIST;
+        return ExceptionCodeToErrorCode(e.code());
     }
 
     switch (cpptype)

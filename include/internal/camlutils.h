@@ -21,7 +21,12 @@
 #include <string>
 #include <vector>
 
+#include "AMLException.h"
+#include "camlerrorcodes.h"
+
 char* ConvertStringToCharStr(std::string str);
 char** ConvertVectorToCharStrArr(std::vector<std::string>& list);
+
+CAMLErrorCode ExceptionCodeToErrorCode(AMLResult result);
 
 #endif // C_AML_UTILS_H_
