@@ -15,6 +15,7 @@
  *
  *******************************************************************************/
 
+#include <string.h>
 #include <string>
 
 #include "Representation.h"
@@ -89,6 +90,50 @@ CAMLErrorCode Representation_GetConfigInfo(representation_t repHandle, amlObject
     catch (const AMLException& e)
     {
         return CAML_INVALID_AML_SCHEMA;
+    }
+
+    return CAML_OK;
+}
+
+CAMLErrorCode Representation_DataToAml(const representation_t repHandle, const amlObjectHandle_t amlObjHandle, char** amlStr)
+{
+    VERIFY_PARAM_NON_NULL(repHandle);
+    VERIFY_PARAM_NON_NULL(amlObjHandle);
+    VERIFY_PARAM_NON_NULL(amlStr);
+
+    Representation* rep = static_cast<Representation*>(repHandle);
+    AMLObject* amlObj = static_cast<AMLObject*>(amlObjHandle);
+
+    try
+    {
+        string amlString = rep->DataToAml(*amlObj);
+        *amlStr = ConvertStringToCharStr(amlString);
+    }
+    catch (const AMLException& e)
+    {
+        return ExceptionCodeToErrorCode(e.code());
+    }
+
+    return CAML_OK;
+}
+
+CAMLErrorCode Representation_AmlToData(const representation_t repHandle, const char* amlStr, amlObjectHandle_t* amlObjHandle)
+{
+    VERIFY_PARAM_NON_NULL(repHandle);
+    VERIFY_PARAM_NON_NULL(amlStr);
+    VERIFY_PARAM_NON_NULL(amlObjHandle);
+
+    Representation* rep = static_cast<Representation*>(repHandle);
+    string amlString(amlStr, strlen(amlStr));
+
+    try
+    {
+        AMLObject* amlObj = rep->AmlToData(amlString);
+        *amlObjHandle = static_cast<amlObjectHandle_t>(amlObj);
+    }
+    catch (const AMLException& e)
+    {
+        return ExceptionCodeToErrorCode(e.code());
     }
 
     return CAML_OK;

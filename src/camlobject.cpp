@@ -83,7 +83,7 @@ CAMLErrorCode AMLObject_AddData(amlObjectHandle_t amlObjHandle, const char* name
     }
     catch (const AMLException& e)
     {
-        return CAML_KEY_ALREADY_EXIST;
+        return ExceptionCodeToErrorCode(e.code());
     }
 
     return CAML_OK;
@@ -102,7 +102,7 @@ CAMLErrorCode AMLObject_GetData(amlObjectHandle_t amlObjHandle, const char* name
     }
     catch (const AMLException& e)
     {
-        return CAML_KEY_NOT_EXIST;
+        return ExceptionCodeToErrorCode(e.code());
     }
 
     return CAML_OK;
@@ -124,7 +124,7 @@ CAMLErrorCode AMLObject_GetDataNames(amlObjectHandle_t amlObjHandle, char*** nam
     }
     catch (const AMLException& e)
     {
-        return CAML_NO_MEMORY;
+        return ExceptionCodeToErrorCode(e.code());
     }
 
     *names = strarr;
@@ -153,7 +153,7 @@ CAMLErrorCode AMLObject_GetDeviceId(amlObjectHandle_t amlObjHandle, char** devic
     }
     catch (const AMLException& e)
     {
-        return CAML_NO_MEMORY;
+        return ExceptionCodeToErrorCode(e.code());
     }
 
     return CAML_OK;
@@ -178,7 +178,7 @@ CAMLErrorCode AMLObject_GetTimeStamp(amlObjectHandle_t amlObjHandle, char** time
     }
     catch (const AMLException& e)
     {
-        return CAML_NO_MEMORY;
+        return ExceptionCodeToErrorCode(e.code());
     }
 
     return CAML_OK;
@@ -203,7 +203,7 @@ CAMLErrorCode AMLObject_GetId(amlObjectHandle_t amlObjHandle, char** id)
     }
     catch (const AMLException& e)
     {
-        return CAML_NO_MEMORY;
+        return ExceptionCodeToErrorCode(e.code());
     }
 
     return CAML_OK;

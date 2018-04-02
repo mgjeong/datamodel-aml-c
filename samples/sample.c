@@ -61,8 +61,19 @@ void representationTest(char* filePath);
 
 int main()
 {
-    // test representation
-    representationTest("GTC_data_model.aml");
+    representation_t rep;
+    CreateRepresentation("sample_data_model.aml", &rep);
+
+    char* repId;
+    Representation_GetRepId(rep, &repId);
+    printf("\nRepresentation Id : %s\n\n", repId);
+    free(repId);
+
+    amlObjectHandle_t config;
+    Representation_GetConfigInfo(rep, &config);
+    printAMLObject(config); 
+    DestroyAMLObject(config);
+
     printf("-------------------------------------------------------------\n");
 
     // create "Model" data
@@ -95,21 +106,37 @@ int main()
     amlObjectHandle_t object;
     char* currTime = getCurrentTime();
     CreateAMLObject("Robot0001", currTime, &object);
+    free(currTime);
     AMLObject_AddData(object, "Model", model);
     AMLObject_AddData(object, "Sample", sample);
 
-
     // print object
     printAMLObject(object);
+    printf("-------------------------------------------------------------\n");
 
+    char* amlStr;
+    Representation_DataToAml(rep, object, &amlStr);
+    printf("%s\n", amlStr);
+    printf("-------------------------------------------------------------\n");
+
+    amlObjectHandle_t objectFromStr;
+    Representation_AmlToData(rep, amlStr, &objectFromStr);
+    free(amlStr);
+
+    printAMLObject(objectFromStr);
+
+    printf("-------------------------------------------------------------\n");
 
     // Destroy object and datas
+
     DestroyAMLData(model);
     DestroyAMLData(axis);
     DestroyAMLData(info);
     DestroyAMLData(sample);
     DestroyAMLObject(object);
-    free(currTime);
+    DestroyAMLObject(objectFromStr);
+
+    DestroyRepresentation(rep);
 }
 
 void representationTest(char* filePath)

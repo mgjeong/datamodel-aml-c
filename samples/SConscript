@@ -45,3 +45,4 @@ caml_sample_env.AppendUnique(LIBS=['caml'])
 camlsample = caml_sample_env.Program('sample', ['sample.c'])
 
 Command("GTC_data_model.aml", File("GTC_data_model.aml").srcnode(), Copy("$TARGET", "$SOURCE"))
+Command("sample_data_model.aml", File("sample_data_model.aml").srcnode(), Copy("$TARGET", "$SOURCE"))
