@@ -28,14 +28,24 @@
 #include "camlutils.h"
 
 using namespace std;
+using namespace AML;
 
 CAMLErrorCode CreateAMLObject(const char* deviceId, const char* timeStamp, amlObjectHandle_t* amlObjHandle)
 {
     VERIFY_PARAM_NON_NULL(deviceId);
     VERIFY_PARAM_NON_NULL(timeStamp);
+    VERIFY_PARAM_NON_NULL(amlObjHandle);
 
-    *amlObjHandle = new(std::nothrow) AMLObject(deviceId, timeStamp);
-    if (!amlObjHandle)
+    try
+    {
+        *amlObjHandle = new(std::nothrow) AMLObject(deviceId, timeStamp);
+    }
+    catch (const AMLException& e)
+    {
+        return ExceptionCodeToErrorCode(e.code());
+    }
+
+    if (!*amlObjHandle)
     {
         return CAML_NO_MEMORY;
     }
@@ -48,9 +58,18 @@ CAMLErrorCode CreateAMLObjectWithID(const char* deviceId, const char* timeStamp,
     VERIFY_PARAM_NON_NULL(deviceId);
     VERIFY_PARAM_NON_NULL(timeStamp);
     VERIFY_PARAM_NON_NULL(id);
+    VERIFY_PARAM_NON_NULL(amlObjHandle);
 
-    *amlObjHandle = new(std::nothrow) AMLObject(deviceId, timeStamp);
-    if (!amlObjHandle)
+    try
+    {
+        *amlObjHandle = new(std::nothrow) AMLObject(deviceId, timeStamp, id);
+    }
+    catch (const AMLException& e)
+    {
+        return ExceptionCodeToErrorCode(e.code());
+    }
+
+    if (!*amlObjHandle)
     {
         return CAML_NO_MEMORY;
     }
@@ -141,11 +160,6 @@ CAMLErrorCode AMLObject_GetDeviceId(amlObjectHandle_t amlObjHandle, char** devic
     AMLObject* amlObj = static_cast<AMLObject*>(amlObjHandle);
 
     string deviceIdStr = amlObj->getDeviceId();
-    
-    if (deviceIdStr.empty())
-    {
-        return CAML_INVALID_DATA;
-    }
 
     try
     {
@@ -167,10 +181,6 @@ CAMLErrorCode AMLObject_GetTimeStamp(amlObjectHandle_t amlObjHandle, char** time
     AMLObject* amlObj = static_cast<AMLObject*>(amlObjHandle);
 
     string timeStampStr = amlObj->getTimeStamp();
-    if (timeStampStr.empty())
-    {
-        return CAML_INVALID_DATA;
-    }
 
     try
     {
@@ -192,10 +202,6 @@ CAMLErrorCode AMLObject_GetId(amlObjectHandle_t amlObjHandle, char** id)
     AMLObject* amlObj = static_cast<AMLObject*>(amlObjHandle);
 
     string idStr = amlObj->getId();
-    if (idStr.empty())
-    {
-        return CAML_INVALID_DATA;
-    }
 
     try
     {

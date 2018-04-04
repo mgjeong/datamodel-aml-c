@@ -23,16 +23,17 @@
 typedef enum
 {
     CAML_OK = 0,                    /**< Success */
-
-    CAML_INVALID_PARAM,             /**< Invalid Parameter */
-    CAML_INVALID_DATA,
+    CAML_INVALID_PARAM,             /**< .. */
     CAML_INVALID_FILE_PATH,         /**< .. */
     CAML_INVALID_AML_SCHEMA,        /**< .. */
-    CAML_INVALID_XML_STRING,        /**< .. */
+    CAML_INVALID_XML_STR,           /**< .. */
+    CAML_NOT_MATCH_TO_AML_MODEL,    /**< .. */
+    CAML_INVALID_BYTE_STR,          /**< .. */
+    CAML_SERIALIZE_FAIL,            /**< .. */
     CAML_NO_MEMORY,                 /**< .. */
     CAML_KEY_NOT_EXIST,             /**< .. */
     CAML_KEY_ALREADY_EXIST,         /**< .. */
-    CAML_INVALID_DATA_TYPE,         /**< .. */
+    CAML_WRONG_GETTER_TYPE,         /**< .. */
 } CAMLErrorCode;
 
 #endif // C_AML_ERRORCODES_H_
