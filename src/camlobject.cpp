@@ -160,7 +160,7 @@ CAMLErrorCode AMLObject_GetDeviceId(amlObjectHandle_t amlObjHandle, char** devic
     AMLObject* amlObj = static_cast<AMLObject*>(amlObjHandle);
 
     string deviceIdStr = amlObj->getDeviceId();
-
+cout << deviceIdStr << endl;
     try
     {
         *deviceId = ConvertStringToCharStr(deviceIdStr);

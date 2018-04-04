@@ -60,6 +60,7 @@ CAMLErrorCode ExceptionCodeToErrorCode(AML::ResultCode result)
         case AML::KEY_NOT_EXIST :           return CAML_KEY_NOT_EXIST;
         case AML::KEY_ALREADY_EXIST :       return CAML_KEY_ALREADY_EXIST;
         case AML::WRONG_GETTER_TYPE :       return CAML_WRONG_GETTER_TYPE;
+        case AML::API_NOT_ENABLED :         return CAML_API_NOT_ENABLED;
         default : /* AML::NO_ERROR */       return CAML_OK;
     }
 }

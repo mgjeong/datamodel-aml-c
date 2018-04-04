@@ -31,7 +31,7 @@ void freeCharArr(char** str, size_t size);
 void printAMLData(amlDataHandle_t amlData, int depth);
 void printAMLObject(amlObjectHandle_t amlObj);
 
-void representationTest(char* filePath);
+void representationConvertApiTest(representation_t rep, amlObjectHandle_t object);
 
 // Example Data
 /*
@@ -114,18 +114,7 @@ int main()
     printAMLObject(object);
     printf("-------------------------------------------------------------\n");
 
-    char* amlStr;
-    Representation_DataToAml(rep, object, &amlStr);
-    printf("%s\n", amlStr);
-    printf("-------------------------------------------------------------\n");
-
-    amlObjectHandle_t objectFromStr;
-    Representation_AmlToData(rep, amlStr, &objectFromStr);
-    free(amlStr);
-
-    printAMLObject(objectFromStr);
-
-    printf("-------------------------------------------------------------\n");
+    representationConvertApiTest(rep, object);
 
     // Destroy object and datas
 
@@ -134,23 +123,43 @@ int main()
     DestroyAMLData(info);
     DestroyAMLData(sample);
     DestroyAMLObject(object);
-    DestroyAMLObject(objectFromStr);
 
     DestroyRepresentation(rep);
 }
 
-void representationTest(char* filePath)
+void representationConvertApiTest(representation_t rep, amlObjectHandle_t object)
 {
-    representation_t rep;
-    CreateRepresentation(filePath, &rep);
+    // aml object <-> aml string
+    char* amlStr;
+    Representation_DataToAml(rep, object, &amlStr);
 
-    amlObjectHandle_t config;
-    Representation_GetConfigInfo(rep, &config);
+    printf("%s\n", amlStr);
+    printf("-------------------------------------------------------------\n");
 
-    printAMLObject(config); 
+    amlObjectHandle_t objectFromStr;
+    Representation_AmlToData(rep, amlStr, &objectFromStr);
+    free(amlStr);
 
-    DestroyAMLObject(config);
-    DestroyRepresentation(rep);
+    printAMLObject(objectFromStr);
+    printf("-------------------------------------------------------------\n");
+
+    // aml object <-> byte string
+    char* byteStr;
+    Representation_DataToByte(rep, object, &byteStr);
+
+    printf("%s\n", byteStr);
+    printf("-------------------------------------------------------------\n");
+
+    amlObjectHandle_t objectFromByte;
+    Representation_ByteToData(rep, byteStr, &objectFromByte);
+    free(byteStr);
+
+    printAMLObject(objectFromByte);
+    printf("-------------------------------------------------------------\n");
+
+    // destroy objects
+    DestroyAMLObject(objectFromStr);
+    DestroyAMLObject(objectFromByte);
 }
 
 char* getCurrentTime()

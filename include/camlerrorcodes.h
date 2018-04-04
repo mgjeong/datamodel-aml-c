@@ -34,6 +34,7 @@ typedef enum
     CAML_KEY_NOT_EXIST,             /**< .. */
     CAML_KEY_ALREADY_EXIST,         /**< .. */
     CAML_WRONG_GETTER_TYPE,         /**< .. */
+    CAML_API_NOT_ENABLED,           /**< .. */
 } CAMLErrorCode;
 
 #endif // C_AML_ERRORCODES_H_

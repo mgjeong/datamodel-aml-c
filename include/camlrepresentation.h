@@ -114,6 +114,40 @@ AML_EXPORT CAMLErrorCode Representation_AmlToData(const representation_t repHand
                                                   const char* amlStr,
                                                   amlObjectHandle_t* amlObjHandle);
 
+/**
+ * @brief       This function converts AMLObject to Protobuf byte data to match the AML model information which is set on CreateRepresentation().
+ * @param       repHandle       [in] handle of Representation.
+ * @param       amlObjHandle    [in] handle of AMLObject.
+ * @param       byteStr         [out] byte string serialized by Protobuf.
+ * @retval      #CAML_OK                 Successful.
+ * @retval      #CAML_INVALID_PARAM      Invalid parameter.
+ * @retval      $CAML_INVALID_BYTE_STR   Invalid protobuf byte string.
+ * @retval      #CAML_INVALID_AML_SCHEMA The AML, which is set by CreateRepresentation, has a invalid schema.
+ * @retval      #CAML_API_NOT_ENABLED    If datamodel-aml-cpp library is built with 'exclude_protobuf' option, this API will be disabled.
+ * @note        Characters will be allocated to 'amlStr', so it should be freed after use. (See the below example)
+ *              ex) free(amlStr);
+ */
+AML_EXPORT CAMLErrorCode Representation_DataToByte(const representation_t repHandle,
+                                                   amlObjectHandle_t amlObjHandle,
+                                                   char** byteStr);
+
+/**
+ * @brief       This function converts Protobuf byte data to AMLObject to match the AML model information which is set on CreateRepresentation().
+ * @param       repHandle       [in] handle of Representation.
+ * @param       byteStr         [in] byte string serialized by Protobuf.
+ * @param       amlObjHandle    [out] handle of AMLObject.
+ * @retval      #CAML_OK                 Successful.
+ * @retval      #CAML_INVALID_PARAM      Invalid parameter.
+ * @retval      #CAML_INVALID_AML_SCHEMA The AML, which is set by CreateRepresentation, has a invalid schema.
+ * @retval      #CAML_API_NOT_ENABLED    If datamodel-aml-cpp library is built with 'exclude_protobuf' option, this API will be disabled.
+ * @note        AMLObject instance will be allocated, so it should be deleted after use.
+ *              To destroy an instance, use DestroyAMLObject().
+ * @see         DestroyAMLObject
+ */
+AML_EXPORT CAMLErrorCode Representation_ByteToData(const representation_t repHandle,
+                                                   const char* byteStr,
+                                                   amlObjectHandle_t* amlObjHandle);
+
 #ifdef __cplusplus
 }
 #endif

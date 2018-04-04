@@ -147,3 +147,47 @@ CAMLErrorCode Representation_AmlToData(const representation_t repHandle, const c
 
     return CAML_OK;
 }
+
+CAMLErrorCode Representation_DataToByte(const representation_t repHandle, amlObjectHandle_t amlObjHandle, char** byteStr)
+{
+    VERIFY_PARAM_NON_NULL(repHandle);
+    VERIFY_PARAM_NON_NULL(amlObjHandle);
+    VERIFY_PARAM_NON_NULL(byteStr);
+
+    Representation* rep = static_cast<Representation*>(repHandle);
+    AMLObject* amlObj = static_cast<AMLObject*>(amlObjHandle);
+
+    try
+    {
+        string byteString = rep->DataToByte(*amlObj);
+        *byteStr = ConvertStringToCharStr(byteString);
+    }
+    catch (const AMLException& e)
+    {
+        return ExceptionCodeToErrorCode(e.code());
+    }
+
+    return CAML_OK;
+}
+
+CAMLErrorCode Representation_ByteToData(const representation_t repHandle, const char* byteStr, amlObjectHandle_t* amlObjHandle)
+{
+    VERIFY_PARAM_NON_NULL(repHandle);
+    VERIFY_PARAM_NON_NULL(byteStr);
+    VERIFY_PARAM_NON_NULL(amlObjHandle);
+
+    Representation* rep = static_cast<Representation*>(repHandle);
+    string byteString(byteStr, strlen(byteStr));
+
+    try
+    {
+        AMLObject* amlObj = rep->ByteToData(byteString);
+        *amlObjHandle = static_cast<amlObjectHandle_t>(amlObj);
+    }
+    catch (const AMLException& e)
+    {
+        return ExceptionCodeToErrorCode(e.code());
+    }
+
+    return CAML_OK;
+}
