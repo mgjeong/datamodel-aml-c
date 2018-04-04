@@ -27,6 +27,6 @@
 char* ConvertStringToCharStr(std::string str);
 char** ConvertVectorToCharStrArr(std::vector<std::string>& list);
 
-CAMLErrorCode ExceptionCodeToErrorCode(AMLResult result);
+CAMLErrorCode ExceptionCodeToErrorCode(AML::ResultCode result);
 
 #endif // C_AML_UTILS_H_

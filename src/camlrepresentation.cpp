@@ -28,14 +28,23 @@
 #include "camlutils.h"
 
 using namespace std;
+using namespace AML;
 
 CAMLErrorCode CreateRepresentation(const char* filePath, representation_t* repHandle)
 {
-    VERIFY_PARAM_NON_NULL(repHandle);
     VERIFY_PARAM_NON_NULL(filePath);
+    VERIFY_PARAM_NON_NULL(repHandle);
 
-    *repHandle = new(std::nothrow) Representation(filePath);
-    if (!repHandle)
+    try
+    {
+        *repHandle = new(std::nothrow) Representation(filePath);
+    }
+    catch (const AMLException& e)
+    {
+        return ExceptionCodeToErrorCode(e.code());
+    }
+
+    if (!*repHandle)
     {
         return CAML_NO_MEMORY;
     }
@@ -67,7 +76,7 @@ CAMLErrorCode Representation_GetRepId(representation_t repHandle, char** repId)
     }
     catch (const AMLException& e)
     {
-        return CAML_NO_MEMORY;
+        return ExceptionCodeToErrorCode(e.code());
     }
 
     return CAML_OK;
@@ -89,7 +98,7 @@ CAMLErrorCode Representation_GetConfigInfo(representation_t repHandle, amlObject
     }
     catch (const AMLException& e)
     {
-        return CAML_INVALID_AML_SCHEMA;
+        return ExceptionCodeToErrorCode(e.code());
     }
 
     return CAML_OK;

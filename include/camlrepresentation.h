@@ -40,6 +40,7 @@ typedef void * representation_t;
  * @param       repHandle       [out] handle of created Representation.
  * @retval      #CAML_OK                Successful.
  * @retval      #CAML_INVALID_PARAM     Invalid parameter.
+ * @retval      #CAML_INVALID_FILE_PATH Invalid file path.
  * @retval      #CAML_NO_MEMORY         Failed to alloc memory.
  * @note        Representation instance will be allocated, so it should be deleted after use.
  *              To destroy an instance, use DestroyRepresentation().
