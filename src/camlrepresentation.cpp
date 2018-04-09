@@ -16,7 +16,6 @@
  *******************************************************************************/
 
 #include <string.h>
-#include <iostream>
 #include <string>
 
 #include "Representation.h"
@@ -154,6 +153,7 @@ CAMLErrorCode Representation_DataToByte(const representation_t repHandle, const 
     VERIFY_PARAM_NON_NULL(repHandle);
     VERIFY_PARAM_NON_NULL(amlObjHandle);
     VERIFY_PARAM_NON_NULL(byte);
+    VERIFY_PARAM_NON_NULL(size);
 
     Representation* rep = static_cast<Representation*>(repHandle);
     AMLObject* amlObj = static_cast<AMLObject*>(amlObjHandle);
@@ -161,8 +161,8 @@ CAMLErrorCode Representation_DataToByte(const representation_t repHandle, const 
     try
     {
         string amlString = rep->DataToByte(*amlObj);
+        *byte = reinterpret_cast<uint8_t*>(ConvertStringToCharStr(amlString));
         *size = amlString.size();
-        *byte = ConvertStringToByte(amlString);
     }
     catch (const AMLException& e)
     {
@@ -176,15 +176,15 @@ CAMLErrorCode Representation_ByteToData(const representation_t repHandle, const 
 {
     VERIFY_PARAM_NON_NULL(repHandle);
     VERIFY_PARAM_NON_NULL(byte);
+    VERIFY_PARAM_NON_NULL(size);
     VERIFY_PARAM_NON_NULL(amlObjHandle);
-    
 
     Representation* rep = static_cast<Representation*>(repHandle);
-    string amlString((char*)byte, size);
+    string byteString((char*)byte, size);
 
     try
     {
-        AMLObject* amlObj = rep->ByteToData(amlString);
+        AMLObject* amlObj = rep->ByteToData(byteString);
         *amlObjHandle = static_cast<amlObjectHandle_t>(amlObj);
     }
     catch (const AMLException& e)

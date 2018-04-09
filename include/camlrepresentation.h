@@ -18,6 +18,8 @@
 #ifndef C_AML_REPRESENTATION_H_
 #define C_AML_REPRESENTATION_H_
 
+#include <stdint.h>
+
 #include "camlinterface.h"
 #include "camlerrorcodes.h"
 
@@ -118,7 +120,8 @@ AML_EXPORT CAMLErrorCode Representation_AmlToData(const representation_t repHand
  * @brief       This function converts AMLObject to Protobuf byte data to match the AML model information which is set on CreateRepresentation().
  * @param       repHandle       [in] handle of Representation.
  * @param       amlObjHandle    [in] handle of AMLObject.
- * @param       byteStr         [out] byte string serialized by Protobuf.
+ * @param       byte            [out] byte data serialized by Protobuf.
+ * @param       size            [out] size of byte data.
  * @retval      #CAML_OK                 Successful.
  * @retval      #CAML_INVALID_PARAM      Invalid parameter.
  * @retval      $CAML_INVALID_BYTE_STR   Invalid protobuf byte string.
@@ -128,14 +131,15 @@ AML_EXPORT CAMLErrorCode Representation_AmlToData(const representation_t repHand
  *              ex) free(amlStr);
  */
 AML_EXPORT CAMLErrorCode Representation_DataToByte(const representation_t repHandle,
-                                                  const amlObjectHandle_t amlObjHandle,
-                                                  uint8_t** byte, 
-                                                  size_t* size);
+                                                   const amlObjectHandle_t amlObjHandle,
+                                                   uint8_t** byte, 
+                                                   size_t* size);
 
 /**
  * @brief       This function converts Protobuf byte data to AMLObject to match the AML model information which is set on CreateRepresentation().
  * @param       repHandle       [in] handle of Representation.
- * @param       byteStr         [in] byte string serialized by Protobuf.
+ * @param       byte            [in] byte data serialized by Protobuf.
+ * @param       size            [in] size of byte data.
  * @param       amlObjHandle    [out] handle of AMLObject.
  * @retval      #CAML_OK                 Successful.
  * @retval      #CAML_INVALID_PARAM      Invalid parameter.
@@ -146,9 +150,9 @@ AML_EXPORT CAMLErrorCode Representation_DataToByte(const representation_t repHan
  * @see         DestroyAMLObject
  */
 AML_EXPORT CAMLErrorCode Representation_ByteToData(const representation_t repHandle,
-                                                  const uint8_t* amlStr,
-                                                  const size_t size,
-                                                  amlObjectHandle_t* amlObjHandle);
+                                                   const uint8_t* byte,
+                                                   const size_t size,
+                                                   amlObjectHandle_t* amlObjHandle);
 #ifdef __cplusplus
 }
 #endif

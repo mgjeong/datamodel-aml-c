@@ -22,7 +22,6 @@
 #include <time.h>
 #include <sys/timeb.h>
 
-
 #include "camlinterface.h"
 #include "camlrepresentation.h"
 #include "camlerrorcodes.h"
