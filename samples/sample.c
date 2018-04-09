@@ -18,8 +18,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <time.h>
 #include <sys/timeb.h>
+
 
 #include "camlinterface.h"
 #include "camlrepresentation.h"
@@ -30,6 +32,7 @@ char* getCurrentTime();
 void freeCharArr(char** str, size_t size);
 void printAMLData(amlDataHandle_t amlData, int depth);
 void printAMLObject(amlObjectHandle_t amlObj);
+void printByte(uint8_t* amlByte, size_t byteSize);
 
 void representationConvertApiTest(representation_t rep, amlObjectHandle_t object);
 
@@ -132,28 +135,28 @@ void representationConvertApiTest(representation_t rep, amlObjectHandle_t object
     // aml object <-> aml string
     char* amlStr;
     Representation_DataToAml(rep, object, &amlStr);
-
+    printf("DataToAML :\n");
     printf("%s\n", amlStr);
     printf("-------------------------------------------------------------\n");
 
     amlObjectHandle_t objectFromStr;
     Representation_AmlToData(rep, amlStr, &objectFromStr);
     free(amlStr);
-
+    printf("AmlToData :\n");
     printAMLObject(objectFromStr);
     printf("-------------------------------------------------------------\n");
 
-    // aml object <-> byte string
-    char* byteStr;
-    Representation_DataToByte(rep, object, &byteStr);
-
-    printf("%s\n", byteStr);
+    uint8_t* amlByte;
+    size_t byteSize;
+    Representation_DataToByte(rep, object, &amlByte, &byteSize);
+    printf("DataToByte :\n");
+    printByte(amlByte, byteSize);
     printf("-------------------------------------------------------------\n");
 
     amlObjectHandle_t objectFromByte;
-    Representation_ByteToData(rep, byteStr, &objectFromByte);
-    free(byteStr);
-
+    Representation_ByteToData(rep, amlByte, byteSize, &objectFromByte);
+    free(amlByte);
+    printf("ByteToData :\n");
     printAMLObject(objectFromByte);
     printf("-------------------------------------------------------------\n");
 
@@ -281,4 +284,16 @@ void printAMLObject(amlObjectHandle_t amlObj)
     printf("\n}\n");
 
     freeCharArr(dataNames, size);
+}
+
+void printByte(uint8_t* amlByte, size_t byteSize)
+{
+    char debug[50000];
+    memset(debug, 0x00, sizeof(debug));
+    int j;
+    for(j = 0; j < (int)byteSize; j++)
+    {
+      snprintf(debug + 2*j, sizeof(debug), "%02X", amlByte[j]);
+    }
+    printf("%s\n", debug);
 }

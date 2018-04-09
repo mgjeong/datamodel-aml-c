@@ -16,6 +16,7 @@
  *******************************************************************************/
 
 #include <string.h>
+#include <iostream>
 #include <string>
 
 #include "Representation.h"
@@ -148,19 +149,20 @@ CAMLErrorCode Representation_AmlToData(const representation_t repHandle, const c
     return CAML_OK;
 }
 
-CAMLErrorCode Representation_DataToByte(const representation_t repHandle, amlObjectHandle_t amlObjHandle, char** byteStr)
+CAMLErrorCode Representation_DataToByte(const representation_t repHandle, const amlObjectHandle_t amlObjHandle, uint8_t** byte, size_t* size)
 {
     VERIFY_PARAM_NON_NULL(repHandle);
     VERIFY_PARAM_NON_NULL(amlObjHandle);
-    VERIFY_PARAM_NON_NULL(byteStr);
+    VERIFY_PARAM_NON_NULL(byte);
 
     Representation* rep = static_cast<Representation*>(repHandle);
     AMLObject* amlObj = static_cast<AMLObject*>(amlObjHandle);
 
     try
     {
-        string byteString = rep->DataToByte(*amlObj);
-        *byteStr = ConvertStringToCharStr(byteString);
+        string amlString = rep->DataToByte(*amlObj);
+        *size = amlString.size();
+        *byte = ConvertStringToByte(amlString);
     }
     catch (const AMLException& e)
     {
@@ -170,18 +172,19 @@ CAMLErrorCode Representation_DataToByte(const representation_t repHandle, amlObj
     return CAML_OK;
 }
 
-CAMLErrorCode Representation_ByteToData(const representation_t repHandle, const char* byteStr, amlObjectHandle_t* amlObjHandle)
+CAMLErrorCode Representation_ByteToData(const representation_t repHandle, const uint8_t* byte, const size_t size, amlObjectHandle_t* amlObjHandle)
 {
     VERIFY_PARAM_NON_NULL(repHandle);
-    VERIFY_PARAM_NON_NULL(byteStr);
+    VERIFY_PARAM_NON_NULL(byte);
     VERIFY_PARAM_NON_NULL(amlObjHandle);
+    
 
     Representation* rep = static_cast<Representation*>(repHandle);
-    string byteString(byteStr, strlen(byteStr));
+    string amlString((char*)byte, size);
 
     try
     {
-        AMLObject* amlObj = rep->ByteToData(byteString);
+        AMLObject* amlObj = rep->ByteToData(amlString);
         *amlObjHandle = static_cast<amlObjectHandle_t>(amlObj);
     }
     catch (const AMLException& e)

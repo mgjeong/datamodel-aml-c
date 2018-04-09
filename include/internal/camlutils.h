@@ -26,6 +26,7 @@
 
 char* ConvertStringToCharStr(std::string str);
 char** ConvertVectorToCharStrArr(std::vector<std::string>& list);
+uint8_t* ConvertStringToByte(std::string str);
 
 CAMLErrorCode ExceptionCodeToErrorCode(AML::ResultCode result);
 

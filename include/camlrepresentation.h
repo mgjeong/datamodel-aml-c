@@ -128,8 +128,9 @@ AML_EXPORT CAMLErrorCode Representation_AmlToData(const representation_t repHand
  *              ex) free(amlStr);
  */
 AML_EXPORT CAMLErrorCode Representation_DataToByte(const representation_t repHandle,
-                                                   amlObjectHandle_t amlObjHandle,
-                                                   char** byteStr);
+                                                  const amlObjectHandle_t amlObjHandle,
+                                                  uint8_t** byte, 
+                                                  size_t* size);
 
 /**
  * @brief       This function converts Protobuf byte data to AMLObject to match the AML model information which is set on CreateRepresentation().
@@ -145,9 +146,9 @@ AML_EXPORT CAMLErrorCode Representation_DataToByte(const representation_t repHan
  * @see         DestroyAMLObject
  */
 AML_EXPORT CAMLErrorCode Representation_ByteToData(const representation_t repHandle,
-                                                   const char* byteStr,
-                                                   amlObjectHandle_t* amlObjHandle);
-
+                                                  const uint8_t* amlStr,
+                                                  const size_t size,
+                                                  amlObjectHandle_t* amlObjHandle);
 #ifdef __cplusplus
 }
 #endif

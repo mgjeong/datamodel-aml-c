@@ -18,6 +18,7 @@
 #include <string>
 #include <cstring>
 #include <vector>
+#include <iostream>
 
 #include "camlutils.h"
 
@@ -26,10 +27,21 @@ using namespace std;
 char* ConvertStringToCharStr(std::string str)
 {
     char* cstr = new char[str.size() + 1];
-    strncpy(cstr, str.c_str(), str.size());
+
+    memcpy(cstr, str.c_str(), str.size());
     cstr[str.size()] = '\0';
 
     return cstr;
+}
+
+uint8_t* ConvertStringToByte(std::string str)
+{
+    uint8_t* byte = new uint8_t[str.size() + 1];
+
+    memcpy(byte, str.c_str(), str.size());
+    byte[str.size()] = '\0';
+
+    return byte;    
 }
 
 char** ConvertVectorToCharStrArr(std::vector<std::string>& list)
