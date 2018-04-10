@@ -126,7 +126,7 @@ AML_EXPORT CAMLErrorCode Representation_AmlToData(const representation_t repHand
  * @retval      #CAML_INVALID_PARAM      Invalid parameter.
  * @retval      $CAML_INVALID_BYTE_STR   Invalid protobuf byte string.
  * @retval      #CAML_INVALID_AML_SCHEMA The AML, which is set by CreateRepresentation, has a invalid schema.
- * @retval      #CAML_API_NOT_ENABLED    If datamodel-aml-cpp library is built with 'exclude_protobuf' option, this API will be disabled.
+ * @retval      #CAML_API_NOT_ENABLED    If datamodel-aml-cpp library is built with 'disable_protobuf' option, this API will be disabled.
  * @note        Characters will be allocated to 'amlStr', so it should be freed after use. (See the below example)
  *              ex) free(amlStr);
  */
@@ -144,7 +144,7 @@ AML_EXPORT CAMLErrorCode Representation_DataToByte(const representation_t repHan
  * @retval      #CAML_OK                 Successful.
  * @retval      #CAML_INVALID_PARAM      Invalid parameter.
  * @retval      #CAML_INVALID_AML_SCHEMA The AML, which is set by CreateRepresentation, has a invalid schema.
- * @retval      #CAML_API_NOT_ENABLED    If datamodel-aml-cpp library is built with 'exclude_protobuf' option, this API will be disabled.
+ * @retval      #CAML_API_NOT_ENABLED    If datamodel-aml-cpp library is built with 'disable_protobuf' option, this API will be disabled.
  * @note        AMLObject instance will be allocated, so it should be deleted after use.
  *              To destroy an instance, use DestroyAMLObject().
  * @see         DestroyAMLObject
