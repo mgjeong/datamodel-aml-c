@@ -24,7 +24,7 @@ Import('env')
 caml_env = env.Clone()
 target_os = caml_env.get('TARGET_OS')
 target_arch = caml_env.get('TARGET_ARCH')
-exclude_protobuf = caml_env.get('EXCLUDE_PROTOBUF')
+disable_protobuf = caml_env.get('DISABLE_PROTOBUF')
 
 if caml_env.get('RELEASE'):
     caml_env.AppendUnique(CCFLAGS=['-Os'])
@@ -39,11 +39,11 @@ caml_env.AppendUnique(CPPPATH=[
         './include/internal'
 ])
 
-if not exclude_protobuf:
+if not disable_protobuf:
     caml_env.AppendUnique(CPPPATH=['./dependencies/datamodel-aml-cpp/protobuf'])
     caml_env.PrependUnique(LIBS=['protobuf'])
 else:
-    caml_env.AppendUnique(CPPDEFINES = ['_EXCLUDE_PROTOBUF_'])
+    caml_env.AppendUnique(CPPDEFINES = ['_DISABLE_PROTOBUF_'])
 
 if caml_env.get('RELEASE'):
     caml_env.PrependUnique(LIBS=['aml'], LIBPATH=[os.path.join('./dependencies/datamodel-aml-cpp/out/linux/', target_arch, 'release')])
