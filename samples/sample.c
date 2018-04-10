@@ -18,6 +18,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <time.h>
 #include <sys/timeb.h>
 
@@ -30,8 +31,9 @@ char* getCurrentTime();
 void freeCharArr(char** str, size_t size);
 void printAMLData(amlDataHandle_t amlData, int depth);
 void printAMLObject(amlObjectHandle_t amlObj);
+void printByte(uint8_t* amlByte, size_t byteSize);
 
-void representationTest(char* filePath);
+void representationConvertApiTest(representation_t rep, amlObjectHandle_t object);
 
 // Example Data
 /*
@@ -114,18 +116,7 @@ int main()
     printAMLObject(object);
     printf("-------------------------------------------------------------\n");
 
-    char* amlStr;
-    Representation_DataToAml(rep, object, &amlStr);
-    printf("%s\n", amlStr);
-    printf("-------------------------------------------------------------\n");
-
-    amlObjectHandle_t objectFromStr;
-    Representation_AmlToData(rep, amlStr, &objectFromStr);
-    free(amlStr);
-
-    printAMLObject(objectFromStr);
-
-    printf("-------------------------------------------------------------\n");
+    representationConvertApiTest(rep, object);
 
     // Destroy object and datas
 
@@ -134,23 +125,43 @@ int main()
     DestroyAMLData(info);
     DestroyAMLData(sample);
     DestroyAMLObject(object);
-    DestroyAMLObject(objectFromStr);
 
     DestroyRepresentation(rep);
 }
 
-void representationTest(char* filePath)
+void representationConvertApiTest(representation_t rep, amlObjectHandle_t object)
 {
-    representation_t rep;
-    CreateRepresentation(filePath, &rep);
+    // aml object <-> aml string
+    char* amlStr;
+    Representation_DataToAml(rep, object, &amlStr);
+    printf("DataToAML :\n");
+    printf("%s\n", amlStr);
+    printf("-------------------------------------------------------------\n");
 
-    amlObjectHandle_t config;
-    Representation_GetConfigInfo(rep, &config);
+    amlObjectHandle_t objectFromStr;
+    Representation_AmlToData(rep, amlStr, &objectFromStr);
+    free(amlStr);
+    printf("AmlToData :\n");
+    printAMLObject(objectFromStr);
+    printf("-------------------------------------------------------------\n");
 
-    printAMLObject(config); 
+    uint8_t* amlByte;
+    size_t byteSize;
+    Representation_DataToByte(rep, object, &amlByte, &byteSize);
+    printf("DataToByte :\n");
+    printByte(amlByte, byteSize);
+    printf("-------------------------------------------------------------\n");
 
-    DestroyAMLObject(config);
-    DestroyRepresentation(rep);
+    amlObjectHandle_t objectFromByte;
+    Representation_ByteToData(rep, amlByte, byteSize, &objectFromByte);
+    free(amlByte);
+    printf("ByteToData :\n");
+    printAMLObject(objectFromByte);
+    printf("-------------------------------------------------------------\n");
+
+    // destroy objects
+    DestroyAMLObject(objectFromStr);
+    DestroyAMLObject(objectFromByte);
 }
 
 char* getCurrentTime()
@@ -272,4 +283,16 @@ void printAMLObject(amlObjectHandle_t amlObj)
     printf("\n}\n");
 
     freeCharArr(dataNames, size);
+}
+
+void printByte(uint8_t* amlByte, size_t byteSize)
+{
+    char debug[50000];
+    memset(debug, 0x00, sizeof(debug));
+    int j;
+    for(j = 0; j < (int)byteSize; j++)
+    {
+      snprintf(debug + 2*j, sizeof(debug), "%02X", amlByte[j]);
+    }
+    printf("%s\n", debug);
 }

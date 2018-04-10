@@ -25,9 +25,11 @@ using namespace std;
 
 char* ConvertStringToCharStr(std::string str)
 {
-    char* cstr = new char[str.size() + 1];
-    strncpy(cstr, str.c_str(), str.size());
-    cstr[str.size()] = '\0';
+    size_t size = str.size();
+    char* cstr = new char[size + 1];
+
+    memcpy(cstr, str.c_str(), size);
+    cstr[size] = '\0';
 
     return cstr;
 }
@@ -37,7 +39,7 @@ char** ConvertVectorToCharStrArr(std::vector<std::string>& list)
     unsigned long size = list.size();
     char ** cstr = new char*[size];
 
-    for(unsigned long i = 0; i < size; i++)
+    for (unsigned long i = 0; i < size; i++)
     {
         cstr[i] = ConvertStringToCharStr(list[i]);
     }
@@ -60,6 +62,7 @@ CAMLErrorCode ExceptionCodeToErrorCode(AML::ResultCode result)
         case AML::KEY_NOT_EXIST :           return CAML_KEY_NOT_EXIST;
         case AML::KEY_ALREADY_EXIST :       return CAML_KEY_ALREADY_EXIST;
         case AML::WRONG_GETTER_TYPE :       return CAML_WRONG_GETTER_TYPE;
+        case AML::API_NOT_ENABLED :         return CAML_API_NOT_ENABLED;
         default : /* AML::NO_ERROR */       return CAML_OK;
     }
 }
