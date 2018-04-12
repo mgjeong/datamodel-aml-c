@@ -134,6 +134,7 @@ void representationConvertApiTest(representation_t rep, amlObjectHandle_t object
     // aml object <-> aml string
     char* amlStr;
     Representation_DataToAml(rep, object, &amlStr);
+
     printf("DataToAML :\n");
     printf("%s\n", amlStr);
     printf("-------------------------------------------------------------\n");

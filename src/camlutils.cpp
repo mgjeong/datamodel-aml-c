@@ -27,7 +27,6 @@ char* ConvertStringToCharStr(std::string str)
 {
     size_t size = str.size();
     char* cstr = new char[size + 1];
-
     memcpy(cstr, str.c_str(), size);
     cstr[size] = '\0';
 

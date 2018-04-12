@@ -18,6 +18,7 @@
 #include <string>
 #include <string.h>
 #include <vector>
+#include <iostream>
 
 #include "AMLInterface.h"
 #include "AMLException.h"
@@ -53,8 +54,9 @@ CAMLErrorCode DestroyAMLData(amlDataHandle_t amlDataHandle)
 }
 
 CAMLErrorCode AMLData_SetValueStr(amlDataHandle_t amlDataHandle, const char* key, const char* value)
-{
+{   
     VERIFY_PARAM_NON_NULL(amlDataHandle);
+
     VERIFY_PARAM_NON_NULL(key);
     VERIFY_PARAM_NON_NULL(value);
 
