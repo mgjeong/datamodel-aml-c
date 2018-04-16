@@ -18,7 +18,6 @@
 #include <string>
 #include <string.h>
 #include <vector>
-#include <iostream>
 
 #include "AMLInterface.h"
 #include "AMLException.h"
