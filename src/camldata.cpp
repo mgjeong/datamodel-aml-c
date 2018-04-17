@@ -52,6 +52,22 @@ CAMLErrorCode DestroyAMLData(amlDataHandle_t amlDataHandle)
     return CAML_OK;
 }
 
+CAMLErrorCode CloneAMLData(amlDataHandle_t origin, amlDataHandle_t* clone)
+{
+    VERIFY_PARAM_NON_NULL(origin);
+    VERIFY_PARAM_NON_NULL(clone);
+
+    AMLData* amlOrigin = static_cast<AMLData*>(origin);
+
+    *clone = new(std::nothrow) AMLData(*amlOrigin);
+    if (!*clone)
+    {
+        return CAML_NO_MEMORY;
+    }
+
+    return CAML_OK;
+}
+
 CAMLErrorCode AMLData_SetValueStr(amlDataHandle_t amlDataHandle, const char* key, const char* value)
 {
     VERIFY_PARAM_NON_NULL(amlDataHandle);
