@@ -89,6 +89,18 @@ AML_EXPORT CAMLErrorCode CreateAMLObjectWithID(const char* deviceId,
 AML_EXPORT CAMLErrorCode DestroyAMLObject(amlObjectHandle_t amlObjHandle);
 
 /**
+ * @brief       Clone an instance of AMLObject.
+ * @param       origin          [in] AMLObject that will be cloned.
+ * @param       clone           [out] Cloned AMLObject.
+ * @retval      #CAML_OK                Successful.
+ * @retval      #CAML_INVALID_PARAM     Invalid parameter.
+ * @note        AMLObject instance will be allocated to 'clone', so it should be deleted after use.
+ *              To destroy an instance, use DestroyAMLObject().
+ */
+AML_EXPORT CAMLErrorCode CloneAMLObject(amlObjectHandle_t origin,
+                                        amlObjectHandle_t* clone);
+
+/**
  * @brief       This function adds AMLData to AMLObject using AMLData key that to match AMLData value.
  * @param       amlObjHandle    [in] handle of AMLObject.
  * @param       name            [in] AMLData key.
@@ -188,6 +200,17 @@ AML_EXPORT CAMLErrorCode CreateAMLData(amlDataHandle_t* amlDataHandle);
  */
 AML_EXPORT CAMLErrorCode DestroyAMLData(amlDataHandle_t amlDataHandle);
 
+/**
+ * @brief       Clone an instance of AMLData.
+ * @param       origin          [in] AMLData that will be cloned.
+ * @param       clone           [out] Cloned AMLData.
+ * @retval      #CAML_OK                Successful.
+ * @retval      #CAML_INVALID_PARAM     Invalid parameter.
+ * @note        AMLData instance will be allocated to 'clone', so it should be deleted after use.
+ *              To destroy an instance, use DestroyAMLData().
+ */
+AML_EXPORT CAMLErrorCode CloneAMLData(amlDataHandle_t origin,
+                                      amlDataHandle_t* clone);
 /**
  * @brief       This function set key/value as a string value to AMLData.
  * @param       amlDataHandle   [in] handle of AMLData.

@@ -87,6 +87,30 @@ CAMLErrorCode DestroyAMLObject(amlObjectHandle_t amlObjHandle)
     return CAML_OK;
 }
 
+CAMLErrorCode CloneAMLObject(amlObjectHandle_t origin, amlObjectHandle_t* clone)
+{
+    VERIFY_PARAM_NON_NULL(origin);
+    VERIFY_PARAM_NON_NULL(clone);
+
+    AMLObject* amlOrigin = static_cast<AMLObject*>(origin);
+
+    try
+    {
+        *clone = new(std::nothrow) AMLObject(*amlOrigin);
+    }
+    catch (const AMLException& e)
+    {
+        return ExceptionCodeToErrorCode(e.code());
+    }
+
+    if (!*clone)
+    {
+        return CAML_NO_MEMORY;
+    }
+
+    return CAML_OK;
+}
+
 CAMLErrorCode AMLObject_AddData(amlObjectHandle_t amlObjHandle, const char* name, const amlDataHandle_t amlDataHandle)
 {
     VERIFY_PARAM_NON_NULL(amlObjHandle);
