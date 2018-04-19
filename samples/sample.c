@@ -134,6 +134,7 @@ void representationConvertApiTest(representation_t rep, amlObjectHandle_t object
     // aml object <-> aml string
     char* amlStr;
     Representation_DataToAml(rep, object, &amlStr);
+
     printf("DataToAML :\n");
     printf("%s\n", amlStr);
     printf("-------------------------------------------------------------\n");
@@ -287,12 +288,13 @@ void printAMLObject(amlObjectHandle_t amlObj)
 
 void printByte(uint8_t* amlByte, size_t byteSize)
 {
-    char debug[50000];
+    char debug[byteSize *2 + 1];
     memset(debug, 0x00, sizeof(debug));
-    int j;
-    for(j = 0; j < (int)byteSize; j++)
+    
+    size_t i;   
+    for(i = 0; i < byteSize; i++)
     {
-      snprintf(debug + 2*j, sizeof(debug), "%02X", amlByte[j]);
+      snprintf(debug + 2*i, sizeof(debug), "%02X", amlByte[i]);
     }
     printf("%s\n", debug);
 }

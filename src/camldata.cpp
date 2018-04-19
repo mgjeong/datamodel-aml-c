@@ -69,8 +69,9 @@ CAMLErrorCode CloneAMLData(amlDataHandle_t origin, amlDataHandle_t* clone)
 }
 
 CAMLErrorCode AMLData_SetValueStr(amlDataHandle_t amlDataHandle, const char* key, const char* value)
-{
+{   
     VERIFY_PARAM_NON_NULL(amlDataHandle);
+
     VERIFY_PARAM_NON_NULL(key);
     VERIFY_PARAM_NON_NULL(value);
 

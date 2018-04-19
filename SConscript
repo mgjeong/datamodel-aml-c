@@ -78,6 +78,6 @@ if target_os == 'linux':
        SConscript('samples/SConscript')
 
 # Go to build AML DataModel unit test cases
-#if target_os == 'linux':
-#    if target_arch in ['x86', 'x86_64']:
-#        SConscript('unittests/SConscript')
+if target_os == 'linux':
+    if target_arch in ['x86', 'x86_64']:
+        SConscript('unittests/SConscript')
