@@ -313,17 +313,20 @@ namespace camlrepresentationtest
     	DestroyAMLObject(rep);
     }
 
-    // TEST(Representation_DataToAmlTest, ConvertValid)
-    // {
-    //     Representation rep = Representation(amlModelFile);
-    //     AMLObject amlObj = TestAMLObject();
-    //     std::string amlStr;
-    //     EXPECT_NO_THROW(amlStr = rep.DataToAml(amlObj));
+    TEST(Representation_DataToAmlTest, ConvertValid)
+    {
+        representation_t rep;
+        CreateRepresentation(amlModelFile, &rep);
 
-    //     std::string varify = TestAML();
-    //     EXPECT_EQ(varify.compare(amlStr), 0); //@TODO: issue - it does not return 0 though they are same string 
-    // }
+        amlObjectHandle_t amlObj;
+        amlObj = TestAMLObjectHandle();
 
+        char* amlStr;
+        EXPECT_EQ(Representation_DataToAml(rep, amlObj, &amlStr), CAML_OK);
+
+        char* varify = TestAML();
+        EXPECT_TRUE(isEqual(amlStr, varify));
+    }
 
     TEST(Representation_DataToAmlTest, InvalidDataToModel)
     {

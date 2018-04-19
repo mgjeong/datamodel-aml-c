@@ -96,6 +96,50 @@ namespace camlinterfacetest
         return true;
     }
 
+	bool isEqualAMLObject(amlObjectHandle_t obj1, amlObjectHandle_t obj2)
+    {	
+    	char* str1 = NULL;
+    	char* str2 = NULL;
+
+    	AMLObject_GetDeviceId(obj1, &str1);
+    	AMLObject_GetDeviceId(obj2, &str2);
+
+    	if(false == isEqual(str1, str2)) return false;
+
+    	AMLObject_GetTimeStamp(obj1, &str1);
+    	AMLObject_GetTimeStamp(obj2, &str2);
+
+    	if(false == isEqual(str1, str2)) return false;
+
+    	AMLObject_GetId(obj1, &str1);
+    	AMLObject_GetId(obj2, &str2);
+
+    	if(false == isEqual(str1, str2)) return false;
+
+    	char** dataNames1 = NULL;
+        char** dataNames2 = NULL;
+        
+        size_t size1;
+        size_t size2;
+
+        AMLObject_GetDataNames(obj1, &dataNames1, &size1);
+        AMLObject_GetDataNames(obj2, &dataNames2, &size2);
+
+        if(false == isEqualArr((const char**)dataNames1, size1, (const char**)dataNames2, size2)) return false;
+
+        amlDataHandle_t data1;
+        amlDataHandle_t data2;
+        for(size_t i = 0; i < size1; i++)
+        {	
+        	AMLObject_GetData(obj1, dataNames1[i], &data1);
+        	AMLObject_GetData(obj2, dataNames1[i], &data2);
+        	
+        	if(false == isEqualAMLData(data1, data2)) return false;
+        }
+
+        return true;
+    }
+
     bool isPresent(const char* str, char** strArr, size_t size)
     {
     	for(size_t i = 0; i < size; i++)
@@ -122,6 +166,29 @@ namespace camlinterfacetest
 		amlDataHandle_t amlData;
 		CreateAMLData(&amlData);
 
+		EXPECT_EQ(DestroyAMLData(amlData), CAML_OK);
+	}
+
+	TEST(AMLData_CloneAMLData, Valid)
+	{
+		amlDataHandle_t amlData;
+		CreateAMLData(&amlData);
+
+		AMLData_SetValueStr(amlData, "key1", "value1");
+		
+		amlDataHandle_t value2;
+		CreateAMLData(&value2);
+		
+		AMLData_SetValueAMLData(amlData, "key2", value2);
+
+
+		amlDataHandle_t cloneData;
+
+		EXPECT_EQ(CloneAMLData(amlData, &cloneData), CAML_OK);
+		EXPECT_TRUE(isEqualAMLData(amlData, cloneData));
+
+		DestroyAMLData(value2);
+		EXPECT_EQ(DestroyAMLData(cloneData), CAML_OK);
 		EXPECT_EQ(DestroyAMLData(amlData), CAML_OK);
 	}
 
@@ -457,6 +524,36 @@ namespace camlinterfacetest
 
 		EXPECT_EQ(DestroyAMLObject(amlObj), CAML_OK);
 	}
+
+	TEST(AMLObject_CloneAMLObject, Valid)
+	{
+		amlDataHandle_t amlData;
+		CreateAMLData(&amlData);
+
+		AMLData_SetValueStr(amlData, "key1", "value1");
+		
+		amlDataHandle_t value2;
+		CreateAMLData(&value2);
+		
+		AMLData_SetValueAMLData(amlData, "key2", value2);
+
+		amlObjectHandle_t amlObj;
+		CreateAMLObject("deviceId", "timeStamp", &amlObj);
+
+		AMLObject_AddData(amlObj, "dataName", amlData);
+
+		amlObjectHandle_t cloneObj;
+		
+		EXPECT_EQ(CloneAMLObject(amlObj, &cloneObj), CAML_OK);
+		EXPECT_TRUE(isEqualAMLObject(amlObj, cloneObj));
+
+		DestroyAMLData(amlData);
+		DestroyAMLData(value2);
+
+		EXPECT_EQ(DestroyAMLObject(amlObj), CAML_OK);
+		EXPECT_EQ(DestroyAMLObject(cloneObj), CAML_OK);
+	}
+
 
 	TEST(AMLObject_AddDataTest, Valid)
 	{
