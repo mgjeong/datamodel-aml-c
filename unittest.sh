@@ -17,6 +17,7 @@
 
 #!/bin/bash
 
+PROJECT_ROOT=$(pwd)
 CAML_TARGET_ARCH=x86_64
 
 function build(){
@@ -29,6 +30,7 @@ function build(){
 
 function run_test(){
     cd out/linux/${CAML_TARGET_ARCH}/release/unittests
+    export LD_LIBRARY_PATH=${PROJECT_ROOT}/dependencies/datamodel-aml-cpp/out/linux/${CAML_TARGET_ARCH}/release/
     ./caml_rep_test
     if [ $? -ne 0 ]; then 
         echo -e "\033[31m"Unittests failed"\033[0m" 
