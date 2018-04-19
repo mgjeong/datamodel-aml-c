@@ -28,58 +28,58 @@ using namespace std;
 
 namespace camlrepresentationtest
 {
-	const char* amlModelFile                = "./TEST_DataModel.aml";
+    const char* amlModelFile                = "./TEST_DataModel.aml";
     const char* amlModelFile_invalid_NoCAEX = "./TEST_DataModel_Invalid_NoCAEX.aml";
     const char* amlModelFile_invalid_NoSUCL = "./TEST_DataModel_Invalid_NoSUCL.aml";
     const char* amlDataFile                 = "./TEST_Data.aml";
     const char* dataBinaryFile              = "./TEST_DataBinary";
 
-    const char* amlModelId 				   = "GTC_Robot_0.0.1"; 
+    const char* amlModelId                    = "GTC_Robot_0.0.1"; 
 
     //Helper method
     
     amlObjectHandle_t TestAMLObjectHandle()
     {
-	    // create "Model" data
-	    amlDataHandle_t model;
-	    CreateAMLData(&model);
+        // create "Model" data
+        amlDataHandle_t model;
+        CreateAMLData(&model);
 
-	    AMLData_SetValueStr(model, "ctname", "Model_107.113.97.248");
-	    AMLData_SetValueStr(model, "con", "SR-P7-970");
+        AMLData_SetValueStr(model, "ctname", "Model_107.113.97.248");
+        AMLData_SetValueStr(model, "con", "SR-P7-970");
 
-	    // create "Sample" data
-	    amlDataHandle_t axis;
-	    CreateAMLData(&axis);
-	    AMLData_SetValueStr(axis, "x", "20");
-	    AMLData_SetValueStr(axis, "y", "110");
-	    AMLData_SetValueStr(axis, "z", "80");
+        // create "Sample" data
+        amlDataHandle_t axis;
+        CreateAMLData(&axis);
+        AMLData_SetValueStr(axis, "x", "20");
+        AMLData_SetValueStr(axis, "y", "110");
+        AMLData_SetValueStr(axis, "z", "80");
 
-	    amlDataHandle_t info;
-	    CreateAMLData(&info);
-	    AMLData_SetValueStr(info, "id", "f437da3b");
-	    AMLData_SetValueAMLData(info, "axis", axis);
+        amlDataHandle_t info;
+        CreateAMLData(&info);
+        AMLData_SetValueStr(info, "id", "f437da3b");
+        AMLData_SetValueAMLData(info, "axis", axis);
 
-	    amlDataHandle_t sample;
-	    CreateAMLData(&sample);
-	    AMLData_SetValueAMLData(sample, "info", info);
-	    const char* appendix[3] = {"52303", "935", "1442"};
-	    AMLData_SetValueStrArr(sample, "appendix", appendix, 3);
+        amlDataHandle_t sample;
+        CreateAMLData(&sample);
+        AMLData_SetValueAMLData(sample, "info", info);
+        const char* appendix[3] = {"52303", "935", "1442"};
+        AMLData_SetValueStrArr(sample, "appendix", appendix, 3);
 
 
-	    // set datas to object
-	    amlObjectHandle_t object;
-	    CreateAMLObject("GTC001", "123456789", &object);
-	    
-	    AMLObject_AddData(object, "Model", model);
-	    AMLObject_AddData(object, "Sample", sample);
+        // set datas to object
+        amlObjectHandle_t object;
+        CreateAMLObject("GTC001", "123456789", &object);
+        
+        AMLObject_AddData(object, "Model", model);
+        AMLObject_AddData(object, "Sample", sample);
 
-	    DestroyAMLData(model);
-	    DestroyAMLData(axis);
-	    DestroyAMLData(info);
-	    DestroyAMLData(sample);
+        DestroyAMLData(model);
+        DestroyAMLData(axis);
+        DestroyAMLData(info);
+        DestroyAMLData(sample);
 
-	    return object;
-	}
+        return object;
+    }
 
     char* TestAML()
     {
@@ -90,7 +90,7 @@ namespace camlrepresentationtest
         
         char* cstr = new char[size + 1];
         memcpy(cstr, str.c_str(), size);
-    	cstr[size] = '\0';
+        cstr[size] = '\0';
 
         return cstr;
     }
@@ -111,18 +111,20 @@ namespace camlrepresentationtest
         return;
     }
 
-	bool isEqual(const char* str1, const char* str2)
+    bool isEqual(const char* str1, const char* str2)
     {
-        return !strcmp(str1, str2);
+        size_t len1 = strlen(str1), len2 = strlen(str2);
+        if (len1 != len2) return false;
+        return (0 == strncmp(str1, str2, len1));
     }
 
-	bool isEqualArr(const char** strArr1, size_t size1, const char** strArr2, size_t size2)
+    bool isEqualArr(const char** strArr1, size_t size1, const char** strArr2, size_t size2)
     {
-        if (size1 != size2)	return false;
-        
-        for(size_t i = 0; i < size2; i++)
+        if (size1 != size2)    return false;
+
+        for (size_t i = 0; i < size2; i++)
         {
-        	if(true == strcmp(strArr1[i], strArr2[i])) return false;
+            if (false == isEqual(strArr1[i], strArr2[i])) return false;
         }
 
         return true;
@@ -141,28 +143,28 @@ namespace camlrepresentationtest
 
         for (size_t i = 0; i < size1; i++)
         {
-        	char* key = keys1[i];
+            char* key = keys1[i];
 
-        	CAMLValueType type1, type2;
-        	AMLData_GetValueType(data1, key, &type1);
-        	AMLData_GetValueType(data2, key, &type2);
+            CAMLValueType type1, type2;
+            AMLData_GetValueType(data1, key, &type1);
+            AMLData_GetValueType(data2, key, &type2);
 
             if (type1 != type2)     return false;
 
             if (AMLVALTYPE_STRING == type1)
             {
-            	char* ret1 = NULL;
-            	char* ret2 = NULL;
+                char* ret1 = NULL;
+                char* ret2 = NULL;
                 AMLData_GetValueStr(data1, key, &ret1);
                 AMLData_GetValueStr(data2, key, &ret2);
-                
+
                 if (false == isEqual(ret1, ret2)) return false;
             }
             else if (AMLVALTYPE_STRINGARRAY == type1)
             {
-            	char** ret1 = NULL;
-            	char** ret2 = NULL;
-            	size_t ret_size1, ret_size2;
+                char** ret1 = NULL;
+                char** ret2 = NULL;
+                size_t ret_size1, ret_size2;
                 AMLData_GetValueStrArr(data1, key, &ret1, &ret_size1);
                 AMLData_GetValueStrArr(data2, key, &ret2, &ret_size2);
 
@@ -170,10 +172,10 @@ namespace camlrepresentationtest
             }
             else if (AMLVALTYPE_AMLDATA == type1)
             {
-            	amlDataHandle_t ret1, ret2;
+                amlDataHandle_t ret1, ret2;
                 AMLData_GetValueAMLData(data1, key, &ret1);
                 AMLData_GetValueAMLData(data2, key, &ret2);
-                
+
                 if (false == isEqualAMLData(ret1, ret2)) return false;
             }
         }
@@ -181,26 +183,26 @@ namespace camlrepresentationtest
     }
 
     bool isEqualAMLObject(amlObjectHandle_t obj1, amlObjectHandle_t obj2)
-    {	
-    	char* str1 = NULL;
-    	char* str2 = NULL;
+    {    
+        char* str1 = NULL;
+        char* str2 = NULL;
 
-    	AMLObject_GetDeviceId(obj1, &str1);
-    	AMLObject_GetDeviceId(obj2, &str2);
+        AMLObject_GetDeviceId(obj1, &str1);
+        AMLObject_GetDeviceId(obj2, &str2);
 
-    	if(false == isEqual(str1, str2)) return false;
+        if (false == isEqual(str1, str2)) return false;
 
-    	AMLObject_GetTimeStamp(obj1, &str1);
-    	AMLObject_GetTimeStamp(obj2, &str2);
+        AMLObject_GetTimeStamp(obj1, &str1);
+        AMLObject_GetTimeStamp(obj2, &str2);
 
-    	if(false == isEqual(str1, str2)) return false;
+        if (false == isEqual(str1, str2)) return false;
 
-    	AMLObject_GetId(obj1, &str1);
-    	AMLObject_GetId(obj2, &str2);
+        AMLObject_GetId(obj1, &str1);
+        AMLObject_GetId(obj2, &str2);
 
-    	if(false == isEqual(str1, str2)) return false;
+        if (false == isEqual(str1, str2)) return false;
 
-    	char** dataNames1 = NULL;
+        char** dataNames1 = NULL;
         char** dataNames2 = NULL;
         
         size_t size1;
@@ -209,16 +211,16 @@ namespace camlrepresentationtest
         AMLObject_GetDataNames(obj1, &dataNames1, &size1);
         AMLObject_GetDataNames(obj2, &dataNames2, &size2);
 
-        if(false == isEqualArr((const char**)dataNames1, size1, (const char**)dataNames2, size2)) return false;
+        if (false == isEqualArr((const char**)dataNames1, size1, (const char**)dataNames2, size2)) return false;
 
         amlDataHandle_t data1;
         amlDataHandle_t data2;
-        for(size_t i = 0; i < size1; i++)
-        {	
-        	AMLObject_GetData(obj1, dataNames1[i], &data1);
-        	AMLObject_GetData(obj2, dataNames1[i], &data2);
-        	
-        	if(false == isEqualAMLData(data1, data2)) return false;
+        for (size_t i = 0; i < size1; i++)
+        {    
+            AMLObject_GetData(obj1, dataNames1[i], &data1);
+            AMLObject_GetData(obj2, dataNames1[i], &data2);
+
+            if (false == isEqualAMLData(data1, data2)) return false;
         }
 
         return true;
@@ -227,90 +229,90 @@ namespace camlrepresentationtest
     bool isEqualBinary(uint8_t* binary1, size_t size1, uint8_t* binary2, size_t size2)
     {
         if (size1 != size2) return false;
-        
+
         char debug1[size1 * 2 + 1];
         memset(debug1, 0x00, sizeof(debug1));
         char debug2[size2 * 2 + 1];
         memset(debug2, 0x00, sizeof(debug2));
 
-        size_t i;   
-        for(i = 0; i < size1; i++)
+        size_t i;
+        for (i = 0; i < size1; i++)
         {
-          snprintf(debug1 + 2*i, sizeof(debug1), "%02X", binary1[i]);
+            snprintf(debug1 + 2*i, sizeof(debug1), "%02X", binary1[i]);
         }
 
-        for(i = 0; i < size2; i++)
+        for (i = 0; i < size2; i++)
         {
-          snprintf(debug2 + 2*i, sizeof(debug2), "%02X", binary2[i]);
+            snprintf(debug2 + 2*i, sizeof(debug2), "%02X", binary2[i]);
         }
 
-         return !strcmp(debug1, debug2);
+         return (0 == strncmp(debug1, debug2, sizeof(debug1)));
     }
 
     // Test
     TEST(ConstructRepresentationTest, ValidAML)
     {
-    	representation_t rep;
-    	EXPECT_EQ(CreateRepresentation(amlModelFile, &rep), CAML_OK);
+        representation_t rep;
+        EXPECT_EQ(CreateRepresentation(amlModelFile, &rep), CAML_OK);
 
-    	DestroyRepresentation(rep);
+        DestroyRepresentation(rep);
     }
 
     TEST(ConstructRepresentationTest, InvalidFilePath)
     {
-    	representation_t rep;
-    	EXPECT_EQ(CreateRepresentation("NoExist.aml", &rep), CAML_INVALID_FILE_PATH);
+        representation_t rep;
+        EXPECT_EQ(CreateRepresentation("NoExist.aml", &rep), CAML_INVALID_FILE_PATH);
     }
 
     TEST(ConstructRepresentationTest, AMLWithoutCAEX)
     {
-    	representation_t rep;
-    	EXPECT_EQ(CreateRepresentation(amlModelFile_invalid_NoCAEX, &rep), CAML_INVALID_AML_SCHEMA);
+        representation_t rep;
+        EXPECT_EQ(CreateRepresentation(amlModelFile_invalid_NoCAEX, &rep), CAML_INVALID_AML_SCHEMA);
     }
 
     TEST(ConstructRepresentationTest, AMLWithoutSUCL)
     {
-    	representation_t rep;
-    	EXPECT_EQ(CreateRepresentation(amlModelFile_invalid_NoSUCL, &rep), CAML_INVALID_AML_SCHEMA);
+        representation_t rep;
+        EXPECT_EQ(CreateRepresentation(amlModelFile_invalid_NoSUCL, &rep), CAML_INVALID_AML_SCHEMA);
     }
 
     TEST(DestroyRepresentationTest, Valid)
     {
-    	representation_t rep;
-    	CreateRepresentation(amlModelFile, &rep);
+        representation_t rep;
+        CreateRepresentation(amlModelFile, &rep);
 
-    	EXPECT_EQ(DestroyRepresentation(rep), CAML_OK);
+        EXPECT_EQ(DestroyRepresentation(rep), CAML_OK);
     }
 
     TEST(Representation_AmlToDataTest, ConvertValid)
     {
-    	representation_t rep;
-    	CreateRepresentation(amlModelFile, &rep);
+        representation_t rep;
+        CreateRepresentation(amlModelFile, &rep);
 
-    	amlObjectHandle_t amlObj;
-    	char* amlStr = TestAML();
+        amlObjectHandle_t amlObj;
+        char* amlStr = TestAML();
 
-    	EXPECT_EQ(Representation_AmlToData(rep, amlStr, &amlObj), CAML_OK);
+        EXPECT_EQ(Representation_AmlToData(rep, amlStr, &amlObj), CAML_OK);
 
-    	amlObjectHandle_t varify = TestAMLObjectHandle();
-    	EXPECT_TRUE(isEqualAMLObject(amlObj, varify));
+        amlObjectHandle_t varify = TestAMLObjectHandle();
+        EXPECT_TRUE(isEqualAMLObject(amlObj, varify));
 
-    	DestroyAMLObject(amlObj);
-    	DestroyAMLObject(varify);
-    	DestroyRepresentation(rep);
+        DestroyAMLObject(amlObj);
+        DestroyAMLObject(varify);
+        DestroyRepresentation(rep);
     }
 
     TEST(Representation_AmlToDataTest, InvalidAml)
     {
-		representation_t rep;
-    	CreateRepresentation(amlModelFile, &rep);
+        representation_t rep;
+        CreateRepresentation(amlModelFile, &rep);
 
-    	amlObjectHandle_t amlObj;
-    	const char* amlStr = "<invalid />";
+        amlObjectHandle_t amlObj;
+        const char* amlStr = "<invalid />";
 
-    	EXPECT_EQ(Representation_AmlToData(rep, amlStr, &amlObj), CAML_INVALID_AML_SCHEMA);
+        EXPECT_EQ(Representation_AmlToData(rep, amlStr, &amlObj), CAML_INVALID_AML_SCHEMA);
 
-    	DestroyAMLObject(rep);
+        DestroyAMLObject(rep);
     }
 
     TEST(Representation_DataToAmlTest, ConvertValid)
@@ -330,11 +332,11 @@ namespace camlrepresentationtest
 
     TEST(Representation_DataToAmlTest, InvalidDataToModel)
     {
-		representation_t rep;
-    	CreateRepresentation(amlModelFile, &rep);
+        representation_t rep;
+        CreateRepresentation(amlModelFile, &rep);
 
-    	amlObjectHandle_t amlObj;
-    	CreateAMLObject("deviceId", "0", &amlObj);
+        amlObjectHandle_t amlObj;
+        CreateAMLObject("deviceId", "0", &amlObj);
 
         amlDataHandle_t amlData;
         CreateAMLData(&amlData);
@@ -422,7 +424,7 @@ namespace camlrepresentationtest
 #ifndef _DISABLE_PROTOBUF_
         EXPECT_EQ(Representation_ByteToData(rep, binary, size, &amlObj), CAML_INVALID_BYTE_STR);
 #else
-        EXPECT_EQ(Representation_ByteToData(rep, binary, size, &amlObj), CAML_API_NOT_ENABLED);   
+        EXPECT_EQ(Representation_ByteToData(rep, binary, size, &amlObj), CAML_API_NOT_ENABLED);
 #endif
         DestroyRepresentation(rep);
     }
