@@ -36,6 +36,7 @@ else:
 
 caml_test_env = lib_env.Clone()
 target_os = caml_test_env.get('TARGET_OS')
+target_arch = caml_test_env.get('TARGET_ARCH')
 disable_protobuf = caml_test_env.get('DISABLE_PROTOBUF')
 
 ######################################################################
@@ -43,9 +44,9 @@ disable_protobuf = caml_test_env.get('DISABLE_PROTOBUF')
 ######################################################################
 
 if caml_test_env.get('RELEASE'):
-    caml_test_env.PrependUnique(LIBS=['aml'], LIBPATH=[os.path.join('./../dependencies/datamodel-aml-cpp/out/linux/x86_64/release')])
+    caml_test_env.PrependUnique(LIBS=['aml'], LIBPATH=[os.path.join('./../dependencies/datamodel-aml-cpp/out/linux/', target_arch, 'release')])
 else:
-    caml_test_env.PrependUnique(LIBS=['aml'], LIBPATH=[os.path.join('./../dependencies/datamodel-aml-cpp/out/linux/x86_64/debug')])
+    caml_test_env.PrependUnique(LIBS=['aml'], LIBPATH=[os.path.join('./../dependencies/datamodel-aml-cpp/out/linux/', target_arch, 'debug')])
 
 #caml_test_env.AppendUnique(LIBPATH=[lib_env.get('BUILD_DIR')])
 caml_test_env.AppendUnique(LIBS=['caml'])
