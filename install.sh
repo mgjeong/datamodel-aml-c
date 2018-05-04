@@ -5,7 +5,7 @@ USR_INC_DIR=/usr/local/include
 KEYWORD_AML_C=datamodel-aml-c
 
 # COPY shared library to /usr/local/lib
-sudo cp out/liux/armhf/release/libcaml.so $USR_LIB_DIR
+sudo cp out/linux/armhf/release/libcaml.so $USR_LIB_DIR
 
 # COPY header file to /usr/local/include/datamodel-aml-c
 sudo rm -rf $USR_INC_DIR/$KEYWORD_AML_C
