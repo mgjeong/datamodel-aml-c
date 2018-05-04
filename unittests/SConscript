@@ -43,10 +43,11 @@ disable_protobuf = caml_test_env.get('DISABLE_PROTOBUF')
 # Build flags
 ######################################################################
 
-if caml_test_env.get('RELEASE'):
-    caml_test_env.PrependUnique(LIBS=['aml'], LIBPATH=[os.path.join('./../dependencies/datamodel-aml-cpp/out/linux/', target_arch, 'release')])
-else:
-    caml_test_env.PrependUnique(LIBS=['aml'], LIBPATH=[os.path.join('./../dependencies/datamodel-aml-cpp/out/linux/', target_arch, 'debug')])
+build_mode = 'release'
+if not caml_test_env.get('RELEASE'):
+    build_mode = 'debug'
+
+caml_test_env.PrependUnique(LIBS=['aml'], LIBPATH=[os.path.join('./../dependencies/datamodel-aml-cpp/out/', target_os, target_arch, build_mode)])
 
 #caml_test_env.AppendUnique(LIBPATH=[lib_env.get('BUILD_DIR')])
 caml_test_env.AppendUnique(LIBS=['caml'])
