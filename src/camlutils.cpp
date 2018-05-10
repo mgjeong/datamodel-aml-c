@@ -29,6 +29,7 @@ char* ConvertStringToCharStr(std::string str)
     char* cstr = (char*)malloc(sizeof(char) * (size + 1));
     if(nullptr == cstr) 
     {
+        free(cstr);
         return nullptr;    
     }
 
@@ -52,6 +53,11 @@ char** ConvertVectorToCharStrArr(std::vector<std::string>& list)
         cstr[i] = ConvertStringToCharStr(list[i]);
         if(nullptr == cstr[i])
         {
+            for(unsigned long j = 0; j <= i; j++)
+            {
+                free(cstr[j]);
+            }
+            free(cstr);
             return nullptr;
         }
     }
