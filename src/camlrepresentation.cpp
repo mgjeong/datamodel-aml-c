@@ -73,6 +73,10 @@ CAMLErrorCode Representation_GetRepId(representation_t repHandle, char** repId)
     try
     {
         *repId = ConvertStringToCharStr(repIdStr);
+        if(nullptr == *repId)
+        {
+            return CAML_NO_MEMORY;
+        }
     }
     catch (const AMLException& e)
     {
@@ -117,6 +121,10 @@ CAMLErrorCode Representation_DataToAml(const representation_t repHandle, const a
     {
         string amlString = rep->DataToAml(*amlObj);
         *amlStr = ConvertStringToCharStr(amlString);
+        if(nullptr == *amlStr)
+        {
+            return CAML_NO_MEMORY;
+        }
     }
     catch (const AMLException& e)
     {
@@ -161,7 +169,12 @@ CAMLErrorCode Representation_DataToByte(const representation_t repHandle, const 
     try
     {
         string amlString = rep->DataToByte(*amlObj);
-        *byte = reinterpret_cast<uint8_t*>(ConvertStringToCharStr(amlString));
+        char* temp = ConvertStringToCharStr(amlString);
+        if(nullptr == temp)
+        {
+            return CAML_NO_MEMORY;
+        }
+        *byte = reinterpret_cast<uint8_t*>(temp);
         *size = amlString.size();
     }
     catch (const AMLException& e)
