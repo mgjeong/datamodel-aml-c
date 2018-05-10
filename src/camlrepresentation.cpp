@@ -73,7 +73,7 @@ CAMLErrorCode Representation_GetRepId(representation_t repHandle, char** repId)
     try
     {
         *repId = ConvertStringToCharStr(repIdStr);
-        if(nullptr == *repId)
+        if (nullptr == *repId)
         {
             return CAML_NO_MEMORY;
         }
@@ -121,7 +121,7 @@ CAMLErrorCode Representation_DataToAml(const representation_t repHandle, const a
     {
         string amlString = rep->DataToAml(*amlObj);
         *amlStr = ConvertStringToCharStr(amlString);
-        if(nullptr == *amlStr)
+        if (nullptr == *amlStr)
         {
             return CAML_NO_MEMORY;
         }
@@ -170,7 +170,7 @@ CAMLErrorCode Representation_DataToByte(const representation_t repHandle, const 
     {
         string amlString = rep->DataToByte(*amlObj);
         char* temp = ConvertStringToCharStr(amlString);
-        if(nullptr == temp)
+        if (nullptr == temp)
         {
             return CAML_NO_MEMORY;
         }

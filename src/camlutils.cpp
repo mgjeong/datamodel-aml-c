@@ -27,10 +27,9 @@ char* ConvertStringToCharStr(std::string str)
 {
     size_t size = str.size();
     char* cstr = (char*)malloc(sizeof(char) * (size + 1));
-    if(nullptr == cstr) 
+    if (nullptr == cstr) 
     {
-        free(cstr);
-        return nullptr;    
+        return nullptr;
     }
 
     memcpy(cstr, str.c_str(), size);
@@ -43,7 +42,7 @@ char** ConvertVectorToCharStrArr(std::vector<std::string>& list)
 {
     unsigned long size = list.size();
     char** cstr = (char**)malloc(sizeof(char*) * size);
-    if(nullptr == cstr)
+    if (nullptr == cstr)
     {
         return nullptr;
     }
@@ -51,9 +50,9 @@ char** ConvertVectorToCharStrArr(std::vector<std::string>& list)
     for (unsigned long i = 0; i < size; i++)
     {
         cstr[i] = ConvertStringToCharStr(list[i]);
-        if(nullptr == cstr[i])
+        if (nullptr == cstr[i])
         {
-            for(unsigned long j = 0; j <= i; j++)
+            for (unsigned long j = 0; j < i; j++)
             {
                 free(cstr[j]);
             }

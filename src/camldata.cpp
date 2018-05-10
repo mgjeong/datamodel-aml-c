@@ -154,7 +154,7 @@ CAMLErrorCode AMLData_GetValueStr(amlDataHandle_t amlDataHandle, const char* key
     {
         string str = amldata->getValueToStr(keyStr);
         *value = ConvertStringToCharStr(str);
-        if(nullptr == *value)
+        if (nullptr == *value)
         {
             return CAML_NO_MEMORY;
         }
@@ -183,7 +183,7 @@ CAMLErrorCode AMLData_GetValueStrArr(amlDataHandle_t amlDataHandle, const char* 
     {
         valueStrArr = amldata->getValueToStrArr(keyStr);
         strarr = ConvertVectorToCharStrArr(valueStrArr);
-        if(nullptr == strarr)
+        if (nullptr == strarr)
         {
             return CAML_NO_MEMORY;
         }
@@ -234,7 +234,7 @@ CAMLErrorCode AMLData_GetKeys(amlDataHandle_t amlDataHandle, char*** keys, size_
     try
     {
         strarr = ConvertVectorToCharStrArr(keysVec);
-        if(NULL == strarr)
+        if (NULL == strarr)
         {
             return CAML_NO_MEMORY;;
         }
