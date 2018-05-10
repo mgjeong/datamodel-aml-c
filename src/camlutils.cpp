@@ -45,7 +45,7 @@ char** ConvertVectorToCharStrArr(std::vector<std::string>& list)
     char** cstr = (char**)malloc(sizeof(char*) * size);
     if(nullptr == cstr)
     {
-        return NULL;
+        return nullptr;
     }
 
     for (unsigned long i = 0; i < size; i++)
