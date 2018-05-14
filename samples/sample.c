@@ -168,17 +168,17 @@ void representationConvertApiTest(representation_t rep, amlObjectHandle_t object
 char* getCurrentTime()
 {
     char* timeStr = (char*)malloc(sizeof(char) * 10);
+    if (NULL == timeStr) return NULL;
+
     struct timeb tp;
     ftime(&tp);
-    strftime(timeStr, sizeof(timeStr), "%H%M%S", localtime(&tp.time));
+    strftime(timeStr, 7, "%H%M%S", localtime(&tp.time));
 
     char milliSec[4];
-    sprintf(milliSec, "%d", tp.millitm);
+    snprintf(milliSec, 4, "%d", tp.millitm);
 
     strncpy(timeStr + 6, milliSec, 3);
     timeStr[9] = '\0';
-
-//    printf("%s\n", timeStr);
 
     return timeStr;
 }
@@ -196,7 +196,7 @@ void printAMLData(amlDataHandle_t amlData, int depth)
 {
     char* indent = (char*)malloc(sizeof(char)*100);
     strncpy(indent, "", 1);
-    for (int i = 0; i < depth; i++) strcat(indent, "    ");
+    for (int i = 0; i < depth; i++) strncat(indent, "    ", 4);
 
     printf("%s{\n", indent);
 

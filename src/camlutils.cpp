@@ -26,7 +26,12 @@ using namespace std;
 char* ConvertStringToCharStr(std::string str)
 {
     size_t size = str.size();
-    char* cstr = new char[size + 1];
+    char* cstr = (char*)malloc(sizeof(char) * (size + 1));
+    if (nullptr == cstr) 
+    {
+        return nullptr;
+    }
+
     memcpy(cstr, str.c_str(), size);
     cstr[size] = '\0';
 
@@ -36,11 +41,24 @@ char* ConvertStringToCharStr(std::string str)
 char** ConvertVectorToCharStrArr(std::vector<std::string>& list)
 {
     unsigned long size = list.size();
-    char ** cstr = new char*[size];
+    char** cstr = (char**)malloc(sizeof(char*) * size);
+    if (nullptr == cstr)
+    {
+        return nullptr;
+    }
 
     for (unsigned long i = 0; i < size; i++)
     {
         cstr[i] = ConvertStringToCharStr(list[i]);
+        if (nullptr == cstr[i])
+        {
+            for (unsigned long j = 0; j < i; j++)
+            {
+                free(cstr[j]);
+            }
+            free(cstr);
+            return nullptr;
+        }
     }
 
     return cstr;

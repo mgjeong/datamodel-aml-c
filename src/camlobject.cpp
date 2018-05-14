@@ -164,6 +164,10 @@ CAMLErrorCode AMLObject_GetDataNames(amlObjectHandle_t amlObjHandle, char*** nam
     try
     {
         strarr = ConvertVectorToCharStrArr(strvec);
+        if (nullptr == strarr)
+        {
+            return CAML_NO_MEMORY;;
+        }
     }
     catch (const AMLException& e)
     {
@@ -188,6 +192,10 @@ CAMLErrorCode AMLObject_GetDeviceId(amlObjectHandle_t amlObjHandle, char** devic
     try
     {
         *deviceId = ConvertStringToCharStr(deviceIdStr);
+        if (nullptr == *deviceId)
+        {
+            return CAML_NO_MEMORY;
+        }
     }
     catch (const AMLException& e)
     {
@@ -209,6 +217,10 @@ CAMLErrorCode AMLObject_GetTimeStamp(amlObjectHandle_t amlObjHandle, char** time
     try
     {
         *timeStamp = ConvertStringToCharStr(timeStampStr);
+        if (nullptr == *timeStamp)
+        {
+            return CAML_NO_MEMORY;
+        }
     }
     catch (const AMLException& e)
     {
@@ -230,6 +242,10 @@ CAMLErrorCode AMLObject_GetId(amlObjectHandle_t amlObjHandle, char** id)
     try
     {
         *id = ConvertStringToCharStr(idStr);
+        if (nullptr == *id)
+        {
+            return CAML_NO_MEMORY;
+        }
     }
     catch (const AMLException& e)
     {
