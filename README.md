@@ -38,7 +38,15 @@ For getting help about script option: **$ ./build.sh --help** </br>
 
 ### Sample ###
 1. Goto: ~/datamodel-aml-c/out/linux/{ARCH}/{MODE}/samples/
-2. export LD_LIBRARY_PATH=../
+2. Set library paths:
+    - datamodel-aml-c library
+      ```
+      export LD_LIBRARY_PATH=../
+      ```
+    - datamodel-aml-cpp library
+      ```
+      export LD_LIBRARY_PATH=../../../../../dependencies/datamodel-aml-cpp/out/linux/{ARCH}/{MODE}/
+      ```
 3. Run the sample:
     ```
      ./sample
