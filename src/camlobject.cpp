@@ -25,6 +25,7 @@
 
 #include "camlinterface.h"
 #include "camlerrorcodes.h"
+#include "camlhandlemanager.h"
 #include "camlutils.h"
 
 using namespace std;
@@ -36,20 +37,24 @@ CAMLErrorCode CreateAMLObject(const char* deviceId, const char* timeStamp, amlOb
     VERIFY_PARAM_NON_NULL(timeStamp);
     VERIFY_PARAM_NON_NULL(amlObjHandle);
 
+    AMLObject* amlObj = nullptr;
     try
     {
-        *amlObjHandle = new(std::nothrow) AMLObject(deviceId, timeStamp);
+        amlObj = new AMLObject(deviceId, timeStamp);
     }
     catch (const AMLException& e)
     {
         return ExceptionCodeToErrorCode(e.code());
     }
 
-    if (!*amlObjHandle)
+    amlObjectHandle_t handle = AddAmlObjHandle(amlObj, true);
+    if (!handle)
     {
+        delete amlObj;
         return CAML_NO_MEMORY;
     }
 
+    *amlObjHandle = handle;
     return CAML_OK;
 }
 
@@ -60,20 +65,24 @@ CAMLErrorCode CreateAMLObjectWithID(const char* deviceId, const char* timeStamp,
     VERIFY_PARAM_NON_NULL(id);
     VERIFY_PARAM_NON_NULL(amlObjHandle);
 
+    AMLObject* amlObj = nullptr;
     try
     {
-        *amlObjHandle = new(std::nothrow) AMLObject(deviceId, timeStamp, id);
+        amlObj = new AMLObject(deviceId, timeStamp, id);
     }
     catch (const AMLException& e)
     {
         return ExceptionCodeToErrorCode(e.code());
     }
 
-    if (!*amlObjHandle)
+    amlObjectHandle_t handle = AddAmlObjHandle(amlObj, true);
+    if (!handle)
     {
+        delete amlObj;
         return CAML_NO_MEMORY;
     }
 
+    *amlObjHandle = handle;
     return CAML_OK;
 }
 
@@ -81,8 +90,14 @@ CAMLErrorCode DestroyAMLObject(amlObjectHandle_t amlObjHandle)
 {
     VERIFY_PARAM_NON_NULL(amlObjHandle);
 
-    AMLObject* amlObj = static_cast<AMLObject*>(amlObjHandle);
-    delete amlObj;
+    AMLObject* amlObj = FindAmlObj(amlObjHandle);
+    if (!amlObj)
+    {
+        return CAML_INVALID_HANDLE;
+    }
+
+    RemoveOwnedAmlDataHandles(amlObj);
+    RemoveAmlObj(amlObjHandle);
 
     return CAML_OK;
 }
@@ -92,22 +107,30 @@ CAMLErrorCode CloneAMLObject(amlObjectHandle_t origin, amlObjectHandle_t* clone)
     VERIFY_PARAM_NON_NULL(origin);
     VERIFY_PARAM_NON_NULL(clone);
 
-    AMLObject* amlOrigin = static_cast<AMLObject*>(origin);
+    AMLObject* originObj = FindAmlObj(origin);
+    if (!originObj)
+    {
+        return CAML_INVALID_HANDLE;
+    }
 
+    AMLObject* cloneObj = nullptr;
     try
     {
-        *clone = new(std::nothrow) AMLObject(*amlOrigin);
+        cloneObj = new AMLObject(*originObj);
     }
     catch (const AMLException& e)
     {
         return ExceptionCodeToErrorCode(e.code());
     }
 
-    if (!*clone)
+    amlObjectHandle_t cloneHandle = AddAmlObjHandle(cloneObj, true);
+    if (!cloneHandle)
     {
+        delete cloneObj;
         return CAML_NO_MEMORY;
     }
 
+    *clone = cloneHandle;
     return CAML_OK;
 }
 
@@ -117,12 +140,16 @@ CAMLErrorCode AMLObject_AddData(amlObjectHandle_t amlObjHandle, const char* name
     VERIFY_PARAM_NON_NULL(name);
     VERIFY_PARAM_NON_NULL(amlDataHandle);
 
-    AMLObject* amlObj = static_cast<AMLObject*>(amlObjHandle);
-    AMLData* amldata = static_cast<AMLData*>(amlDataHandle);
+    AMLObject* amlObj = FindAmlObj(amlObjHandle);
+    AMLData* amlData = FindAmlData(amlDataHandle);
+    if (!amlObj || !amlData)
+    {
+        return CAML_INVALID_HANDLE;
+    }
 
     try
     {
-        amlObj->addData(name, *amldata);
+        amlObj->addData(name, *amlData);
     }
     catch (const AMLException& e)
     {
@@ -138,10 +165,27 @@ CAMLErrorCode AMLObject_GetData(amlObjectHandle_t amlObjHandle, const char* name
     VERIFY_PARAM_NON_NULL(name);
     VERIFY_PARAM_NON_NULL(amlDataHandle);
 
+    AMLObject* amlObj = FindAmlObj(amlObjHandle);
+    if (!amlObj)
+    {
+        return CAML_INVALID_HANDLE;
+    }
+
     try
     {
-        const AMLData& amlData = static_cast<AMLObject*>(amlObjHandle)->getData(name);
-        *amlDataHandle = static_cast<amlDataHandle_t>(const_cast<AMLData*>(&amlData));
+        const AMLData& amlData = amlObj->getData(name);
+
+        amlDataHandle_t handle = FindAmlDataHandle(const_cast<AMLData*>(&amlData));
+        if (NULL == handle)
+        {
+            handle = AddAmlDataHandle(const_cast<AMLData*>(&amlData), false);
+            if (NULL == handle)
+            {
+                return CAML_NO_MEMORY;
+            }
+        }
+
+        *amlDataHandle = handle;
     }
     catch (const AMLException& e)
     {
@@ -157,21 +201,17 @@ CAMLErrorCode AMLObject_GetDataNames(amlObjectHandle_t amlObjHandle, char*** nam
     VERIFY_PARAM_NON_NULL(names);
     VERIFY_PARAM_NON_NULL(namesSize);
 
-    AMLObject* amlObj = static_cast<AMLObject*>(amlObjHandle);
-    vector<string> strvec = amlObj->getDataNames();
-    char** strarr = nullptr;
-
-    try
+    AMLObject* amlObj = FindAmlObj(amlObjHandle);
+    if (!amlObj)
     {
-        strarr = ConvertVectorToCharStrArr(strvec);
-        if (nullptr == strarr)
-        {
-            return CAML_NO_MEMORY;;
-        }
+        return CAML_INVALID_HANDLE;
     }
-    catch (const AMLException& e)
+
+    vector<string> strvec = amlObj->getDataNames();
+    char** strarr = ConvertVectorToCharStrArr(strvec);
+    if (nullptr == strarr)
     {
-        return ExceptionCodeToErrorCode(e.code());
+        return CAML_NO_MEMORY;;
     }
 
     *names = strarr;
@@ -185,21 +225,17 @@ CAMLErrorCode AMLObject_GetDeviceId(amlObjectHandle_t amlObjHandle, char** devic
     VERIFY_PARAM_NON_NULL(amlObjHandle);
     VERIFY_PARAM_NON_NULL(deviceId);
 
-    AMLObject* amlObj = static_cast<AMLObject*>(amlObjHandle);
+    AMLObject* amlObj = FindAmlObj(amlObjHandle);
+    if (!amlObj)
+    {
+        return CAML_INVALID_HANDLE;
+    }
 
     string deviceIdStr = amlObj->getDeviceId();
-
-    try
+    *deviceId = ConvertStringToCharStr(deviceIdStr);
+    if (nullptr == *deviceId)
     {
-        *deviceId = ConvertStringToCharStr(deviceIdStr);
-        if (nullptr == *deviceId)
-        {
-            return CAML_NO_MEMORY;
-        }
-    }
-    catch (const AMLException& e)
-    {
-        return ExceptionCodeToErrorCode(e.code());
+        return CAML_NO_MEMORY;
     }
 
     return CAML_OK;
@@ -210,21 +246,17 @@ CAMLErrorCode AMLObject_GetTimeStamp(amlObjectHandle_t amlObjHandle, char** time
     VERIFY_PARAM_NON_NULL(amlObjHandle);
     VERIFY_PARAM_NON_NULL(timeStamp);
 
-    AMLObject* amlObj = static_cast<AMLObject*>(amlObjHandle);
+    AMLObject* amlObj = FindAmlObj(amlObjHandle);
+    if (!amlObj)
+    {
+        return CAML_INVALID_HANDLE;
+    }
 
     string timeStampStr = amlObj->getTimeStamp();
-
-    try
+    *timeStamp = ConvertStringToCharStr(timeStampStr);
+    if (nullptr == *timeStamp)
     {
-        *timeStamp = ConvertStringToCharStr(timeStampStr);
-        if (nullptr == *timeStamp)
-        {
-            return CAML_NO_MEMORY;
-        }
-    }
-    catch (const AMLException& e)
-    {
-        return ExceptionCodeToErrorCode(e.code());
+        return CAML_NO_MEMORY;
     }
 
     return CAML_OK;
@@ -235,21 +267,17 @@ CAMLErrorCode AMLObject_GetId(amlObjectHandle_t amlObjHandle, char** id)
     VERIFY_PARAM_NON_NULL(amlObjHandle);
     VERIFY_PARAM_NON_NULL(id);
 
-    AMLObject* amlObj = static_cast<AMLObject*>(amlObjHandle);
+    AMLObject* amlObj = FindAmlObj(amlObjHandle);
+    if (!amlObj)
+    {
+        return CAML_INVALID_HANDLE;
+    }
 
     string idStr = amlObj->getId();
-
-    try
+    *id = ConvertStringToCharStr(idStr);
+    if (nullptr == *id)
     {
-        *id = ConvertStringToCharStr(idStr);
-        if (nullptr == *id)
-        {
-            return CAML_NO_MEMORY;
-        }
-    }
-    catch (const AMLException& e)
-    {
-        return ExceptionCodeToErrorCode(e.code());
+        return CAML_NO_MEMORY;
     }
 
     return CAML_OK;

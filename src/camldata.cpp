@@ -24,6 +24,7 @@
 
 #include "camlinterface.h"
 #include "camlerrorcodes.h"
+#include "camlhandlemanager.h"
 #include "camlutils.h"
 
 using namespace std;
@@ -33,12 +34,20 @@ CAMLErrorCode CreateAMLData(amlDataHandle_t* amlDataHandle)
 {
     VERIFY_PARAM_NON_NULL(amlDataHandle);
 
-    *amlDataHandle = new(std::nothrow) AMLData();
-    if (!*amlDataHandle)
+    AMLData* amlData = new AMLData();
+    if (nullptr == amlData)
     {
         return CAML_NO_MEMORY;
     }
 
+    amlDataHandle_t handle = AddAmlDataHandle(amlData, true);
+    if (!handle)
+    {
+        delete amlData;
+        return CAML_NO_MEMORY;
+    }
+
+    *amlDataHandle = handle;
     return CAML_OK;
 }
 
@@ -46,8 +55,14 @@ CAMLErrorCode DestroyAMLData(amlDataHandle_t amlDataHandle)
 {
     VERIFY_PARAM_NON_NULL(amlDataHandle);
 
-    AMLData* amldata = static_cast<AMLData*>(amlDataHandle);
-    delete amldata;
+    AMLData* amlData = FindAmlData(amlDataHandle);
+    if (!amlData)
+    {
+        return CAML_INVALID_HANDLE;
+    }
+
+    RemoveOwnedAmlDataHandles(amlData);
+    RemoveAmlData(amlDataHandle);
 
     return CAML_OK;
 }
@@ -57,31 +72,47 @@ CAMLErrorCode CloneAMLData(amlDataHandle_t origin, amlDataHandle_t* clone)
     VERIFY_PARAM_NON_NULL(origin);
     VERIFY_PARAM_NON_NULL(clone);
 
-    AMLData* amlOrigin = static_cast<AMLData*>(origin);
+    AMLData* originAmlData = FindAmlData(origin);
+    if (!originAmlData)
+    {
+        return CAML_INVALID_HANDLE;
+    }
 
-    *clone = new(std::nothrow) AMLData(*amlOrigin);
-    if (!*clone)
+    AMLData* cloneAmlData = new AMLData(*originAmlData);
+    if (nullptr == cloneAmlData)
     {
         return CAML_NO_MEMORY;
     }
 
+    amlDataHandle_t cloneHandle = AddAmlDataHandle(cloneAmlData, true);
+    if (!cloneHandle)
+    {
+        delete cloneAmlData;
+        return CAML_NO_MEMORY;
+    }
+
+    *clone = cloneHandle;
     return CAML_OK;
 }
 
 CAMLErrorCode AMLData_SetValueStr(amlDataHandle_t amlDataHandle, const char* key, const char* value)
 {   
     VERIFY_PARAM_NON_NULL(amlDataHandle);
-
     VERIFY_PARAM_NON_NULL(key);
     VERIFY_PARAM_NON_NULL(value);
 
-    AMLData* amldata = static_cast<AMLData*>(amlDataHandle);
+    AMLData* amlData = FindAmlData(amlDataHandle);
+    if (!amlData)
+    {
+        return CAML_INVALID_HANDLE;
+    }
+
     string keyStr(key, strlen(key));
     string valueStr(value, strlen(value));
 
     try
     {
-       amldata->setValue(keyStr, valueStr);
+        amlData->setValue(keyStr, valueStr);
     }
     catch (const AMLException& e)
     {
@@ -97,10 +128,14 @@ CAMLErrorCode AMLData_SetValueStrArr(amlDataHandle_t amlDataHandle, const char* 
     VERIFY_PARAM_NON_NULL(key);
     VERIFY_PARAM_NON_NULL(value);
 
-    AMLData* amldata = static_cast<AMLData*>(amlDataHandle);
+    AMLData* amlData = FindAmlData(amlDataHandle);
+    if (!amlData)
+    {
+        return CAML_INVALID_HANDLE;
+    }
+
     string keyStr(key, strlen(key));
     vector<string> valueStrArr;
-
     for (size_t i = 0; i< valueSize; i++)
     {
         string valueStr(value[i], strlen(value[i]));
@@ -109,7 +144,7 @@ CAMLErrorCode AMLData_SetValueStrArr(amlDataHandle_t amlDataHandle, const char* 
 
     try
     {
-       amldata->setValue(keyStr, valueStrArr);
+        amlData->setValue(keyStr, valueStrArr);
     }
     catch (const AMLException& e)
     {
@@ -125,13 +160,18 @@ CAMLErrorCode AMLData_SetValueAMLData(amlDataHandle_t amlDataHandle, const char*
     VERIFY_PARAM_NON_NULL(key);
     VERIFY_PARAM_NON_NULL(value);
 
-    AMLData* amldata = static_cast<AMLData*>(amlDataHandle);
+    AMLData* amlData = FindAmlData(amlDataHandle);
+    AMLData* valueData = FindAmlData(value);
+    if (!amlData || !valueData)
+    {
+        return CAML_INVALID_HANDLE;
+    }
+
     string keyStr(key, strlen(key));
-    AMLData* amlData = static_cast<AMLData*>(value);
 
     try
     {
-        amldata->setValue(keyStr, *amlData);
+        amlData->setValue(keyStr, *valueData);
     }
     catch (const AMLException& e)
     {
@@ -147,22 +187,31 @@ CAMLErrorCode AMLData_GetValueStr(amlDataHandle_t amlDataHandle, const char* key
     VERIFY_PARAM_NON_NULL(key);
     VERIFY_PARAM_NON_NULL(value);
 
-    AMLData* amldata = static_cast<AMLData*>(amlDataHandle);
+    AMLData* amlData = FindAmlData(amlDataHandle);
+    if (!amlData)
+    {
+        return CAML_INVALID_HANDLE;
+    }
+
     string keyStr(key, strlen(key));
+    string valueStr;
 
     try
     {
-        string str = amldata->getValueToStr(keyStr);
-        *value = ConvertStringToCharStr(str);
-        if (nullptr == *value)
-        {
-            return CAML_NO_MEMORY;
-        }
+        valueStr = amlData->getValueToStr(keyStr);
     }
     catch (const AMLException& e)
     {
         return ExceptionCodeToErrorCode(e.code());
     }
+
+    char* valueArr = ConvertStringToCharStr(valueStr);
+    if (NULL == valueArr)
+    {
+        return CAML_NO_MEMORY;
+    }
+
+    *value = valueArr;
 
     return CAML_OK;
 }
@@ -174,23 +223,28 @@ CAMLErrorCode AMLData_GetValueStrArr(amlDataHandle_t amlDataHandle, const char* 
     VERIFY_PARAM_NON_NULL(value);
     VERIFY_PARAM_NON_NULL(valueSize);
 
-    AMLData* amldata = static_cast<AMLData*>(amlDataHandle);
+    AMLData* amlData = FindAmlData(amlDataHandle);
+    if (!amlData)
+    {
+        return CAML_INVALID_HANDLE;
+    }
+
     string keyStr(key, strlen(key));
-    char** strarr = nullptr;
     vector<string> valueStrArr;
 
     try
     {
-        valueStrArr = amldata->getValueToStrArr(keyStr);
-        strarr = ConvertVectorToCharStrArr(valueStrArr);
-        if (nullptr == strarr)
-        {
-            return CAML_NO_MEMORY;
-        }
+        valueStrArr = amlData->getValueToStrArr(keyStr);
     }
     catch (const AMLException& e)
     {
         return ExceptionCodeToErrorCode(e.code());
+    }
+
+    char** strarr = ConvertVectorToCharStrArr(valueStrArr);
+    if (NULL == strarr)
+    {
+        return CAML_NO_MEMORY;
     }
 
     *valueSize = valueStrArr.size();
@@ -205,13 +259,29 @@ CAMLErrorCode AMLData_GetValueAMLData(amlDataHandle_t amlDataHandle, const char*
     VERIFY_PARAM_NON_NULL(key);
     VERIFY_PARAM_NON_NULL(value);
 
-    AMLData* amldata = static_cast<AMLData*>(amlDataHandle);
+    AMLData* amlData = FindAmlData(amlDataHandle);
+    if (!amlData)
+    {
+        return CAML_INVALID_HANDLE;
+    }
+
     string keyStr(key, strlen(key));
 
     try
     {
-        const AMLData& amlData = amldata->getValueToAMLData(keyStr);
-        *value = static_cast<amlDataHandle_t>(const_cast<AMLData*>(&amlData));
+        const AMLData& valueData = amlData->getValueToAMLData(keyStr);
+
+        amlDataHandle_t valueHandle = FindAmlDataHandle(const_cast<AMLData*>(&valueData));
+        if (NULL == valueHandle)
+        {
+            valueHandle = AddAmlDataHandle(const_cast<AMLData*>(&valueData), false);
+            if (NULL == valueHandle)
+            {
+                return CAML_NO_MEMORY;
+            }
+        }
+
+        *value = valueHandle;
     }
     catch (const AMLException e)
     {
@@ -227,21 +297,18 @@ CAMLErrorCode AMLData_GetKeys(amlDataHandle_t amlDataHandle, char*** keys, size_
     VERIFY_PARAM_NON_NULL(keys);
     VERIFY_PARAM_NON_NULL(keysSize);
 
-    AMLData* amlData = static_cast<AMLData*>(amlDataHandle);
-    vector<string> keysVec = amlData->getKeys();
-    char** strarr = NULL;
-
-    try
+    AMLData* amlData = FindAmlData(amlDataHandle);
+    if (!amlData)
     {
-        strarr = ConvertVectorToCharStrArr(keysVec);
-        if (NULL == strarr)
-        {
-            return CAML_NO_MEMORY;;
-        }
+        return CAML_INVALID_HANDLE;
     }
-    catch (const AMLException& e)
+
+    vector<string> keysVec = amlData->getKeys();
+
+    char** strarr = ConvertVectorToCharStrArr(keysVec);
+    if (NULL == strarr)
     {
-        return ExceptionCodeToErrorCode(e.code());
+        return CAML_NO_MEMORY;;
     }
 
     *keysSize = keysVec.size();
@@ -256,13 +323,18 @@ CAMLErrorCode AMLData_GetValueType(amlDataHandle_t amlDataHandle, const char* ke
     VERIFY_PARAM_NON_NULL(key);
     VERIFY_PARAM_NON_NULL(type);
 
-    AMLData* amldata = static_cast<AMLData*>(amlDataHandle);
+    AMLData* amlData = FindAmlData(amlDataHandle);
+    if (!amlData)
+    {
+        return CAML_INVALID_HANDLE;
+    }
+
     string keyStr(key, strlen(key));
     AMLValueType cpptype;
 
     try
     {
-        cpptype = amldata->getValueType(keyStr);
+        cpptype = amlData->getValueType(keyStr);
     }
     catch (const AMLException& e)
     {
