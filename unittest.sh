@@ -54,7 +54,6 @@ function coverage() {
             -e "protobuf.*" \
             -e "samples.*" \
             -e "unittests.*" \
-            -e "src/logger.*" \
             --html --html-details -o ./coverage/report.html
 }
 
