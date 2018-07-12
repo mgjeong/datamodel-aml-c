@@ -25,6 +25,7 @@
 #include "camlrepresentation.h"
 #include "camlinterface.h"
 #include "camlerrorcodes.h"
+#include "camlhandlemanager.h"
 #include "camlutils.h"
 
 using namespace std;
@@ -35,20 +36,24 @@ CAMLErrorCode CreateRepresentation(const char* filePath, representation_t* repHa
     VERIFY_PARAM_NON_NULL(filePath);
     VERIFY_PARAM_NON_NULL(repHandle);
 
+    Representation* rep = nullptr;
     try
     {
-        *repHandle = new(std::nothrow) Representation(filePath);
+        rep = new Representation(filePath);
     }
     catch (const AMLException& e)
     {
         return ExceptionCodeToErrorCode(e.code());
     }
 
-    if (!*repHandle)
+    representation_t handle = AddRepresentationHandle(rep);
+    if (!handle)
     {
+        delete rep;
         return CAML_NO_MEMORY;
     }
 
+    *repHandle = handle;
     return CAML_OK;
 }
 
@@ -56,8 +61,13 @@ CAMLErrorCode DestroyRepresentation(representation_t repHandle)
 {
     VERIFY_PARAM_NON_NULL(repHandle);
 
-    Representation* rep = static_cast<Representation*>(repHandle);
-    delete rep;
+    Representation* rep = FindRepresentation(repHandle);
+    if (!rep)
+    {
+        return CAML_INVALID_HANDLE;
+    }
+
+    RemoveRepresentation(repHandle);
 
     return CAML_OK;
 }
@@ -67,20 +77,17 @@ CAMLErrorCode Representation_GetRepId(representation_t repHandle, char** repId)
     VERIFY_PARAM_NON_NULL(repHandle);
     VERIFY_PARAM_NON_NULL(repId);
 
-    Representation* rep = static_cast<Representation*>(repHandle);
-    string repIdStr = rep->getRepresentationId();
-
-    try
+    Representation* rep = FindRepresentation(repHandle);
+    if (!rep)
     {
-        *repId = ConvertStringToCharStr(repIdStr);
-        if (nullptr == *repId)
-        {
-            return CAML_NO_MEMORY;
-        }
+        return CAML_INVALID_HANDLE;
     }
-    catch (const AMLException& e)
+
+    string repIdStr = rep->getRepresentationId();
+    *repId = ConvertStringToCharStr(repIdStr);
+    if (nullptr == *repId)
     {
-        return ExceptionCodeToErrorCode(e.code());
+        return CAML_NO_MEMORY;
     }
 
     return CAML_OK;
@@ -91,20 +98,30 @@ CAMLErrorCode Representation_GetConfigInfo(representation_t repHandle, amlObject
     VERIFY_PARAM_NON_NULL(repHandle);
     VERIFY_PARAM_NON_NULL(amlObjHandle);
 
+    Representation* rep = FindRepresentation(repHandle);
+    if (!rep)
+    {
+        return CAML_INVALID_HANDLE;
+    }
+
+    AMLObject* amlObj = nullptr;
     try
     {
-        //@TODO: should be this after Representaiton cpp API is modified.
-        //const AMLObject& amlObj = static_cast<Representation*>(repHandle)->getConfigInfo();
-        //*amlObjHandle = static_cast<amlObjectHandle_t>(const_cast<AMLObject*>(&amlObj));
-
-        AMLObject* amlObj = static_cast<Representation*>(repHandle)->getConfigInfo();
-        *amlObjHandle = static_cast<amlObjectHandle_t>(amlObj);
+        amlObj = rep->getConfigInfo();
     }
     catch (const AMLException& e)
     {
         return ExceptionCodeToErrorCode(e.code());
     }
 
+    amlObjectHandle_t amlObjHandleNew = AddAmlObjHandle(amlObj, true);
+    if (!amlObjHandleNew)
+    {
+        delete amlObj;
+        return CAML_NO_MEMORY;
+    }
+
+    *amlObjHandle = amlObjHandleNew;
     return CAML_OK;
 }
 
@@ -114,14 +131,19 @@ CAMLErrorCode Representation_DataToAml(const representation_t repHandle, const a
     VERIFY_PARAM_NON_NULL(amlObjHandle);
     VERIFY_PARAM_NON_NULL(amlStr);
 
-    Representation* rep = static_cast<Representation*>(repHandle);
-    AMLObject* amlObj = static_cast<AMLObject*>(amlObjHandle);
+    Representation* rep = FindRepresentation(repHandle);
+    AMLObject* amlObj = FindAmlObj(amlObjHandle);
+    if (!rep || !amlObj)
+    {
+        return CAML_INVALID_HANDLE;
+    }
 
+    char* amlChar = NULL;
     try
     {
         string amlString = rep->DataToAml(*amlObj);
-        *amlStr = ConvertStringToCharStr(amlString);
-        if (nullptr == *amlStr)
+        amlChar = ConvertStringToCharStr(amlString);
+        if (NULL == amlChar)
         {
             return CAML_NO_MEMORY;
         }
@@ -130,6 +152,8 @@ CAMLErrorCode Representation_DataToAml(const representation_t repHandle, const a
     {
         return ExceptionCodeToErrorCode(e.code());
     }
+
+    *amlStr = amlChar;
 
     return CAML_OK;
 }
@@ -140,19 +164,32 @@ CAMLErrorCode Representation_AmlToData(const representation_t repHandle, const c
     VERIFY_PARAM_NON_NULL(amlStr);
     VERIFY_PARAM_NON_NULL(amlObjHandle);
 
-    Representation* rep = static_cast<Representation*>(repHandle);
+    Representation* rep = FindRepresentation(repHandle);
+    if (!rep)
+    {
+        return CAML_INVALID_HANDLE;
+    }
+
+    AMLObject* amlObj = nullptr;
     string amlString(amlStr, strlen(amlStr));
 
     try
     {
-        AMLObject* amlObj = rep->AmlToData(amlString);
-        *amlObjHandle = static_cast<amlObjectHandle_t>(amlObj);
+        amlObj = rep->AmlToData(amlString);
     }
     catch (const AMLException& e)
     {
         return ExceptionCodeToErrorCode(e.code());
     }
 
+    amlObjectHandle_t amlObjHandleNew = AddAmlObjHandle(amlObj, true);
+    if (!amlObjHandleNew)
+    {
+        delete amlObj;
+        return CAML_NO_MEMORY;
+    }
+
+    *amlObjHandle = amlObjHandleNew;
     return CAML_OK;
 }
 
@@ -163,8 +200,12 @@ CAMLErrorCode Representation_DataToByte(const representation_t repHandle, const 
     VERIFY_PARAM_NON_NULL(byte);
     VERIFY_PARAM_NON_NULL(size);
 
-    Representation* rep = static_cast<Representation*>(repHandle);
-    AMLObject* amlObj = static_cast<AMLObject*>(amlObjHandle);
+    Representation* rep = FindRepresentation(repHandle);
+    AMLObject* amlObj = FindAmlObj(amlObjHandle);
+    if (!rep || !amlObj)
+    {
+        return CAML_INVALID_HANDLE;
+    }
 
     try
     {
@@ -192,18 +233,32 @@ CAMLErrorCode Representation_ByteToData(const representation_t repHandle, const 
     VERIFY_PARAM_NON_NULL(size);
     VERIFY_PARAM_NON_NULL(amlObjHandle);
 
-    Representation* rep = static_cast<Representation*>(repHandle);
+    Representation* rep = FindRepresentation(repHandle);
+    if (!rep)
+    {
+        return CAML_INVALID_HANDLE;
+    }
+
+    AMLObject* amlObj = nullptr;
     string byteString((char*)byte, size);
 
     try
     {
-        AMLObject* amlObj = rep->ByteToData(byteString);
-        *amlObjHandle = static_cast<amlObjectHandle_t>(amlObj);
+        amlObj = rep->ByteToData(byteString);
     }
     catch (const AMLException& e)
     {
         return ExceptionCodeToErrorCode(e.code());
     }
+
+    amlObjectHandle_t amlObjHandleNew = AddAmlObjHandle(amlObj, true);
+    if (!amlObjHandleNew)
+    {
+        delete amlObj;
+        return CAML_NO_MEMORY;
+    }
+
+    *amlObjHandle = amlObjHandleNew;
 
     return CAML_OK;
 }

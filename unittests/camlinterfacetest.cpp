@@ -171,6 +171,15 @@ namespace camlinterfacetest
         EXPECT_EQ(DestroyAMLData(amlData), CAML_OK);
     }
 
+    TEST(AMLData_DestroyTest, Invalid_handle)
+    {
+        amlDataHandle_t amlData;
+        CreateAMLData(&amlData);
+        EXPECT_EQ(DestroyAMLData(amlData), CAML_OK);
+
+        EXPECT_EQ(DestroyAMLData(amlData), CAML_INVALID_HANDLE);
+    }
+
     TEST(AMLData_CloneAMLData, Valid)
     {
         amlDataHandle_t amlData;
@@ -194,6 +203,17 @@ namespace camlinterfacetest
         EXPECT_EQ(DestroyAMLData(amlData), CAML_OK);
     }
 
+    TEST(AMLData_CloneAMLData, Invalid_handle)
+    {
+        amlDataHandle_t amlData;
+        CreateAMLData(&amlData);
+        DestroyAMLData(amlData);
+
+        amlDataHandle_t cloneData;
+
+        EXPECT_EQ(CloneAMLData(amlData, &cloneData), CAML_INVALID_HANDLE);
+    }
+
     TEST(AMLData_SetValueStrTest, Valid)
     {
         amlDataHandle_t amlData;
@@ -205,6 +225,18 @@ namespace camlinterfacetest
         EXPECT_EQ(AMLData_SetValueStr(amlData, key, value), CAML_OK);
 
         DestroyAMLData(amlData);
+    }
+
+    TEST(AMLData_SetValueStrTest, Invalid_handle)
+    {
+        amlDataHandle_t amlData;
+        CreateAMLData(&amlData);
+        DestroyAMLData(amlData);
+
+        const char* key = "key";
+        const char* value = "value";
+
+        EXPECT_EQ(AMLData_SetValueStr(amlData, key, value), CAML_INVALID_HANDLE);
     }
 
     TEST(AMLData_SetValueStrTest, Invalid_DuplicatedKey)
@@ -234,6 +266,18 @@ namespace camlinterfacetest
         DestroyAMLData(amlData);
     }
 
+    TEST(AMLData_SetValueStrArrTest, Invalid_handle)
+    {
+        amlDataHandle_t amlData;
+        CreateAMLData(&amlData);
+        DestroyAMLData(amlData);
+
+        const char* key = "key";
+        const char* value[2] = {"value1", "value2"};
+        
+        EXPECT_EQ(AMLData_SetValueStrArr(amlData, key, value, 2), CAML_INVALID_HANDLE);
+    }
+
     TEST(AMLData_SetValueStrArrTest, Invalid_DuplicatedKey)
     {
         amlDataHandle_t amlData;
@@ -261,6 +305,24 @@ namespace camlinterfacetest
 
         DestroyAMLData(amlData);
         DestroyAMLData(value);
+    }
+
+    TEST(AMLData_SetValueAMLDataTest, Invalid_handle)
+    {
+        amlDataHandle_t amlData;
+        CreateAMLData(&amlData);
+        DestroyAMLData(amlData);
+
+        amlDataHandle_t dummy;
+        CreateAMLData(&dummy);
+
+        const char* key = "key";
+        amlDataHandle_t value;
+        CreateAMLData(&value);
+
+        DestroyAMLData(dummy);
+
+        EXPECT_EQ(AMLData_SetValueAMLData(amlData, key, value), CAML_INVALID_HANDLE);
     }
 
     TEST(AMLData_SetValueAMLDataTest, Invalid_DuplicatedKey)
@@ -296,6 +358,18 @@ namespace camlinterfacetest
         DestroyAMLData(amlData);
     }
 
+    TEST(AMLData_GetValueStrTest, InvalidHandle)
+    {
+        amlDataHandle_t amlData;
+        CreateAMLData(&amlData);
+        DestroyAMLData(amlData);
+
+        const char* key = "key";
+        char* ret;
+
+        EXPECT_EQ(AMLData_GetValueStr(amlData, key, &ret), CAML_INVALID_HANDLE);
+    }
+
     TEST(AMLData_GetValueStrTest, InvalidGetterType)
     {
         amlDataHandle_t amlData;
@@ -329,7 +403,20 @@ namespace camlinterfacetest
 
         DestroyAMLData(amlData);
     }
-    
+
+    TEST(AMLData_GetValueStrArrTest, InvalidHandle)
+    {
+        amlDataHandle_t amlData;
+        CreateAMLData(&amlData);
+        DestroyAMLData(amlData);
+
+        const char* key = "key";
+        char** ret;
+        size_t size;
+
+        EXPECT_EQ(AMLData_GetValueStrArr(amlData, key, &ret, &size), CAML_INVALID_HANDLE);
+    }
+
     TEST(AMLData_GetValueStrArrTest, InvalidGetterType)
     {
         amlDataHandle_t amlData;
@@ -364,6 +451,18 @@ namespace camlinterfacetest
 
         DestroyAMLData(amlData);
         DestroyAMLData(value);
+    }
+
+    TEST(AMLData_GetValueAMLDataTest, InvalidHandle)
+    {
+        amlDataHandle_t amlData;
+        CreateAMLData(&amlData);
+        DestroyAMLData(amlData);
+
+        const char* key = "key";
+        amlDataHandle_t value;
+
+        EXPECT_EQ(AMLData_GetValueAMLData(amlData, key, &value), CAML_INVALID_HANDLE);
     }
 
     TEST(AMLData_GetValueAMLDataTest, InvalidGetterType)
@@ -415,6 +514,18 @@ namespace camlinterfacetest
         DestroyAMLData(value3);
     }
 
+    TEST(AMLData_GetKeysTest, InvalidHandle)
+    {
+        amlDataHandle_t amlData;
+        CreateAMLData(&amlData);
+        DestroyAMLData(amlData);
+
+        char** keys = NULL;
+        size_t size;
+
+        EXPECT_EQ(AMLData_GetKeys(amlData, &keys, &size), CAML_INVALID_HANDLE);
+    }
+
     TEST(AMLData_GetValueTypeTest, Valid)
     {
         amlDataHandle_t amlData;
@@ -450,6 +561,18 @@ namespace camlinterfacetest
         DestroyAMLData(value3);
     }
 
+    TEST(AMLData_GetValueTypeTest, InvalidHandle)
+    {
+        amlDataHandle_t amlData;
+        CreateAMLData(&amlData);
+        DestroyAMLData(amlData);
+
+        const char* key = "key";
+        CAMLValueType type;
+
+        EXPECT_EQ(AMLData_GetValueType(amlData, key, &type), CAML_INVALID_HANDLE);
+    }
+
     TEST(AMLData_GetValueTypeTest, InvalidKey)
     {
         amlDataHandle_t amlData;
@@ -479,7 +602,7 @@ namespace camlinterfacetest
 
     //AMLObject Test
     TEST(AMLObject_CreateTest, Valid)
-    {    
+    {
         const char* deviceId = "deviceId";
         const char* timeStamp = "timeStamp";
         const char* id = "id";
@@ -491,19 +614,19 @@ namespace camlinterfacetest
     }
 
     TEST(AMLObject_CreateTest, Invalid_Parameter1)
-    {    
+    {
         amlObjectHandle_t amlObj;
         EXPECT_EQ(CreateAMLObject("", "timeStamp", &amlObj), CAML_INVALID_PARAM);
     }
 
     TEST(AMLObject_CreateTest, Invalid_Parameter2)
-    {    
+    {
         amlObjectHandle_t amlObj;
         EXPECT_EQ(CreateAMLObject("deviceId", "", &amlObj), CAML_INVALID_PARAM);
     }
 
     TEST(AMLObjectTest_CreateWithoutIdTest, Valid)
-    {    
+    {
         const char* deviceId = "deviceId";
         const char* timeStamp = "timeStamp";
 
@@ -514,17 +637,26 @@ namespace camlinterfacetest
     }
 
     TEST(AMLObject_CreateWithoutIdTest, Invalid_Parameter)
-    {    
+    {
         amlObjectHandle_t amlObj;
         EXPECT_EQ(CreateAMLObjectWithID("deviceId", "timeStamp", "", &amlObj), CAML_INVALID_PARAM);
     }
 
     TEST(AMLObject_DestroyTest, DestroyObject)
-    {    
+    {
         amlObjectHandle_t amlObj;
         CreateAMLObject("deviceId", "timeStamp", &amlObj);
 
         EXPECT_EQ(DestroyAMLObject(amlObj), CAML_OK);
+    }
+
+    TEST(AMLObject_DestroyTest, DestroyObject_InvalidHandle)
+    {
+        amlObjectHandle_t amlObj;
+        CreateAMLObject("deviceId", "timeStamp", &amlObj);
+        EXPECT_EQ(DestroyAMLObject(amlObj), CAML_OK);
+
+        EXPECT_EQ(DestroyAMLObject(amlObj), CAML_INVALID_HANDLE);
     }
 
     TEST(AMLObject_CloneAMLObject, Valid)
@@ -556,6 +688,16 @@ namespace camlinterfacetest
         EXPECT_EQ(DestroyAMLObject(cloneObj), CAML_OK);
     }
 
+    TEST(AMLObject_CloneAMLObject, InvalidHandle)
+    {
+        amlObjectHandle_t amlObj;
+        CreateAMLObject("deviceId", "timeStamp", &amlObj);
+        DestroyAMLObject(amlObj);
+
+        amlObjectHandle_t cloneObj;
+
+        EXPECT_EQ(CloneAMLObject(amlObj, &cloneObj), CAML_INVALID_HANDLE);
+    }
 
     TEST(AMLObject_AddDataTest, Valid)
     {
@@ -572,7 +714,23 @@ namespace camlinterfacetest
         DestroyAMLData(amlData);
         DestroyAMLObject(amlObj);
     }
-    
+
+    TEST(AMLObject_AddDataTest, InvalidHandle)
+    {
+        amlDataHandle_t amlData;
+        CreateAMLData(&amlData);
+
+        EXPECT_EQ(AMLData_SetValueStr(amlData, "key", "value"), CAML_OK);
+
+        amlObjectHandle_t amlObj;
+        CreateAMLObject("deviceId", "timeStamp", &amlObj);
+        DestroyAMLObject(amlObj);
+
+        EXPECT_EQ(AMLObject_AddData(amlObj, "dataName", amlData), CAML_INVALID_HANDLE);
+
+        DestroyAMLData(amlData);
+    }
+
     TEST(AMLObject_AddDataTest, Invalid_DuplicatedKey)
     {
         amlDataHandle_t amlData1;
@@ -615,6 +773,16 @@ namespace camlinterfacetest
 
         DestroyAMLData(amlData);
         DestroyAMLObject(amlObj);
+    }
+
+    TEST(AMLObject_GetDataTest, InvalidHandle)
+    {
+        amlObjectHandle_t amlObj;
+        CreateAMLObject("deviceId", "timeStamp", &amlObj);
+        DestroyAMLObject(amlObj);
+
+        amlDataHandle_t res;
+        EXPECT_EQ(AMLObject_GetData(amlObj, "dataName", &res), CAML_INVALID_HANDLE);
     }
 
     TEST(AMLObject_GetDataTest, InvalidKey)
@@ -665,6 +833,17 @@ namespace camlinterfacetest
         DestroyAMLData(amlData1);
         DestroyAMLData(amlData2);
         DestroyAMLObject(amlObj);
+    }
 
+    TEST(AMLObject_GetDataNamesTest, InvalidHandle)
+    {
+        amlObjectHandle_t amlObj;
+        CreateAMLObject("deviceId", "timeStamp", &amlObj);
+        DestroyAMLObject(amlObj);
+
+        char** dataNames = NULL;
+        size_t size;
+
+        EXPECT_EQ(AMLObject_GetDataNames(amlObj, &dataNames, &size), CAML_INVALID_HANDLE);
     }
 }

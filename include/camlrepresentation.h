@@ -55,6 +55,7 @@ AML_EXPORT CAMLErrorCode CreateRepresentation(const char* filePath,
  * @param       repHandle       [in] handle of Representation that will be destroyed.
  * @retval      #CAML_OK                Successful.
  * @retval      #CAML_INVALID_PARAM     Invalid parameter.
+ * @retval      #CAML_INVALID_HANDLE    Invalid handle.
  */
 AML_EXPORT CAMLErrorCode DestroyRepresentation(representation_t repHandle);
 
@@ -64,6 +65,7 @@ AML_EXPORT CAMLErrorCode DestroyRepresentation(representation_t repHandle);
  * @param       repId           [out] ID of Representation.
  * @retval      #CAML_OK                Successful.
  * @retval      #CAML_INVALID_PARAM     Invalid parameter.
+ * @retval      #CAML_INVALID_HANDLE    Invalid handle.
  * @retval      #CAML_NO_MEMORY         Failed to alloc memory.
  * @note        Characters will be allocated to 'repId', so it should be freed after use. (See the below example)
  *              ex) free(repId);
@@ -77,6 +79,7 @@ AML_EXPORT CAMLErrorCode Representation_GetRepId(const representation_t repHandl
  * @param       amlObjHandle    [out] handle of AMLObject.
  * @retval      #CAML_OK                 Successful.
  * @retval      #CAML_INVALID_PARAM      Invalid parameter.
+ * @retval      #CAML_INVALID_HANDLE     Invalid handle.
  * @retval      #CAML_INVALID_AML_SCHEMA The AML, which is set by CreateRepresentation, has a invalid schema.
  * @note        AMLObject instance will be allocated, so it should be deleted after use.
  *              To destroy an instance, use DestroyAMLObject().
@@ -92,6 +95,7 @@ AML_EXPORT CAMLErrorCode Representation_GetConfigInfo(const representation_t rep
  * @param       amlStr          [out] AML(XML) string.
  * @retval      #CAML_OK                 Successful.
  * @retval      #CAML_INVALID_PARAM      Invalid parameter.
+ * @retval      #CAML_INVALID_HANDLE     Invalid handle.
  * @retval      #CAML_INVALID_AML_SCHEMA The AML, which is set by CreateRepresentation, has a invalid schema.
  * @note        Characters will be allocated to 'amlStr', so it should be freed after use. (See the below example)
  *              ex) free(amlStr);
@@ -107,6 +111,7 @@ AML_EXPORT CAMLErrorCode Representation_DataToAml(const representation_t repHand
  * @param       amlObjHandle    [out] handle of AMLObject.
  * @retval      #CAML_OK                 Successful.
  * @retval      #CAML_INVALID_PARAM      Invalid parameter.
+ * @retval      #CAML_INVALID_HANDLE     Invalid handle.
  * @retval      #CAML_INVALID_AML_SCHEMA The AML, which is set by CreateRepresentation, has a invalid schema.
  * @note        AMLObject instance will be allocated, so it should be deleted after use.
  *              To destroy an instance, use DestroyAMLObject().
@@ -124,6 +129,7 @@ AML_EXPORT CAMLErrorCode Representation_AmlToData(const representation_t repHand
  * @param       size            [out] size of byte data.
  * @retval      #CAML_OK                 Successful.
  * @retval      #CAML_INVALID_PARAM      Invalid parameter.
+ * @retval      #CAML_INVALID_HANDLE     Invalid handle.
  * @retval      $CAML_INVALID_BYTE_STR   Invalid protobuf byte string.
  * @retval      #CAML_INVALID_AML_SCHEMA The AML, which is set by CreateRepresentation, has a invalid schema.
  * @retval      #CAML_API_NOT_ENABLED    If datamodel-aml-cpp library is built with 'disable_protobuf' option, this API will be disabled.
@@ -143,6 +149,7 @@ AML_EXPORT CAMLErrorCode Representation_DataToByte(const representation_t repHan
  * @param       amlObjHandle    [out] handle of AMLObject.
  * @retval      #CAML_OK                 Successful.
  * @retval      #CAML_INVALID_PARAM      Invalid parameter.
+ * @retval      #CAML_INVALID_HANDLE     Invalid handle.
  * @retval      #CAML_INVALID_AML_SCHEMA The AML, which is set by CreateRepresentation, has a invalid schema.
  * @retval      #CAML_API_NOT_ENABLED    If datamodel-aml-cpp library is built with 'disable_protobuf' option, this API will be disabled.
  * @note        AMLObject instance will be allocated, so it should be deleted after use.

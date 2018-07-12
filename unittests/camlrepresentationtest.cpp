@@ -183,7 +183,7 @@ namespace camlrepresentationtest
     }
 
     bool isEqualAMLObject(amlObjectHandle_t obj1, amlObjectHandle_t obj2)
-    {    
+    {
         char* str1 = NULL;
         char* str2 = NULL;
 
@@ -216,7 +216,7 @@ namespace camlrepresentationtest
         amlDataHandle_t data1;
         amlDataHandle_t data2;
         for (size_t i = 0; i < size1; i++)
-        {    
+        {
             AMLObject_GetData(obj1, dataNames1[i], &data1);
             AMLObject_GetData(obj2, dataNames1[i], &data2);
 
@@ -284,6 +284,15 @@ namespace camlrepresentationtest
         EXPECT_EQ(DestroyRepresentation(rep), CAML_OK);
     }
 
+    TEST(DestroyRepresentationTest, InvalidHandle)
+    {
+        representation_t rep;
+        CreateRepresentation(amlModelFile, &rep);
+        EXPECT_EQ(DestroyRepresentation(rep), CAML_OK);
+
+        EXPECT_EQ(DestroyRepresentation(rep), CAML_INVALID_HANDLE);
+    }
+
     TEST(Representation_AmlToDataTest, ConvertValid)
     {
         representation_t rep;
@@ -302,6 +311,18 @@ namespace camlrepresentationtest
         DestroyRepresentation(rep);
     }
 
+    TEST(Representation_AmlToDataTest, InvalidHandle)
+    {
+        representation_t rep;
+        CreateRepresentation(amlModelFile, &rep);
+        DestroyRepresentation(rep);
+
+        amlObjectHandle_t amlObj;
+        char* amlStr = TestAML();
+
+        EXPECT_EQ(Representation_AmlToData(rep, amlStr, &amlObj), CAML_INVALID_HANDLE);
+    }
+
     TEST(Representation_AmlToDataTest, InvalidAml)
     {
         representation_t rep;
@@ -312,7 +333,8 @@ namespace camlrepresentationtest
 
         EXPECT_EQ(Representation_AmlToData(rep, amlStr, &amlObj), CAML_INVALID_AML_SCHEMA);
 
-        DestroyAMLObject(rep);
+        DestroyAMLObject(amlObj);
+        DestroyRepresentation(rep);
     }
 
     TEST(Representation_DataToAmlTest, ConvertValid)
@@ -328,6 +350,21 @@ namespace camlrepresentationtest
 
         char* varify = TestAML();
         EXPECT_TRUE(isEqual(amlStr, varify));
+
+        DestroyRepresentation(rep);
+    }
+
+    TEST(Representation_DataToAmlTest, InvalidHandle)
+    {
+        representation_t rep;
+        CreateRepresentation(amlModelFile, &rep);
+        DestroyRepresentation(rep);
+
+        amlObjectHandle_t amlObj;
+        amlObj = TestAMLObjectHandle();
+
+        char* amlStr;
+        EXPECT_EQ(Representation_DataToAml(rep, amlObj, &amlStr), CAML_INVALID_HANDLE);
     }
 
     TEST(Representation_DataToAmlTest, InvalidDataToModel)
@@ -403,13 +440,27 @@ namespace camlrepresentationtest
         DestroyAMLObject(amlObj);
         DestroyAMLObject(varify);
 #else
-        
         EXPECT_EQ(Representation_ByteToData(rep, binary, size, &amlObj), CAML_API_NOT_ENABLED);
 #endif
         DestroyRepresentation(rep);
     }
 
-    TEST(ByteToDataTest, InvalidByte)
+    TEST(Representation_ByteToDataTest, InvalidHandle)
+    {   
+        representation_t rep;
+        CreateRepresentation(amlModelFile, &rep);
+        DestroyRepresentation(rep);
+
+        amlObjectHandle_t amlObj;
+        uint8_t* binary;
+        size_t size;
+
+        TestBinary(&binary, &size);
+
+        EXPECT_EQ(Representation_ByteToData(rep, binary, size, &amlObj), CAML_INVALID_HANDLE);
+    }
+
+    TEST(Representation_ByteToDataTest, InvalidByte)
     {   
         representation_t rep;
         CreateRepresentation(amlModelFile, &rep);
@@ -457,6 +508,20 @@ namespace camlrepresentationtest
         DestroyRepresentation(rep);
     }
 
+    TEST(Representation_DataToByteTest, InvalidHandle)
+    {
+        representation_t rep;
+        CreateRepresentation(amlModelFile, &rep);
+        DestroyRepresentation(rep);
+
+        amlObjectHandle_t amlObj = TestAMLObjectHandle();
+
+        uint8_t* amlBinary;
+        size_t size;
+
+        EXPECT_EQ(Representation_DataToByte(rep, amlObj, &amlBinary, &size), CAML_INVALID_HANDLE);
+    }
+
     TEST(GetRepresentationIdTest, GetValid)
     {   
         representation_t rep;
@@ -465,6 +530,40 @@ namespace camlrepresentationtest
         char* repId;
         Representation_GetRepId(rep, &repId);
         EXPECT_TRUE(isEqual(amlModelId, repId));
+
+        DestroyRepresentation(rep);
+    }
+
+    TEST(GetRepresentationIdTest, InvalidHandle)
+    {   
+        representation_t rep;
+        CreateRepresentation(amlModelFile, &rep);
+        DestroyRepresentation(rep);
+
+        char* repId;
+        EXPECT_EQ(Representation_GetRepId(rep, &repId), CAML_INVALID_HANDLE);
+    }
+
+    TEST(GetConfigInfoTest, Valid)
+    {   
+        representation_t rep;
+        CreateRepresentation(amlModelFile, &rep);
+
+        amlObjectHandle_t config;
+        EXPECT_EQ(Representation_GetConfigInfo(rep, &config), CAML_OK);
+
+        DestroyAMLObject(config);
+        DestroyRepresentation(rep);
+    }
+
+    TEST(GetConfigInfoTest, InvalidHandle)
+    {   
+        representation_t rep;
+        CreateRepresentation(amlModelFile, &rep);
+        DestroyRepresentation(rep);
+
+        amlObjectHandle_t config;
+        EXPECT_EQ(Representation_GetConfigInfo(rep, &config), CAML_INVALID_HANDLE);
     }
 }
 
