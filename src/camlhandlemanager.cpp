@@ -18,6 +18,7 @@
 #include <assert.h>
 #include <string>
 #include <vector>
+#include <mutex>
 
 #include "camlhandlemanager.h"
 #include "utlist.h"
@@ -46,6 +47,10 @@ static amlObject_t *g_amlObjectHead = NULL;
 static amlData_t *g_amlDataHead = NULL;
 static amlRep_t *g_amlRepHead = NULL;
 
+static mutex g_amlObjectMtx;
+static mutex g_amlDataMtx;
+static mutex g_amlRepMtx;
+
 amlObjectHandle_t AddAmlObjHandle(AMLObject* amlObj, bool needsDelete)
 {
     amlObject_t* node = (amlObject_t*) malloc(sizeof(amlObject_t));
@@ -57,7 +62,9 @@ amlObjectHandle_t AddAmlObjHandle(AMLObject* amlObj, bool needsDelete)
     node->cppObj = amlObj;
     node->needsDelete = needsDelete;
 
+    g_amlObjectMtx.lock();
     LL_APPEND(g_amlObjectHead, node);
+    g_amlObjectMtx.unlock();
 
     return (amlObjectHandle_t)node;
 }
@@ -68,12 +75,14 @@ void RemoveAmlObj(amlObjectHandle_t handle)
 
     amlObject_t *amlObj = (amlObject_t*)handle;
 
+    g_amlObjectMtx.lock();
+    LL_DELETE(g_amlObjectHead, amlObj);
+    g_amlObjectMtx.unlock();
+
     if (amlObj->needsDelete)
     {
         delete amlObj->cppObj;
     }
-
-    LL_DELETE(g_amlObjectHead, amlObj);
     free(amlObj);
     amlObj = NULL;
 }
@@ -84,13 +93,17 @@ AMLObject* FindAmlObj(amlObjectHandle_t handle)
 
     amlObject_t *target = (amlObject_t*)handle;
     amlObject_t *node = NULL;
+
+    g_amlObjectMtx.lock();
     LL_FOREACH(g_amlObjectHead, node)
     {
         if (node == target)
         {
+            g_amlObjectMtx.unlock();
             return node->cppObj;
         }
     }
+    g_amlObjectMtx.unlock();
 
     return NULL;
 }
@@ -106,7 +119,9 @@ amlDataHandle_t AddAmlDataHandle(AMLData* amlData, bool needsDelete)
     node->cppObj = amlData;
     node->needsDelete = needsDelete;
 
+    g_amlDataMtx.lock();
     LL_APPEND(g_amlDataHead, node);
+    g_amlDataMtx.unlock();
 
     return (amlDataHandle_t)node;
 }
@@ -117,12 +132,14 @@ void RemoveAmlData(amlDataHandle_t handle)
 
     amlData_t* amlData = (amlData_t*)handle;
 
+    g_amlDataMtx.lock();
+    LL_DELETE(g_amlDataHead, amlData);
+    g_amlDataMtx.unlock();
+
     if (amlData->needsDelete)
     {
         delete amlData->cppObj;
     }
-
-    LL_DELETE(g_amlDataHead, amlData);
     free(amlData);
     amlData = NULL;
 }
@@ -132,6 +149,8 @@ void RemoveAmlData(AMLData* amlData)
     assert(amlData);
 
     amlData_t *target = NULL;
+
+    g_amlDataMtx.lock();
     LL_FOREACH(g_amlDataHead, target)
     {
         if (target->cppObj == amlData)
@@ -145,22 +164,28 @@ void RemoveAmlData(AMLData* amlData)
             free(target);
             target = NULL;
 
+            g_amlDataMtx.unlock();
             return;
         }
     }
+    g_amlDataMtx.unlock();
 }
 
 AMLData* FindAmlData(amlDataHandle_t handle)
 {
     amlData_t *target = (amlData_t*)handle;
     amlData_t *node = NULL;
+
+    g_amlDataMtx.lock();
     LL_FOREACH(g_amlDataHead, node)
     {
         if (node == target)
         {
+            g_amlDataMtx.unlock();
             return node->cppObj;
         }
     }
+    g_amlDataMtx.unlock();
 
     return NULL;
 }
@@ -168,13 +193,17 @@ AMLData* FindAmlData(amlDataHandle_t handle)
 amlDataHandle_t* FindAmlDataHandle(AMLData* amlData)
 {
     amlData_t *target = NULL;
+
+    g_amlDataMtx.lock();
     LL_FOREACH(g_amlDataHead, target)
     {
         if (target->cppObj == amlData)
         {
+            g_amlDataMtx.unlock();
             return (amlDataHandle_t*)target;
         }
     }
+    g_amlDataMtx.unlock();
     return NULL;
 }
 
@@ -188,7 +217,9 @@ representation_t AddRepresentationHandle(Representation* rep)
 
     node->cppObj = rep;
 
+    g_amlRepMtx.lock();
     LL_APPEND(g_amlRepHead, node);
+    g_amlRepMtx.unlock();
 
     return (representation_t)node;
 }
@@ -199,9 +230,11 @@ void RemoveRepresentation(representation_t handle)
 
     amlRep_t* rep = (amlRep_t*)handle;
 
-    delete rep->cppObj;
-
+    g_amlRepMtx.lock();
     LL_DELETE(g_amlRepHead, rep);
+    g_amlRepMtx.unlock();
+
+    delete rep->cppObj;
     free(rep);
     rep = NULL;
 }
@@ -210,13 +243,17 @@ Representation* FindRepresentation(representation_t handle)
 {
     amlRep_t *target = (amlRep_t*)handle;
     amlRep_t *node = NULL;
+
+    g_amlRepMtx.lock();
     LL_FOREACH(g_amlRepHead, node)
     {
         if (node == target)
         {
+            g_amlRepMtx.unlock();
             return node->cppObj;
         }
     }
+    g_amlRepMtx.unlock();
 
     return NULL;
 }
