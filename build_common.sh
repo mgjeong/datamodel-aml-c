@@ -51,8 +51,8 @@ install_dependencies() {
     fi
 
     cd ./datamodel-aml-cpp
-    git checkout master
-    git pull
+    git fetch origin
+    git checkout v1.0_rel
 
     # Build datamodel-aml-cpp
     echo -e "Installing datamodel-aml-cpp library"
