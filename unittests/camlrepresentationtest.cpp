@@ -34,7 +34,7 @@ namespace camlrepresentationtest
     const char* amlDataFile                 = "./TEST_Data.aml";
     const char* dataBinaryFile              = "./TEST_DataBinary";
 
-    const char* amlModelId                    = "GTC_Robot_0.0.1"; 
+    const char* amlModelId                    = "SAMPLE_Robot_0.0.1"; 
 
     //Helper method
     
@@ -44,8 +44,8 @@ namespace camlrepresentationtest
         amlDataHandle_t model;
         CreateAMLData(&model);
 
-        AMLData_SetValueStr(model, "ctname", "Model_107.113.97.248");
-        AMLData_SetValueStr(model, "con", "SR-P7-970");
+        AMLData_SetValueStr(model, "a", "Model_107.113.97.248");
+        AMLData_SetValueStr(model, "b", "SR-P7-970");
 
         // create "Sample" data
         amlDataHandle_t axis;
@@ -68,7 +68,7 @@ namespace camlrepresentationtest
 
         // set datas to object
         amlObjectHandle_t object;
-        CreateAMLObject("GTC001", "123456789", &object);
+        CreateAMLObject("SAMPLE001", "123456789", &object);
         
         AMLObject_AddData(object, "Model", model);
         AMLObject_AddData(object, "Sample", sample);

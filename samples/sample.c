@@ -39,8 +39,8 @@ void representationConvertApiTest(representation_t rep, amlObjectHandle_t object
 /*
     Raw Data1 (name : "Model")
     {
-        "ctname": "Model_107.113.97.248",
-        "con": "SR-P7-970"
+        "a": "Model_107.113.97.248",
+        "b": "SR-P7-970"
     }
 
     Raw Data2 (name : "Sample")
@@ -82,8 +82,8 @@ int main()
     amlDataHandle_t model;
     CreateAMLData(&model);
 
-    AMLData_SetValueStr(model, "ctname", "Model_107.113.97.248");
-    AMLData_SetValueStr(model, "con", "SR-P7-970");
+    AMLData_SetValueStr(model, "a", "Model_107.113.97.248");
+    AMLData_SetValueStr(model, "b", "SR-P7-970");
 
     // create "Sample" data
     amlDataHandle_t axis;
@@ -107,7 +107,7 @@ int main()
     // set datas to object
     amlObjectHandle_t object;
     char* currTime = getCurrentTime();
-    CreateAMLObject("Robot0001", currTime, &object);
+    CreateAMLObject("SAMPLE001", currTime, &object);
     free(currTime);
     AMLObject_AddData(object, "Model", model);
     AMLObject_AddData(object, "Sample", sample);
