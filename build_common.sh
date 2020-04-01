@@ -47,7 +47,7 @@ install_dependencies() {
         echo "datamodel-aml-cpp already exists"
     else
         #clone datamodel-aml-cpp
-        git clone git@github.sec.samsung.net:RS7-EdgeComputing/datamodel-aml-cpp.git
+        git clone https://github.com/edgexfoundry-holding/datamodel-aml-cpp
     fi
 
     cd ./datamodel-aml-cpp
