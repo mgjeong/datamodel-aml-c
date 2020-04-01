@@ -3,7 +3,7 @@
 
 
 
-datamodel-aml-c is a wrapper library which is written on the top of [datamodel-aml-cpp](https://github.sec.samsung.net/RS7-EdgeComputing/datamodel-aml-cpp), that provides the way to present raw data(key/value based) to AutomationML(AML) standard format.
+datamodel-aml-c is a wrapper library which is written on the top of [datamodel-aml-cpp](https://github.com/edgexfoundry-holding/datamodel-aml-cpp), that provides the way to present raw data(key/value based) to AutomationML(AML) standard format.
  - Transform raw data to AML data(XML).
  - Serialization / Deserialization AML data using protobuf.
 
@@ -15,7 +15,7 @@ datamodel-aml-c is a wrapper library which is written on the top of [datamodel-a
 
 - datamodel-aml-cpp
   - Since datamodel-aml-cpp will be downloaded and built when datamodel-aml-c is built, check the prerequisites of it.
-  - [Prerequisites](https://github.sec.samsung.net/RS7-EdgeComputing/datamodel-aml-cpp)
+  - [Prerequisites](https://github.com/edgexfoundry-holding/datamodel-aml-cpp)
 
 ## How to build ##
 1. Goto: ~/datamodel-aml-c/
